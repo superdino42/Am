@@ -1,0 +1,629 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="default">
+<meta name="apple-mobile-web-app-title" content="AMCO">
+<title>AMCO Quarry</title>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --bg: #F2F2F7;
+    --card: #FFFFFF;
+    --accent: #B8860B;
+    --accent-bg: #FFF8E8;
+    --text: #000000;
+    --text2: #3C3C43;
+    --text3: #8E8E93;
+    --sep: #C6C6C8;
+    --sep-light: #E5E5EA;
+    --blue: #007AFF;
+    --green: #34C759;
+    --orange: #FF9500;
+    --red: #FF3B30;
+    --font: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+    --r: 16px; --r-sm: 12px;
+  }
+  * { box-sizing: border-box; margin: 0; padding: 0; -webkit-tap-highlight-color: transparent; }
+  html, body { height: 100%; background: var(--bg); font-family: var(--font); color: var(--text); -webkit-font-smoothing: antialiased; }
+  .app { max-width: 430px; margin: 0 auto; min-height: 100dvh; display: flex; flex-direction: column; }
+
+  /* HEADER */
+  .header {
+    background: rgba(242,242,247,0.95);
+    backdrop-filter: blur(20px); -webkit-backdrop-filter: blur(20px);
+    padding: 56px 20px 0;
+    position: sticky; top: 0; z-index: 20;
+    border-bottom: 0.5px solid var(--sep);
+  }
+  .header-top { display: flex; align-items: center; justify-content: space-between; padding-bottom: 14px; }
+  .brand { display: flex; align-items: center; gap: 11px; }
+  .brand-mark {
+    width: 40px; height: 40px; border-radius: 10px;
+    background: linear-gradient(145deg, #D4A843, #A07828);
+    display: flex; align-items: center; justify-content: center;
+    font-weight: 800; font-size: 13px; color: white; letter-spacing: 0.5px;
+    box-shadow: 0 2px 8px rgba(160,120,40,0.3);
+  }
+  .brand-name { font-size: 20px; font-weight: 700; letter-spacing: -0.3px; }
+  .brand-sub { font-size: 11px; color: var(--text3); margin-top: 1px; }
+  .date-pill { font-size: 12px; font-weight: 500; color: var(--text3); background: var(--card); border: 0.5px solid var(--sep); padding: 5px 11px; border-radius: 20px; }
+
+  /* SEGMENTED */
+  .seg-wrap { padding: 0 0 12px; }
+  .seg { display: flex; background: rgba(118,118,128,0.12); border-radius: 9px; padding: 2px; gap: 2px; }
+  .seg-btn { flex: 1; padding: 7px 4px; text-align: center; font-size: 13px; font-weight: 500; color: var(--text2); border-radius: 7px; cursor: pointer; border: none; background: none; transition: all 0.18s; }
+  .seg-btn.active { background: var(--card); color: var(--text); font-weight: 600; box-shadow: 0 1px 4px rgba(0,0,0,0.12), 0 0.5px 1px rgba(0,0,0,0.08); }
+
+  /* CONTENT */
+  .content { flex: 1; padding: 20px 16px 60px; overflow-y: auto; }
+
+  /* GROUPED ROWS */
+  .section { margin-bottom: 20px; }
+  .section-label { font-size: 13px; color: var(--text3); text-transform: uppercase; letter-spacing: 0.4px; padding: 0 16px; margin-bottom: 6px; }
+  .group { background: var(--card); border-radius: var(--r); overflow: hidden; }
+  .group-row { display: flex; align-items: center; padding: 0 16px; min-height: 52px; gap: 12px; border-bottom: 0.5px solid var(--sep-light); }
+  .group-row:last-child { border-bottom: none; }
+  .row-label { font-size: 15px; color: var(--text); min-width: 100px; flex-shrink: 0; }
+  .row-input { flex: 1; font-size: 15px; color: var(--text2); background: none; border: none; outline: none; font-family: var(--font); text-align: right; padding: 14px 0; }
+  .row-input::placeholder { color: var(--text3); }
+  .row-input:focus { color: var(--text); }
+
+  /* MATERIAL PILLS */
+  .mat-group { background: var(--card); border-radius: var(--r); padding: 14px; display: flex; gap: 8px; }
+  .mat-pill { flex: 1; display: flex; flex-direction: column; align-items: center; gap: 5px; padding: 11px 6px; border-radius: var(--r-sm); border: 1.5px solid var(--sep-light); background: var(--bg); cursor: pointer; transition: all 0.15s; user-select: none; }
+  .mat-pill-icon { font-size: 20px; }
+  .mat-pill-label { font-size: 11px; font-weight: 600; color: var(--text3); text-align: center; line-height: 1.3; }
+  .mat-pill.active { border-color: var(--accent); background: var(--accent-bg); }
+  .mat-pill.active .mat-pill-label { color: var(--accent); }
+
+  /* QUANTITY */
+  .qty-group { background: var(--card); border-radius: var(--r); overflow: hidden; }
+  .qty-main { display: flex; align-items: center; padding: 12px 16px; gap: 12px; border-bottom: 0.5px solid var(--sep-light); }
+  .qty-btn { width: 32px; height: 32px; border-radius: 50%; flex-shrink: 0; background: var(--sep-light); border: none; font-size: 20px; color: var(--blue); display: flex; align-items: center; justify-content: center; cursor: pointer; user-select: none; transition: all 0.1s; }
+  .qty-btn:active { background: var(--sep); transform: scale(0.93); }
+  .qty-val { flex: 1; text-align: center; font-size: 28px; font-weight: 700; color: var(--text); background: none; border: none; outline: none; font-family: var(--font); }
+  .unit-row { display: flex; }
+  .unit-opt { flex: 1; padding: 12px 0; text-align: center; font-size: 15px; font-weight: 500; color: var(--text3); cursor: pointer; user-select: none; border-right: 0.5px solid var(--sep-light); transition: color 0.15s; }
+  .unit-opt:last-child { border-right: none; }
+  .unit-opt.active { color: var(--blue); font-weight: 600; }
+
+  /* AMOUNT */
+  .amount-row { display: flex; align-items: center; padding: 0 16px; min-height: 52px; gap: 8px; }
+  .amount-label { font-size: 15px; color: var(--text); min-width: 100px; flex-shrink: 0; }
+  .rupee { font-size: 15px; color: var(--text3); }
+  .amount-input { flex: 1; font-size: 15px; font-weight: 500; color: var(--text); background: none; border: none; outline: none; font-family: var(--font); text-align: right; padding: 14px 0; }
+  .amount-input::placeholder { color: var(--text3); font-weight: 400; }
+
+  /* SAVE BTN */
+  .save-btn { width: 100%; padding: 16px; background: var(--blue); color: white; border: none; border-radius: var(--r); font-family: var(--font); font-size: 17px; font-weight: 600; cursor: pointer; transition: all 0.15s; margin-top: 8px; }
+  .save-btn:active { transform: scale(0.98); background: #0065D1; }
+  .save-btn:disabled { background: var(--sep); color: var(--text3); }
+
+  /* TOAST */
+  .toast { position: fixed; bottom: 32px; left: 50%; transform: translateX(-50%) translateY(90px); padding: 12px 22px; border-radius: 40px; font-size: 14px; font-weight: 600; display: flex; align-items: center; gap: 8px; transition: transform 0.35s cubic-bezier(0.34,1.56,0.64,1); white-space: nowrap; z-index: 200; box-shadow: 0 4px 24px rgba(0,0,0,0.18); }
+  .toast.show { transform: translateX(-50%) translateY(0); }
+  .toast.ok { background: #1C1C1E; color: white; }
+  .toast.err { background: var(--red); color: white; }
+
+  /* HISTORY */
+  .list-hdr { display: flex; align-items: center; justify-content: space-between; padding: 0 4px; margin-bottom: 8px; }
+  .list-title { font-size: 13px; font-weight: 600; color: var(--text3); text-transform: uppercase; letter-spacing: 0.5px; }
+  .list-badge { font-size: 12px; color: var(--text3); background: var(--card); border: 0.5px solid var(--sep); padding: 3px 9px; border-radius: 20px; }
+
+  .entry-card { background: var(--card); border-radius: var(--r); margin-bottom: 10px; overflow: hidden; }
+  .entry-main { padding: 14px 16px; display: flex; align-items: flex-start; justify-content: space-between; border-bottom: 0.5px solid var(--sep-light); }
+  .entry-vendor { font-size: 16px; font-weight: 600; }
+  .entry-time { font-size: 12px; color: var(--text3); margin-top: 2px; }
+  .entry-qty-pill { background: var(--accent-bg); color: var(--accent); font-size: 13px; font-weight: 700; padding: 5px 12px; border-radius: 20px; border: 1px solid rgba(184,134,11,0.25); white-space: nowrap; }
+  .entry-meta { padding: 10px 16px; display: flex; gap: 6px; flex-wrap: wrap; align-items: center; }
+  .etag { font-size: 12px; font-weight: 500; padding: 4px 10px; border-radius: 20px; }
+  .etag-default { background: var(--bg); color: var(--text3); }
+  .etag-20mm { background: #FFF8E8; color: #A07828; }
+  .etag-msand { background: #EBF4FF; color: #0055BB; }
+  .etag-wsand { background: #EAFAF2; color: #1A7A45; }
+  .entry-actions { display: flex; border-top: 0.5px solid var(--sep-light); }
+  .action-btn { flex: 1; padding: 12px; text-align: center; font-size: 14px; font-weight: 600; cursor: pointer; border: none; background: none; border-right: 0.5px solid var(--sep-light); }
+  .action-btn:last-child { border-right: none; }
+  .action-edit { color: var(--blue); }
+  .action-delete { color: var(--red); }
+  .entry-amount { padding: 10px 16px; border-top: 0.5px solid var(--sep-light); font-size: 14px; color: var(--text2); display: flex; justify-content: space-between; align-items: center; }
+  .entry-amount-val { font-size: 15px; font-weight: 700; color: var(--text); }
+
+  /* CUSTOMERS */
+  .customer-card { background: var(--card); border-radius: var(--r); margin-bottom: 10px; overflow: hidden; display: flex; align-items: center; padding: 16px; gap: 14px; cursor: pointer; transition: background 0.15s; }
+  .customer-card:active { background: var(--sep-light); }
+  .customer-avatar { width: 44px; height: 44px; border-radius: 50%; background: var(--accent-bg); border: 1.5px solid rgba(184,134,11,0.25); display: flex; align-items: center; justify-content: center; font-size: 16px; font-weight: 700; color: var(--accent); flex-shrink: 0; }
+  .customer-info { flex: 1; }
+  .customer-name { font-size: 16px; font-weight: 600; }
+  .customer-meta { font-size: 13px; color: var(--text3); margin-top: 2px; }
+  .customer-total { text-align: right; }
+  .customer-amt { font-size: 16px; font-weight: 700; color: var(--text); }
+  .customer-loads { font-size: 12px; color: var(--text3); margin-top: 2px; }
+  .chevron { color: var(--sep); font-size: 18px; font-weight: 500; }
+
+  /* CUSTOMER DETAIL VIEW */
+  .detail-header { display: flex; align-items: center; gap: 12px; margin-bottom: 20px; }
+  .back-btn { font-size: 16px; font-weight: 600; color: var(--blue); cursor: pointer; display: flex; align-items: center; gap: 4px; background: none; border: none; font-family: var(--font); padding: 0; }
+  .detail-title { font-size: 18px; font-weight: 700; }
+  .detail-summary { background: var(--card); border-radius: var(--r); padding: 16px; margin-bottom: 16px; display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 12px; }
+  .ds-item { text-align: center; }
+  .ds-num { font-size: 22px; font-weight: 700; color: var(--text); }
+  .ds-num.gold { color: var(--accent); }
+  .ds-num.green { color: var(--green); }
+  .ds-label { font-size: 11px; color: var(--text3); margin-top: 3px; font-weight: 500; text-transform: uppercase; letter-spacing: 0.4px; }
+  .total-bar { background: var(--card); border-radius: var(--r); padding: 16px 20px; margin-top: 12px; display: flex; justify-content: space-between; align-items: center; }
+  .total-bar-label { font-size: 15px; font-weight: 600; color: var(--text2); }
+  .total-bar-val { font-size: 22px; font-weight: 800; color: var(--text); }
+
+  /* EDIT MODAL */
+  .modal-overlay { position: fixed; inset: 0; background: rgba(0,0,0,0.4); z-index: 100; display: flex; align-items: flex-end; justify-content: center; opacity: 0; pointer-events: none; transition: opacity 0.2s; }
+  .modal-overlay.show { opacity: 1; pointer-events: all; }
+  .modal { background: var(--bg); border-radius: 20px 20px 0 0; width: 100%; max-width: 430px; padding: 20px 16px 40px; transform: translateY(100%); transition: transform 0.3s cubic-bezier(0.34,1.2,0.64,1); }
+  .modal-overlay.show .modal { transform: translateY(0); }
+  .modal-handle { width: 36px; height: 4px; background: var(--sep); border-radius: 2px; margin: 0 auto 20px; }
+  .modal-title { font-size: 17px; font-weight: 700; text-align: center; margin-bottom: 20px; }
+  .modal-actions { display: flex; gap: 10px; margin-top: 12px; }
+  .modal-cancel { flex: 1; padding: 14px; background: var(--sep-light); color: var(--text2); border: none; border-radius: var(--r-sm); font-family: var(--font); font-size: 16px; font-weight: 600; cursor: pointer; }
+  .modal-save { flex: 1; padding: 14px; background: var(--blue); color: white; border: none; border-radius: var(--r-sm); font-family: var(--font); font-size: 16px; font-weight: 600; cursor: pointer; }
+
+  .empty { text-align: center; padding: 60px 24px; color: var(--text3); }
+  .empty-icon { font-size: 44px; margin-bottom: 14px; opacity: 0.4; }
+  .empty-text { font-size: 14px; }
+</style>
+</head>
+<body>
+<div class="app">
+
+  <!-- HEADER -->
+  <div class="header">
+    <div class="header-top">
+      <div class="brand">
+        <div class="brand-mark">AM</div>
+        <div>
+          <div class="brand-name">AMCO</div>
+          <div class="brand-sub">Quarry Operations</div>
+        </div>
+      </div>
+      <div class="date-pill" id="dateBadge"></div>
+    </div>
+    <div class="seg-wrap">
+      <div class="seg">
+        <button class="seg-btn active" onclick="switchTab('log')">Log</button>
+        <button class="seg-btn" onclick="switchTab('history')">History</button>
+        <button class="seg-btn" onclick="switchTab('customers')">Customers</button>
+      </div>
+    </div>
+  </div>
+
+  <div class="content">
+
+    <!-- LOG TAB -->
+    <div id="tab-log">
+      <div class="section">
+        <div class="section-label">Details</div>
+        <div class="group">
+          <div class="group-row">
+            <span class="row-label">Vendor</span>
+            <input class="row-input" type="text" id="vendor" placeholder="Contractor name" autocomplete="off" list="vendorList">
+            <datalist id="vendorList"></datalist>
+          </div>
+          <div class="group-row">
+            <span class="row-label">Driver</span>
+            <input class="row-input" type="text" id="driver" placeholder="Driver name" autocomplete="off" list="driverList">
+            <datalist id="driverList"></datalist>
+          </div>
+          <div class="group-row">
+            <span class="row-label">Notes</span>
+            <input class="row-input" type="text" id="notes" placeholder="Optional" autocomplete="off">
+          </div>
+        </div>
+      </div>
+
+      <div class="section">
+        <div class="section-label">Material</div>
+        <div class="mat-group">
+          <div class="mat-pill active" id="mat-20mm" onclick="selectMat('20mm')">
+            <span class="mat-pill-icon">🪨</span>
+            <span class="mat-pill-label">20mm</span>
+          </div>
+          <div class="mat-pill" id="mat-msand" onclick="selectMat('M-Sand')">
+            <span class="mat-pill-icon">🏖️</span>
+            <span class="mat-pill-label">M-Sand</span>
+          </div>
+          <div class="mat-pill" id="mat-wsand" onclick="selectMat('Washed Sand')">
+            <span class="mat-pill-icon">💧</span>
+            <span class="mat-pill-label">Washed Sand</span>
+          </div>
+        </div>
+      </div>
+
+      <div class="section">
+        <div class="section-label">Quantity</div>
+        <div class="qty-group">
+          <div class="qty-main">
+            <button class="qty-btn" onclick="changeQty(-1)">−</button>
+            <input class="qty-val" type="number" id="qty" value="1" min="0.5" step="0.5">
+            <button class="qty-btn" onclick="changeQty(1)">+</button>
+          </div>
+          <div class="unit-row">
+            <div class="unit-opt active" id="unit-brass" onclick="selectUnit('Brass')">Brass</div>
+            <div class="unit-opt" id="unit-tons" onclick="selectUnit('Tons')">Tons</div>
+          </div>
+        </div>
+      </div>
+
+      <div class="section">
+        <div class="section-label">Payment</div>
+        <div class="group">
+          <div class="amount-row">
+            <span class="amount-label">Amount</span>
+            <span class="rupee">₹</span>
+            <input class="amount-input" type="number" id="amount" placeholder="0.00" min="0" step="0.01">
+          </div>
+        </div>
+      </div>
+
+      <button class="save-btn" onclick="submitEntry()">Save Entry</button>
+    </div>
+
+    <!-- HISTORY TAB -->
+    <div id="tab-history" style="display:none">
+      <div class="list-hdr">
+        <div class="list-title">All Entries</div>
+        <div class="list-badge" id="entryCount">0 entries</div>
+      </div>
+      <div id="historyList"></div>
+    </div>
+
+    <!-- CUSTOMERS TAB -->
+    <div id="tab-customers" style="display:none">
+      <div id="customerList"></div>
+      <div id="customerDetail" style="display:none"></div>
+    </div>
+
+  </div>
+</div>
+
+<!-- EDIT MODAL -->
+<div class="modal-overlay" id="editModal">
+  <div class="modal">
+    <div class="modal-handle"></div>
+    <div class="modal-title">Edit Entry</div>
+    <div class="section" style="margin-bottom:12px">
+      <div class="group">
+        <div class="group-row">
+          <span class="row-label">Vendor</span>
+          <input class="row-input" type="text" id="e-vendor" placeholder="Contractor name">
+        </div>
+        <div class="group-row">
+          <span class="row-label">Driver</span>
+          <input class="row-input" type="text" id="e-driver" placeholder="Driver name">
+        </div>
+        <div class="group-row">
+          <span class="row-label">Notes</span>
+          <input class="row-input" type="text" id="e-notes" placeholder="Optional">
+        </div>
+      </div>
+    </div>
+    <div class="section" style="margin-bottom:12px">
+      <div class="section-label">Material</div>
+      <div class="mat-group">
+        <div class="mat-pill active" id="e-mat-20mm" onclick="editSelectMat('20mm')"><span class="mat-pill-icon">🪨</span><span class="mat-pill-label">20mm</span></div>
+        <div class="mat-pill" id="e-mat-msand" onclick="editSelectMat('M-Sand')"><span class="mat-pill-icon">🏖️</span><span class="mat-pill-label">M-Sand</span></div>
+        <div class="mat-pill" id="e-mat-wsand" onclick="editSelectMat('Washed Sand')"><span class="mat-pill-icon">💧</span><span class="mat-pill-label">Washed Sand</span></div>
+      </div>
+    </div>
+    <div class="section" style="margin-bottom:12px">
+      <div class="section-label">Quantity</div>
+      <div class="qty-group">
+        <div class="qty-main">
+          <button class="qty-btn" onclick="editChangeQty(-1)">−</button>
+          <input class="qty-val" type="number" id="e-qty" value="1" min="0.5" step="0.5">
+          <button class="qty-btn" onclick="editChangeQty(1)">+</button>
+        </div>
+        <div class="unit-row">
+          <div class="unit-opt active" id="e-unit-brass" onclick="editSelectUnit('Brass')">Brass</div>
+          <div class="unit-opt" id="e-unit-tons" onclick="editSelectUnit('Tons')">Tons</div>
+        </div>
+      </div>
+    </div>
+    <div class="section" style="margin-bottom:12px">
+      <div class="section-label">Payment</div>
+      <div class="group">
+        <div class="amount-row">
+          <span class="amount-label">Amount</span>
+          <span class="rupee">₹</span>
+          <input class="amount-input" type="number" id="e-amount" placeholder="0.00" min="0" step="0.01">
+        </div>
+      </div>
+    </div>
+    <div class="modal-actions">
+      <button class="modal-cancel" onclick="closeEdit()">Cancel</button>
+      <button class="modal-save" onclick="saveEdit()">Save</button>
+    </div>
+  </div>
+</div>
+
+<div class="toast" id="toast">
+  <span id="toastIcon">✓</span> <span id="toastMsg">Saved</span>
+</div>
+
+<script>
+  const SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbzHLEr54gmw44r3ykS2Vet5oGrqW5DHgM5uH1tG5clEtQENVywd7dHP8QHom7Vtcl9i/exec';
+
+  let selMat = '20mm', selUnit = 'Brass';
+  let editMat = '20mm', editUnit = 'Brass', editIdx = -1;
+  let entries = JSON.parse(localStorage.getItem('amcoEntries') || '[]');
+  let currentView = 'list'; // 'list' or 'detail'
+  let currentCustomer = null;
+
+  document.getElementById('dateBadge').textContent = new Date().toLocaleDateString('en-IN', { day:'numeric', month:'short', year:'numeric' });
+  refreshSuggestions();
+
+  function refreshSuggestions() {
+    document.getElementById('vendorList').innerHTML = [...new Set(entries.map(e=>e.vendor))].map(v=>`<option value="${v}">`).join('');
+    document.getElementById('driverList').innerHTML = [...new Set(entries.map(e=>e.driver))].map(d=>`<option value="${d}">`).join('');
+  }
+
+  function switchTab(t) {
+    ['log','history','customers'].forEach(x => document.getElementById('tab-'+x).style.display = x===t?'block':'none');
+    document.querySelectorAll('.seg-btn').forEach((el,i) => el.className='seg-btn'+(['log','history','customers'][i]===t?' active':''));
+    if (t==='history') renderHistory();
+    if (t==='customers') renderCustomers();
+  }
+
+  /* ── MATERIAL / UNIT ── */
+  function selectMat(m) {
+    selMat = m;
+    ['20mm','msand','wsand'].forEach(id => document.getElementById('mat-'+id).className='mat-pill');
+    document.getElementById('mat-'+{20mm:'20mm','M-Sand':'msand','Washed Sand':'wsand'}[m]).className='mat-pill active';
+  }
+  function selectUnit(u) {
+    selUnit = u;
+    document.getElementById('unit-brass').className='unit-opt'+(u==='Brass'?' active':'');
+    document.getElementById('unit-tons').className='unit-opt'+(u==='Tons'?' active':'');
+  }
+  function changeQty(d) {
+    const el=document.getElementById('qty');
+    el.value=Math.max(0.5,Math.round(((parseFloat(el.value)||1)+d*0.5)*10)/10);
+  }
+
+  /* ── SUBMIT ── */
+  function showToast(msg,ok=true) {
+    const t=document.getElementById('toast');
+    document.getElementById('toastMsg').textContent=msg;
+    document.getElementById('toastIcon').textContent=ok?'✓':'!';
+    t.className='toast show '+(ok?'ok':'err');
+    setTimeout(()=>t.className='toast '+(ok?'ok':'err'),2600);
+  }
+
+  async function submitEntry() {
+    const vendor=document.getElementById('vendor').value.trim();
+    const driver=document.getElementById('driver').value.trim();
+    const qty=parseFloat(document.getElementById('qty').value);
+    const notes=document.getElementById('notes').value.trim();
+    const amount=parseFloat(document.getElementById('amount').value)||0;
+
+    if (!vendor) return showToast('Enter vendor name',false);
+    if (!driver) return showToast('Enter driver name',false);
+    if (!qty||qty<=0) return showToast('Enter valid quantity',false);
+
+    const entry = { id: Date.now(), timestamp: new Date().toLocaleString('en-IN'), vendor, driver, material: selMat, quantity: qty, unit: selUnit, notes, amount };
+    entries.unshift(entry);
+    localStorage.setItem('amcoEntries', JSON.stringify(entries));
+    refreshSuggestions();
+
+    const btn=document.querySelector('.save-btn');
+    btn.disabled=true; btn.textContent='Saving...';
+    try {
+      await fetch(SCRIPT_URL,{method:'POST',mode:'no-cors',headers:{'Content-Type':'application/json'},body:JSON.stringify(entry)});
+      showToast('Saved to sheet ✓');
+    } catch { showToast('Saved locally ✓'); }
+
+    btn.disabled=false; btn.textContent='Save Entry';
+    document.getElementById('vendor').value='';
+    document.getElementById('driver').value='';
+    document.getElementById('qty').value=1;
+    document.getElementById('notes').value='';
+    document.getElementById('amount').value='';
+    selectMat('20mm'); selectUnit('Brass');
+  }
+
+  /* ── HELPERS ── */
+  function tagClass(m) { return m==='20mm'?'etag-20mm':m==='M-Sand'?'etag-msand':'etag-wsand'; }
+  function fmt(n) { return n>0?'₹'+Number(n).toLocaleString('en-IN'):'—'; }
+  function initials(name) { return name.split(' ').map(w=>w[0]).join('').toUpperCase().slice(0,2); }
+
+  /* ── HISTORY ── */
+  function renderHistory() {
+    const el=document.getElementById('historyList');
+    document.getElementById('entryCount').textContent=entries.length+' entries';
+    if (!entries.length) { el.innerHTML='<div class="empty"><div class="empty-icon">📋</div><div class="empty-text">No entries yet</div></div>'; return; }
+    el.innerHTML=entries.map((e,i)=>`
+      <div class="entry-card">
+        <div class="entry-main">
+          <div>
+            <div class="entry-vendor">${e.vendor}</div>
+            <div class="entry-time">${e.timestamp}</div>
+          </div>
+          <div class="entry-qty-pill">${e.quantity} ${e.unit}</div>
+        </div>
+        <div class="entry-meta">
+          <span class="etag ${tagClass(e.material)}">${e.material}</span>
+          <span class="etag etag-default">🚗 ${e.driver}</span>
+          ${e.notes?`<span class="etag etag-default">${e.notes}</span>`:''}
+        </div>
+        ${e.amount>0?`<div class="entry-amount"><span>Amount</span><span class="entry-amount-val">${fmt(e.amount)}</span></div>`:''}
+        <div class="entry-actions">
+          <button class="action-btn action-edit" onclick="openEdit(${i})">✏️ Edit</button>
+          <button class="action-btn action-delete" onclick="deleteEntry(${i})">🗑 Delete</button>
+        </div>
+      </div>`).join('');
+  }
+
+  /* ── DELETE ── */
+  function deleteEntry(i) {
+    if (!confirm('Delete this entry?')) return;
+    entries.splice(i,1);
+    localStorage.setItem('amcoEntries',JSON.stringify(entries));
+    renderHistory();
+    showToast('Entry deleted');
+  }
+
+  /* ── EDIT ── */
+  function openEdit(i) {
+    editIdx=i;
+    const e=entries[i];
+    document.getElementById('e-vendor').value=e.vendor;
+    document.getElementById('e-driver').value=e.driver;
+    document.getElementById('e-notes').value=e.notes||'';
+    document.getElementById('e-qty').value=e.quantity;
+    document.getElementById('e-amount').value=e.amount||'';
+    editSelectMat(e.material);
+    editSelectUnit(e.unit);
+    document.getElementById('editModal').className='modal-overlay show';
+  }
+
+  function closeEdit() {
+    document.getElementById('editModal').className='modal-overlay';
+    editIdx=-1;
+  }
+
+  function editSelectMat(m) {
+    editMat=m;
+    ['20mm','msand','wsand'].forEach(id=>document.getElementById('e-mat-'+id).className='mat-pill');
+    document.getElementById('e-mat-'+{20mm:'20mm','M-Sand':'msand','Washed Sand':'wsand'}[m]).className='mat-pill active';
+  }
+  function editSelectUnit(u) {
+    editUnit=u;
+    document.getElementById('e-unit-brass').className='unit-opt'+(u==='Brass'?' active':'');
+    document.getElementById('e-unit-tons').className='unit-opt'+(u==='Tons'?' active':'');
+  }
+  function editChangeQty(d) {
+    const el=document.getElementById('e-qty');
+    el.value=Math.max(0.5,Math.round(((parseFloat(el.value)||1)+d*0.5)*10)/10);
+  }
+
+  function saveEdit() {
+    if (editIdx<0) return;
+    const e=entries[editIdx];
+    e.vendor=document.getElementById('e-vendor').value.trim()||e.vendor;
+    e.driver=document.getElementById('e-driver').value.trim()||e.driver;
+    e.notes=document.getElementById('e-notes').value.trim();
+    e.quantity=parseFloat(document.getElementById('e-qty').value)||e.quantity;
+    e.amount=parseFloat(document.getElementById('e-amount').value)||0;
+    e.material=editMat;
+    e.unit=editUnit;
+    localStorage.setItem('amcoEntries',JSON.stringify(entries));
+    closeEdit();
+    renderHistory();
+    showToast('Entry updated ✓');
+  }
+
+  /* ── CUSTOMERS ── */
+  function renderCustomers() {
+    document.getElementById('customerList').style.display='block';
+    document.getElementById('customerDetail').style.display='none';
+    currentView='list';
+
+    const byVendor={};
+    entries.forEach(e=>{
+      if (!byVendor[e.vendor]) byVendor[e.vendor]={loads:0,totalQty:0,totalAmt:0,materials:{}};
+      byVendor[e.vendor].loads++;
+      byVendor[e.vendor].totalQty+=e.quantity;
+      byVendor[e.vendor].totalAmt+=(e.amount||0);
+      byVendor[e.vendor].materials[e.material]=(byVendor[e.vendor].materials[e.material]||0)+e.quantity;
+    });
+
+    const cl=document.getElementById('customerList');
+    if (!Object.keys(byVendor).length) {
+      cl.innerHTML='<div class="empty"><div class="empty-icon">👥</div><div class="empty-text">No customers yet.<br>Log your first entry!</div></div>';
+      return;
+    }
+
+    cl.innerHTML=`
+      <div class="list-hdr" style="margin-bottom:12px">
+        <div class="list-title">All Customers</div>
+        <div class="list-badge">${Object.keys(byVendor).length} vendors</div>
+      </div>
+      ${Object.entries(byVendor).sort((a,b)=>b[1].totalAmt-a[1].totalAmt).map(([v,d])=>`
+      <div class="customer-card" onclick="showCustomerDetail('${v.replace(/'/g,"\\'")}')">
+        <div class="customer-avatar">${initials(v)}</div>
+        <div class="customer-info">
+          <div class="customer-name">${v}</div>
+          <div class="customer-meta">${d.loads} trips · ${Object.keys(d.materials).join(', ')}</div>
+        </div>
+        <div class="customer-total">
+          <div class="customer-amt">${d.totalAmt>0?fmt(d.totalAmt):'—'}</div>
+          <div class="customer-loads">${d.totalQty} qty</div>
+        </div>
+        <div class="chevron">›</div>
+      </div>`).join('')}
+    `;
+  }
+
+  function showCustomerDetail(vendor) {
+    currentCustomer=vendor;
+    const vendorEntries=entries.filter(e=>e.vendor===vendor);
+    const totalAmt=vendorEntries.reduce((s,e)=>s+(e.amount||0),0);
+    const totalQty=vendorEntries.reduce((s,e)=>s+e.quantity,0);
+    const loads=vendorEntries.length;
+
+    document.getElementById('customerList').style.display='none';
+    const detail=document.getElementById('customerDetail');
+    detail.style.display='block';
+
+    detail.innerHTML=`
+      <div class="detail-header">
+        <button class="back-btn" onclick="renderCustomers()">‹ Back</button>
+        <div class="detail-title">${vendor}</div>
+      </div>
+
+      <div class="detail-summary">
+        <div class="ds-item">
+          <div class="ds-num">${loads}</div>
+          <div class="ds-label">Trips</div>
+        </div>
+        <div class="ds-item">
+          <div class="ds-num gold">${totalQty}</div>
+          <div class="ds-label">Total Qty</div>
+        </div>
+        <div class="ds-item">
+          <div class="ds-num green">${totalAmt>0?'₹'+Math.round(totalAmt).toLocaleString('en-IN'):'—'}</div>
+          <div class="ds-label">Amount</div>
+        </div>
+      </div>
+
+      <div class="list-hdr">
+        <div class="list-title">All Trips</div>
+        <div class="list-badge">${loads} entries</div>
+      </div>
+
+      ${vendorEntries.map(e=>`
+        <div class="entry-card">
+          <div class="entry-main">
+            <div>
+              <div class="entry-vendor" style="font-size:14px;font-weight:500">${e.timestamp}</div>
+              <div class="entry-time">🚗 ${e.driver}</div>
+            </div>
+            <div class="entry-qty-pill">${e.quantity} ${e.unit}</div>
+          </div>
+          <div class="entry-meta">
+            <span class="etag ${tagClass(e.material)}">${e.material}</span>
+            ${e.notes?`<span class="etag etag-default">${e.notes}</span>`:''}
+          </div>
+          ${e.amount>0?`<div class="entry-amount"><span>Amount</span><span class="entry-amount-val">${fmt(e.amount)}</span></div>`:''}
+        </div>`).join('')}
+
+      <div class="total-bar">
+        <div class="total-bar-label">Total Amount</div>
+        <div class="total-bar-val">${totalAmt>0?fmt(totalAmt):'—'}</div>
+      </div>
+    `;
+  }
+</script>
+</body>
+</html>
