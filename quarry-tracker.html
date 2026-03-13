@@ -370,20 +370,29 @@ var editIdx = -1;
 var entries = [];
 
 function loadFromSheet() {
-  fetch(SCRIPT_URL, { method: 'GET', mode: 'cors' })
-    .then(function(r){ return r.json(); })
-    .then(function(data){
-      if (data.status === 'ok' && data.entries) {
-        entries = data.entries;
-        localStorage.setItem('amcoEntries', JSON.stringify(entries));
-        refreshSuggestions();
-      }
-    })
-    .catch(function(){
-      // Fall back to localStorage if offline
-      entries = JSON.parse(localStorage.getItem('amcoEntries') || '[]');
+  // Remove old callback if exists
+  var old = document.getElementById('jsonp-script');
+  if (old) old.parentNode.removeChild(old);
+
+  window.amcoCallback = function(data) {
+    if (data.status === 'ok' && data.entries) {
+      entries = data.entries;
+      localStorage.setItem('amcoEntries', JSON.stringify(entries));
       refreshSuggestions();
-    });
+      // Refresh current tab if on history or customers
+      var active = document.querySelector('.seg-btn.active');
+      if (active) {
+        var txt = active.textContent.trim().toLowerCase();
+        if (txt === 'history') renderHistory();
+        if (txt === 'customers') renderCustomers();
+      }
+    }
+  };
+
+  var s = document.createElement('script');
+  s.id = 'jsonp-script';
+  s.src = SCRIPT_URL + '?callback=amcoCallback';
+  document.body.appendChild(s);
 }
 
 document.getElementById('dateBadge').textContent = new Date().toLocaleDateString('en-IN', {day:'numeric',month:'short',year:'numeric'});
