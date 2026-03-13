@@ -29,8 +29,6 @@
   .brand-name{font-size:20px;font-weight:700;letter-spacing:-0.3px;}
   .brand-sub{font-size:11px;color:var(--text3);margin-top:1px;}
   .date-pill{font-size:12px;font-weight:500;color:var(--text3);background:var(--card);border:0.5px solid var(--sep);padding:5px 11px;border-radius:20px;}
-
-  /* SEGMENTED */
   .seg-wrap{padding:0 0 12px;}
   .seg{display:flex;background:rgba(118,118,128,0.12);border-radius:9px;padding:2px;gap:2px;}
   .seg-btn{flex:1;padding:7px 4px;text-align:center;font-size:13px;font-weight:500;color:var(--text2);border-radius:7px;cursor:pointer;border:none;background:none;transition:all 0.18s;font-family:var(--font);}
@@ -45,7 +43,7 @@
   .group{background:var(--card);border-radius:var(--r);overflow:hidden;}
   .group-row{display:flex;align-items:center;padding:0 16px;min-height:52px;gap:12px;border-bottom:0.5px solid var(--sep-light);}
   .group-row:last-child{border-bottom:none;}
-  .row-label{font-size:15px;color:var(--text);min-width:100px;flex-shrink:0;}
+  .row-label{font-size:15px;color:var(--text);min-width:110px;flex-shrink:0;}
   .row-input{flex:1;font-size:15px;color:var(--text2);background:none;border:none;outline:none;font-family:var(--font);text-align:right;padding:14px 0;}
   .row-input::placeholder{color:var(--text3);}
 
@@ -70,7 +68,7 @@
 
   /* AMOUNT */
   .amount-row{display:flex;align-items:center;padding:0 16px;min-height:52px;gap:8px;}
-  .amount-label{font-size:15px;color:var(--text);min-width:100px;flex-shrink:0;}
+  .amount-label{font-size:15px;color:var(--text);min-width:110px;flex-shrink:0;}
   .rupee{font-size:15px;color:var(--text3);}
   .amount-input{flex:1;font-size:15px;font-weight:500;color:var(--text);background:none;border:none;outline:none;font-family:var(--font);text-align:right;padding:14px 0;}
   .amount-input::placeholder{color:var(--text3);font-weight:400;}
@@ -90,6 +88,27 @@
   .list-hdr{display:flex;align-items:center;justify-content:space-between;padding:0 4px;margin-bottom:8px;}
   .list-title{font-size:13px;font-weight:600;color:var(--text3);text-transform:uppercase;letter-spacing:0.5px;}
   .list-badge{font-size:12px;color:var(--text3);background:var(--card);border:0.5px solid var(--sep);padding:3px 9px;border-radius:20px;}
+
+  /* SEARCH BAR */
+  .search-wrap{background:var(--card);border-radius:var(--r-sm);display:flex;align-items:center;padding:0 14px;gap:8px;margin-bottom:12px;border:0.5px solid var(--sep);}
+  .search-icon{font-size:15px;color:var(--text3);}
+  .search-input{flex:1;padding:12px 0;font-size:15px;color:var(--text);background:none;border:none;outline:none;font-family:var(--font);}
+  .search-input::placeholder{color:var(--text3);}
+  .search-clear{font-size:18px;color:var(--text3);cursor:pointer;padding:4px;}
+
+  /* DATE FILTER */
+  .filter-row{display:flex;gap:8px;margin-bottom:12px;overflow-x:auto;padding-bottom:2px;}
+  .filter-chip{padding:6px 14px;border-radius:20px;font-size:13px;font-weight:500;white-space:nowrap;cursor:pointer;border:1px solid var(--sep);background:var(--card);color:var(--text2);transition:all 0.15s;flex-shrink:0;}
+  .filter-chip.active{background:var(--blue);color:white;border-color:var(--blue);}
+
+  /* TODAY BANNER */
+  .today-banner{background:linear-gradient(135deg,#FFF8E8,#FFF3D0);border:1px solid rgba(184,134,11,0.2);border-radius:var(--r);padding:16px;margin-bottom:16px;}
+  .today-banner-title{font-size:12px;font-weight:600;color:var(--accent);text-transform:uppercase;letter-spacing:0.5px;margin-bottom:10px;}
+  .today-stats{display:flex;gap:0;}
+  .today-stat{flex:1;text-align:center;border-right:1px solid rgba(184,134,11,0.15);}
+  .today-stat:last-child{border-right:none;}
+  .today-num{font-size:22px;font-weight:700;color:var(--text);}
+  .today-label{font-size:11px;color:var(--accent);margin-top:2px;font-weight:500;}
 
   /* ENTRY CARDS */
   .entry-card{background:var(--card);border-radius:var(--r);margin-bottom:10px;overflow:hidden;}
@@ -138,6 +157,10 @@
   .total-bar-label{font-size:15px;font-weight:600;color:var(--text2);}
   .total-bar-val{font-size:22px;font-weight:800;}
 
+  /* SHARE BTN */
+  .share-btn{width:100%;padding:14px;background:var(--bg);color:var(--blue);border:1px solid var(--sep);border-radius:var(--r);font-family:var(--font);font-size:15px;font-weight:600;cursor:pointer;margin-top:10px;display:flex;align-items:center;justify-content:center;gap:8px;}
+  .share-btn:active{background:var(--sep-light);}
+
   /* EDIT MODAL */
   .modal-overlay{position:fixed;inset:0;background:rgba(0,0,0,0.4);z-index:100;display:flex;align-items:flex-end;justify-content:center;opacity:0;pointer-events:none;transition:opacity 0.2s;}
   .modal-overlay.show{opacity:1;pointer-events:all;}
@@ -152,6 +175,7 @@
   .empty{text-align:center;padding:60px 24px;color:var(--text3);}
   .empty-icon{font-size:44px;margin-bottom:14px;opacity:0.4;}
   .empty-text{font-size:14px;line-height:1.6;}
+  .loading{text-align:center;padding:40px;color:var(--text3);font-size:14px;}
 </style>
 </head>
 <body>
@@ -192,6 +216,11 @@
             <span class="row-label">Driver</span>
             <input class="row-input" type="text" id="driver" placeholder="Driver name" autocomplete="off" list="driverList">
             <datalist id="driverList"></datalist>
+          </div>
+          <div class="group-row">
+            <span class="row-label">Vehicle No.</span>
+            <input class="row-input" type="text" id="vehicle" placeholder="e.g. TN01AB1234" autocomplete="off" list="vehicleList" style="text-transform:uppercase;">
+            <datalist id="vehicleList"></datalist>
           </div>
           <div class="group-row">
             <span class="row-label">Notes</span>
@@ -249,8 +278,20 @@
 
     <!-- HISTORY TAB -->
     <div id="tab-history" style="display:none">
+      <div id="todayBanner"></div>
+      <div class="search-wrap">
+        <span class="search-icon">🔍</span>
+        <input class="search-input" type="text" id="searchInput" placeholder="Search vendor, driver, vehicle..." oninput="renderHistory()">
+        <span class="search-clear" onclick="clearSearch()">✕</span>
+      </div>
+      <div class="filter-row">
+        <div class="filter-chip active" id="filter-all" onclick="setFilter('all')">All</div>
+        <div class="filter-chip" id="filter-today" onclick="setFilter('today')">Today</div>
+        <div class="filter-chip" id="filter-week" onclick="setFilter('week')">This Week</div>
+        <div class="filter-chip" id="filter-month" onclick="setFilter('month')">This Month</div>
+      </div>
       <div class="list-hdr">
-        <div class="list-title">All Entries</div>
+        <div class="list-title">Entries</div>
         <div class="list-badge" id="entryCount">0 entries</div>
       </div>
       <div id="historyList"></div>
@@ -270,39 +311,22 @@
   <div class="modal" id="modalInner">
     <div class="modal-handle"></div>
     <div class="modal-title">Edit Entry</div>
-
     <div class="section" style="margin-bottom:12px">
       <div class="group">
-        <div class="group-row">
-          <span class="row-label">Vendor</span>
-          <input class="row-input" type="text" id="e-vendor" placeholder="Contractor name">
-        </div>
-        <div class="group-row">
-          <span class="row-label">Driver</span>
-          <input class="row-input" type="text" id="e-driver" placeholder="Driver name">
-        </div>
-        <div class="group-row">
-          <span class="row-label">Notes</span>
-          <input class="row-input" type="text" id="e-notes" placeholder="Optional">
-        </div>
+        <div class="group-row"><span class="row-label">Vendor</span><input class="row-input" type="text" id="e-vendor" placeholder="Contractor name"></div>
+        <div class="group-row"><span class="row-label">Driver</span><input class="row-input" type="text" id="e-driver" placeholder="Driver name"></div>
+        <div class="group-row"><span class="row-label">Vehicle No.</span><input class="row-input" type="text" id="e-vehicle" placeholder="e.g. TN01AB1234" style="text-transform:uppercase;"></div>
+        <div class="group-row"><span class="row-label">Notes</span><input class="row-input" type="text" id="e-notes" placeholder="Optional"></div>
       </div>
     </div>
-
     <div class="section" style="margin-bottom:12px">
       <div class="section-label">Material</div>
       <div class="mat-group">
-        <div class="mat-pill active" id="e-mat-20mm" onclick="editSelectMat('20mm')">
-          <span class="mat-pill-icon">🪨</span><span class="mat-pill-label">20mm</span>
-        </div>
-        <div class="mat-pill" id="e-mat-msand" onclick="editSelectMat('M-Sand')">
-          <span class="mat-pill-icon">🏖️</span><span class="mat-pill-label">M-Sand</span>
-        </div>
-        <div class="mat-pill" id="e-mat-wsand" onclick="editSelectMat('Washed Sand')">
-          <span class="mat-pill-icon">💧</span><span class="mat-pill-label">Washed Sand</span>
-        </div>
+        <div class="mat-pill active" id="e-mat-20mm" onclick="editSelectMat('20mm')"><span class="mat-pill-icon">🪨</span><span class="mat-pill-label">20mm</span></div>
+        <div class="mat-pill" id="e-mat-msand" onclick="editSelectMat('M-Sand')"><span class="mat-pill-icon">🏖️</span><span class="mat-pill-label">M-Sand</span></div>
+        <div class="mat-pill" id="e-mat-wsand" onclick="editSelectMat('Washed Sand')"><span class="mat-pill-icon">💧</span><span class="mat-pill-label">Washed Sand</span></div>
       </div>
     </div>
-
     <div class="section" style="margin-bottom:12px">
       <div class="section-label">Quantity</div>
       <div class="qty-group">
@@ -317,7 +341,6 @@
         </div>
       </div>
     </div>
-
     <div class="section" style="margin-bottom:12px">
       <div class="section-label">Payment</div>
       <div class="group">
@@ -328,7 +351,6 @@
         </div>
       </div>
     </div>
-
     <div class="modal-actions">
       <button class="modal-cancel" onclick="closeEdit()">Cancel</button>
       <button class="modal-save" onclick="saveEdit()">Save</button>
@@ -341,46 +363,24 @@
 </div>
 
 <script>
-function sendToSheet(data, cb) {
-  var old = document.getElementById('jsonp-save');
-  if (old) old.parentNode.removeChild(old);
-
-  var params = 'vendor=' + encodeURIComponent(data.vendor)
-    + '&driver=' + encodeURIComponent(data.driver)
-    + '&material=' + encodeURIComponent(data.material)
-    + '&quantity=' + encodeURIComponent(data.quantity)
-    + '&unit=' + encodeURIComponent(data.unit)
-    + '&amount=' + encodeURIComponent(data.amount || 0)
-    + '&notes=' + encodeURIComponent(data.notes || '')
-    + '&timestamp=' + encodeURIComponent(data.timestamp);
-
-  window.amcoSaveCallback = function(result) { cb(result.status === 'success'); };
-
-  var s = document.createElement('script');
-  s.id = 'jsonp-save';
-  s.src = SCRIPT_URL + '?' + params + '&callback=amcoSaveCallback';
-  document.body.appendChild(s);
-}
-
 var SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbzZ2zCHDxUiOQJky2ZOjrmqg2KIuq7NMO94x1-V08rHRNkaCEMoz-5ICwGBzIiKdvC9/exec';
 
-var selMat = '20mm';
-var selUnit = 'Brass';
-var editMat = '20mm';
-var editUnit = 'Brass';
-var editIdx = -1;
+var selMat = '20mm', selUnit = 'Brass';
+var editMat = '20mm', editUnit = 'Brass', editIdx = -1;
 var entries = [];
+var activeFilter = 'all';
 
+document.getElementById('dateBadge').textContent = new Date().toLocaleDateString('en-IN', {day:'numeric',month:'short',year:'numeric'});
+loadFromSheet();
+
+/* ── SHEET SYNC ── */
 function loadFromSheet() {
-  // Remove old callback if exists
-  var old = document.getElementById('jsonp-script');
+  var old = document.getElementById('jsonp-load');
   if (old) old.parentNode.removeChild(old);
-
-  window.amcoCallback = function(data) {
+  window.amcoLoadCallback = function(data) {
     if (data.status === 'ok' && data.entries) {
       entries = data.entries;
       refreshSuggestions();
-      // Refresh current tab if on history or customers
       var active = document.querySelector('.seg-btn.active');
       if (active) {
         var txt = active.textContent.trim().toLowerCase();
@@ -389,337 +389,386 @@ function loadFromSheet() {
       }
     }
   };
-
   var s = document.createElement('script');
-  s.id = 'jsonp-script';
-  s.src = SCRIPT_URL + '?callback=amcoCallback';
+  s.id = 'jsonp-load';
+  s.src = SCRIPT_URL + '?callback=amcoLoadCallback';
   document.body.appendChild(s);
 }
 
-document.getElementById('dateBadge').textContent = new Date().toLocaleDateString('en-IN', {day:'numeric',month:'short',year:'numeric'});
-localStorage.removeItem('amcoEntries');
-refreshSuggestions();
-loadFromSheet();
+function sendToSheet(data, cb) {
+  var old = document.getElementById('jsonp-save');
+  if (old) old.parentNode.removeChild(old);
+  var params = 'vendor=' + encodeURIComponent(data.vendor)
+    + '&driver=' + encodeURIComponent(data.driver)
+    + '&vehicle=' + encodeURIComponent(data.vehicle || '')
+    + '&material=' + encodeURIComponent(data.material)
+    + '&quantity=' + encodeURIComponent(data.quantity)
+    + '&unit=' + encodeURIComponent(data.unit)
+    + '&amount=' + encodeURIComponent(data.amount || 0)
+    + '&notes=' + encodeURIComponent(data.notes || '')
+    + '&timestamp=' + encodeURIComponent(data.timestamp);
+  window.amcoSaveCallback = function(result) { cb(result.status === 'success'); };
+  var s = document.createElement('script');
+  s.id = 'jsonp-save';
+  s.src = SCRIPT_URL + '?' + params + '&callback=amcoSaveCallback';
+  document.body.appendChild(s);
+}
+
+/* ── SUGGESTIONS ── */
+function toTitleCase(str) {
+  return str.replace(/\b\w/g, function(c){ return c.toUpperCase(); });
+}
 
 function refreshSuggestions() {
-  var vendors = [];
-  var drivers = [];
-  for (var i = 0; i < entries.length; i++) {
-    if (vendors.indexOf(entries[i].vendor) === -1) vendors.push(entries[i].vendor);
-    if (drivers.indexOf(entries[i].driver) === -1) drivers.push(entries[i].driver);
+  var vendors = [], drivers = [], vehicles = [];
+  for (var i=0; i<entries.length; i++) {
+    if (entries[i].vendor && vendors.indexOf(entries[i].vendor) === -1) vendors.push(entries[i].vendor);
+    if (entries[i].driver && drivers.indexOf(entries[i].driver) === -1) drivers.push(entries[i].driver);
+    if (entries[i].vehicle && vehicles.indexOf(entries[i].vehicle) === -1) vehicles.push(entries[i].vehicle);
   }
   var vl = document.getElementById('vendorList');
   var dl = document.getElementById('driverList');
+  var vcl = document.getElementById('vehicleList');
   if (vl) vl.innerHTML = vendors.map(function(v){return '<option value="'+v+'">';}).join('');
   if (dl) dl.innerHTML = drivers.map(function(d){return '<option value="'+d+'">';}).join('');
+  if (vcl) vcl.innerHTML = vehicles.map(function(v){return '<option value="'+v+'">';}).join('');
 }
 
+/* ── TABS ── */
 function switchTab(t) {
   var tabs = ['log','history','customers'];
-  for (var i = 0; i < tabs.length; i++) {
-    document.getElementById('tab-'+tabs[i]).style.display = tabs[i]===t ? 'block' : 'none';
+  for (var i=0; i<tabs.length; i++) {
+    document.getElementById('tab-'+tabs[i]).style.display = tabs[i]===t?'block':'none';
   }
   var btns = document.querySelectorAll('.seg-btn');
-  for (var i = 0; i < btns.length; i++) {
-    btns[i].className = 'seg-btn' + (tabs[i]===t ? ' active' : '');
+  for (var i=0; i<btns.length; i++) {
+    btns[i].className = 'seg-btn'+(tabs[i]===t?' active':'');
   }
-  if (t==='history') renderHistory();
-  if (t==='customers') renderCustomers();
+  if (t==='history') { loadFromSheet(); renderHistory(); }
+  if (t==='customers') { loadFromSheet(); renderCustomers(); }
 }
 
-function matIdFromName(m) {
-  if (m==='20mm') return '20mm';
-  if (m==='M-Sand') return 'msand';
-  return 'wsand';
-}
-
+/* ── MAT / UNIT ── */
+function matId(m) { return m==='20mm'?'20mm':m==='M-Sand'?'msand':'wsand'; }
 function selectMat(m) {
   selMat = m;
-  var ids = ['20mm','msand','wsand'];
-  for (var i=0; i<ids.length; i++) {
-    document.getElementById('mat-'+ids[i]).className = 'mat-pill';
-  }
-  document.getElementById('mat-'+matIdFromName(m)).className = 'mat-pill active';
+  ['20mm','msand','wsand'].forEach(function(id){ document.getElementById('mat-'+id).className='mat-pill'; });
+  document.getElementById('mat-'+matId(m)).className='mat-pill active';
 }
-
 function selectUnit(u) {
   selUnit = u;
-  document.getElementById('unit-brass').className = 'unit-opt' + (u==='Brass'?' active':'');
-  document.getElementById('unit-tons').className = 'unit-opt' + (u==='Tons'?' active':'');
+  document.getElementById('unit-brass').className='unit-opt'+(u==='Brass'?' active':'');
+  document.getElementById('unit-tons').className='unit-opt'+(u==='Tons'?' active':'');
 }
-
 function changeQty(d) {
-  var el = document.getElementById('qty');
-  var v = parseFloat(el.value) || 1;
-  el.value = Math.max(0.5, Math.round((v + d*0.5)*10)/10);
+  var el=document.getElementById('qty');
+  el.value=Math.max(0.5,Math.round(((parseFloat(el.value)||1)+d*0.5)*10)/10);
 }
 
-function showToast(msg, ok) {
-  if (ok === undefined) ok = true;
-  var t = document.getElementById('toast');
-  document.getElementById('toastMsg').textContent = msg;
-  document.getElementById('toastIcon').textContent = ok ? '✓' : '!';
-  t.className = 'toast show ' + (ok ? 'ok' : 'err');
-  setTimeout(function(){ t.className = 'toast ' + (ok ? 'ok' : 'err'); }, 2600);
+/* ── TOAST ── */
+function showToast(msg,ok) {
+  if (ok===undefined) ok=true;
+  var t=document.getElementById('toast');
+  document.getElementById('toastMsg').textContent=msg;
+  document.getElementById('toastIcon').textContent=ok?'✓':'!';
+  t.className='toast show '+(ok?'ok':'err');
+  setTimeout(function(){ t.className='toast '+(ok?'ok':'err'); },2600);
 }
 
+/* ── SUBMIT ── */
 function submitEntry() {
-  var vendor = document.getElementById('vendor').value.trim();
-  var driver = document.getElementById('driver').value.trim();
-  var qty = parseFloat(document.getElementById('qty').value);
-  var notes = document.getElementById('notes').value.trim();
-  var amount = parseFloat(document.getElementById('amount').value) || 0;
+  var vendor  = toTitleCase(document.getElementById('vendor').value.trim());
+  var driver  = toTitleCase(document.getElementById('driver').value.trim());
+  var vehicle = document.getElementById('vehicle').value.trim().toUpperCase();
+  var qty     = parseFloat(document.getElementById('qty').value);
+  var notes   = document.getElementById('notes').value.trim();
+  var amount  = parseFloat(document.getElementById('amount').value) || 0;
 
-  if (!vendor) { showToast('Enter vendor name', false); return; }
-  if (!driver) { showToast('Enter driver name', false); return; }
-  if (!qty || qty <= 0) { showToast('Enter valid quantity', false); return; }
+  if (!vendor) return showToast('Enter vendor name', false);
+  if (!driver) return showToast('Enter driver name', false);
+  if (!qty||qty<=0) return showToast('Enter valid quantity', false);
 
   var entry = {
-    id: Date.now(),
     timestamp: new Date().toLocaleString('en-IN'),
-    vendor: vendor, driver: driver,
+    vendor: vendor, driver: driver, vehicle: vehicle,
     material: selMat, quantity: qty, unit: selUnit,
     notes: notes, amount: amount
   };
 
   var btn = document.getElementById('saveBtn');
-  btn.disabled = true;
-  btn.textContent = 'Saving...';
+  btn.disabled = true; btn.textContent = 'Saving...';
 
   sendToSheet(entry, function(ok) {
     showToast(ok ? 'Saved to sheet ✓' : 'Saved locally ✓');
-    btn.disabled = false;
-    btn.textContent = 'Save Entry';
-    // Reload from sheet after save so history is fresh
+    btn.disabled = false; btn.textContent = 'Save Entry';
     loadFromSheet();
   });
 
-  document.getElementById('vendor').value = '';
-  document.getElementById('driver').value = '';
-  document.getElementById('qty').value = 1;
-  document.getElementById('notes').value = '';
-  document.getElementById('amount').value = '';
-  selectMat('20mm');
-  selectUnit('Brass');
+  document.getElementById('vendor').value='';
+  document.getElementById('driver').value='';
+  document.getElementById('vehicle').value='';
+  document.getElementById('qty').value=1;
+  document.getElementById('notes').value='';
+  document.getElementById('amount').value='';
+  selectMat('20mm'); selectUnit('Brass');
 }
 
-function tagClass(m) {
-  if (m==='20mm') return 'etag-20mm';
-  if (m==='M-Sand') return 'etag-msand';
-  return 'etag-wsand';
-}
-
-function fmt(n) {
-  return n > 0 ? '₹' + Number(n).toLocaleString('en-IN') : '—';
-}
-
+/* ── HELPERS ── */
+function tagClass(m) { return m==='20mm'?'etag-20mm':m==='M-Sand'?'etag-msand':'etag-wsand'; }
+function fmt(n) { return n>0?'₹'+Number(n).toLocaleString('en-IN'):'—'; }
 function initials(name) {
-  var parts = name.trim().split(' ');
-  var result = '';
-  for (var i=0; i<Math.min(parts.length,2); i++) {
-    if (parts[i].length > 0) result += parts[i][0].toUpperCase();
-  }
-  return result || '?';
+  var p=name.trim().split(' '), r='';
+  for (var i=0;i<Math.min(p.length,2);i++) if(p[i].length>0) r+=p[i][0].toUpperCase();
+  return r||'?';
+}
+function isToday(ts) {
+  var d = new Date(ts);
+  var n = new Date();
+  return d.getDate()===n.getDate()&&d.getMonth()===n.getMonth()&&d.getFullYear()===n.getFullYear();
+}
+function isThisWeek(ts) {
+  var d=new Date(ts), n=new Date();
+  var start=new Date(n); start.setDate(n.getDate()-n.getDay());
+  start.setHours(0,0,0,0);
+  return d>=start;
+}
+function isThisMonth(ts) {
+  var d=new Date(ts), n=new Date();
+  return d.getMonth()===n.getMonth()&&d.getFullYear()===n.getFullYear();
 }
 
-/* HISTORY */
+/* ── FILTER ── */
+function setFilter(f) {
+  activeFilter = f;
+  ['all','today','week','month'].forEach(function(x){
+    document.getElementById('filter-'+x).className='filter-chip'+(x===f?' active':'');
+  });
+  renderHistory();
+}
+function clearSearch() {
+  document.getElementById('searchInput').value='';
+  renderHistory();
+}
+
+function getFilteredEntries() {
+  var q = document.getElementById('searchInput') ? document.getElementById('searchInput').value.toLowerCase().trim() : '';
+  return entries.filter(function(e) {
+    var matchFilter = true;
+    if (activeFilter==='today') matchFilter=isToday(e.timestamp);
+    else if (activeFilter==='week') matchFilter=isThisWeek(e.timestamp);
+    else if (activeFilter==='month') matchFilter=isThisMonth(e.timestamp);
+    var matchSearch = !q || (
+      (e.vendor||'').toLowerCase().indexOf(q)>-1 ||
+      (e.driver||'').toLowerCase().indexOf(q)>-1 ||
+      (e.vehicle||'').toLowerCase().indexOf(q)>-1 ||
+      (e.material||'').toLowerCase().indexOf(q)>-1 ||
+      (e.notes||'').toLowerCase().indexOf(q)>-1
+    );
+    return matchFilter && matchSearch;
+  });
+}
+
+/* ── TODAY BANNER ── */
+function renderTodayBanner() {
+  var todayEntries = entries.filter(function(e){ return isToday(e.timestamp); });
+  var banner = document.getElementById('todayBanner');
+  if (!todayEntries.length) { banner.innerHTML=''; return; }
+  var totalQty=0, totalAmt=0;
+  todayEntries.forEach(function(e){ totalQty+=e.quantity; totalAmt+=(e.amount||0); });
+  banner.innerHTML = '<div class="today-banner">'
+    + '<div class="today-banner-title">Today\'s Activity</div>'
+    + '<div class="today-stats">'
+    + '<div class="today-stat"><div class="today-num">'+todayEntries.length+'</div><div class="today-label">Trips</div></div>'
+    + '<div class="today-stat"><div class="today-num">'+totalQty+'</div><div class="today-label">Qty</div></div>'
+    + '<div class="today-stat"><div class="today-num">'+(totalAmt>0?'₹'+Math.round(totalAmt).toLocaleString('en-IN'):'—')+'</div><div class="today-label">Amount</div></div>'
+    + '</div></div>';
+}
+
+/* ── HISTORY ── */
 function renderHistory() {
+  renderTodayBanner();
+  var filtered = getFilteredEntries();
   var el = document.getElementById('historyList');
-  document.getElementById('entryCount').textContent = entries.length + ' entries';
-  if (!entries.length) {
-    el.innerHTML = '<div class="empty"><div class="empty-icon">📋</div><div class="empty-text">No entries yet.<br>Log your first load!</div></div>';
+  document.getElementById('entryCount').textContent = filtered.length+' entries';
+  if (!filtered.length) {
+    el.innerHTML='<div class="empty"><div class="empty-icon">📋</div><div class="empty-text">No entries found</div></div>';
     return;
   }
-  var html = '';
-  for (var i=0; i<entries.length; i++) {
-    var e = entries[i];
-    html += '<div class="entry-card">';
-    html += '<div class="entry-main">';
-    html += '<div><div class="entry-vendor">'+e.vendor+'</div><div class="entry-time">'+e.timestamp+'</div></div>';
-    html += '<div class="entry-qty-pill">'+e.quantity+' '+e.unit+'</div>';
-    html += '</div>';
-    html += '<div class="entry-meta">';
-    html += '<span class="etag '+tagClass(e.material)+'">'+e.material+'</span>';
-    html += '<span class="etag etag-default">🚗 '+e.driver+'</span>';
-    if (e.notes) html += '<span class="etag etag-default">'+e.notes+'</span>';
-    html += '</div>';
-    if (e.amount > 0) {
-      html += '<div class="entry-amount-row"><span class="entry-amount-label">Amount</span><span class="entry-amount-val">'+fmt(e.amount)+'</span></div>';
-    }
-    html += '<div class="entry-actions">';
-    html += '<button class="action-btn action-edit" onclick="openEdit('+i+')">✏️ Edit</button>';
-    html += '<button class="action-btn action-delete" onclick="deleteEntry('+i+')">🗑 Delete</button>';
-    html += '</div></div>';
+  var html='';
+  for (var i=0; i<filtered.length; i++) {
+    var e=filtered[i];
+    var realIdx = entries.indexOf(e);
+    html+='<div class="entry-card">';
+    html+='<div class="entry-main"><div><div class="entry-vendor">'+e.vendor+'</div><div class="entry-time">'+e.timestamp+'</div></div>';
+    html+='<div class="entry-qty-pill">'+e.quantity+' '+e.unit+'</div></div>';
+    html+='<div class="entry-meta">';
+    html+='<span class="etag '+tagClass(e.material)+'">'+e.material+'</span>';
+    html+='<span class="etag etag-default">🚗 '+e.driver+'</span>';
+    if (e.vehicle) html+='<span class="etag etag-default">🚛 '+e.vehicle+'</span>';
+    if (e.notes) html+='<span class="etag etag-default">'+e.notes+'</span>';
+    html+='</div>';
+    if (e.amount>0) html+='<div class="entry-amount-row"><span class="entry-amount-label">Amount</span><span class="entry-amount-val">'+fmt(e.amount)+'</span></div>';
+    html+='<div class="entry-actions">';
+    html+='<button class="action-btn action-edit" onclick="openEdit('+realIdx+')">✏️ Edit</button>';
+    html+='<button class="action-btn action-delete" onclick="deleteEntry('+realIdx+')">🗑 Delete</button>';
+    html+='</div></div>';
   }
-  el.innerHTML = html;
+  el.innerHTML=html;
 }
 
+/* ── DELETE ── */
 function deleteEntry(i) {
   if (!confirm('Delete this entry?')) return;
-  var entry = entries[i];
-  entries.splice(i, 1);
+  var entry=entries[i];
+  entries.splice(i,1);
   renderHistory();
   showToast('Deleting...');
-
-  // Delete from sheet via JSONP
-  var old = document.getElementById('jsonp-delete');
-  if (old) old.parentNode.removeChild(old);
-
-  window.amcoDeleteCallback = function(data) {
-    if (data.status === 'deleted') {
-      showToast('Entry deleted ✓');
-      loadFromSheet();
-    } else {
-      showToast('Could not delete from sheet', false);
-      loadFromSheet();
-    }
+  var old=document.getElementById('jsonp-delete');
+  if(old) old.parentNode.removeChild(old);
+  window.amcoDeleteCallback=function(data){
+    if(data.status==='deleted'){ showToast('Deleted ✓'); loadFromSheet(); }
+    else { showToast('Could not delete from sheet',false); loadFromSheet(); }
   };
-
-  var s = document.createElement('script');
-  s.id = 'jsonp-delete';
-  s.src = SCRIPT_URL + '?action=delete&timestamp=' + encodeURIComponent(entry.timestamp) + '&callback=amcoDeleteCallback';
+  var s=document.createElement('script');
+  s.id='jsonp-delete';
+  s.src=SCRIPT_URL+'?action=delete&timestamp='+encodeURIComponent(entry.timestamp)+'&callback=amcoDeleteCallback';
   document.body.appendChild(s);
 }
 
-/* EDIT */
+/* ── EDIT ── */
 function openEdit(i) {
-  editIdx = i;
-  var e = entries[i];
-  document.getElementById('e-vendor').value = e.vendor;
-  document.getElementById('e-driver').value = e.driver;
-  document.getElementById('e-notes').value = e.notes || '';
-  document.getElementById('e-qty').value = e.quantity;
-  document.getElementById('e-amount').value = e.amount || '';
+  editIdx=i;
+  var e=entries[i];
+  document.getElementById('e-vendor').value=e.vendor||'';
+  document.getElementById('e-driver').value=e.driver||'';
+  document.getElementById('e-vehicle').value=e.vehicle||'';
+  document.getElementById('e-notes').value=e.notes||'';
+  document.getElementById('e-qty').value=e.quantity;
+  document.getElementById('e-amount').value=e.amount||'';
   editSelectMat(e.material);
   editSelectUnit(e.unit);
-  document.getElementById('editModal').className = 'modal-overlay show';
+  document.getElementById('editModal').className='modal-overlay show';
 }
-
-function closeEdit() {
-  document.getElementById('editModal').className = 'modal-overlay';
-  editIdx = -1;
-}
-
-function handleModalClick(ev) {
-  if (ev.target === document.getElementById('editModal')) closeEdit();
-}
-
+function closeEdit() { document.getElementById('editModal').className='modal-overlay'; editIdx=-1; }
+function handleModalClick(ev) { if(ev.target===document.getElementById('editModal')) closeEdit(); }
 function editSelectMat(m) {
-  editMat = m;
-  var ids = ['20mm','msand','wsand'];
-  for (var i=0; i<ids.length; i++) {
-    document.getElementById('e-mat-'+ids[i]).className = 'mat-pill';
-  }
-  document.getElementById('e-mat-'+matIdFromName(m)).className = 'mat-pill active';
+  editMat=m;
+  ['20mm','msand','wsand'].forEach(function(id){ document.getElementById('e-mat-'+id).className='mat-pill'; });
+  document.getElementById('e-mat-'+matId(m)).className='mat-pill active';
 }
-
 function editSelectUnit(u) {
-  editUnit = u;
-  document.getElementById('e-unit-brass').className = 'unit-opt' + (u==='Brass'?' active':'');
-  document.getElementById('e-unit-tons').className = 'unit-opt' + (u==='Tons'?' active':'');
+  editUnit=u;
+  document.getElementById('e-unit-brass').className='unit-opt'+(u==='Brass'?' active':'');
+  document.getElementById('e-unit-tons').className='unit-opt'+(u==='Tons'?' active':'');
 }
-
 function editChangeQty(d) {
-  var el = document.getElementById('e-qty');
-  var v = parseFloat(el.value) || 1;
-  el.value = Math.max(0.5, Math.round((v + d*0.5)*10)/10);
+  var el=document.getElementById('e-qty');
+  el.value=Math.max(0.5,Math.round(((parseFloat(el.value)||1)+d*0.5)*10)/10);
 }
-
 function saveEdit() {
-  if (editIdx < 0) return;
-  var e = entries[editIdx];
-  e.vendor = document.getElementById('e-vendor').value.trim() || e.vendor;
-  e.driver = document.getElementById('e-driver').value.trim() || e.driver;
-  e.notes = document.getElementById('e-notes').value.trim();
-  e.quantity = parseFloat(document.getElementById('e-qty').value) || e.quantity;
-  e.amount = parseFloat(document.getElementById('e-amount').value) || 0;
-  e.material = editMat;
-  e.unit = editUnit;
+  if(editIdx<0) return;
+  var e=entries[editIdx];
+  e.vendor=toTitleCase(document.getElementById('e-vendor').value.trim()||e.vendor);
+  e.driver=toTitleCase(document.getElementById('e-driver').value.trim()||e.driver);
+  e.vehicle=(document.getElementById('e-vehicle').value.trim()||e.vehicle||'').toUpperCase();
+  e.notes=document.getElementById('e-notes').value.trim();
+  e.quantity=parseFloat(document.getElementById('e-qty').value)||e.quantity;
+  e.amount=parseFloat(document.getElementById('e-amount').value)||0;
+  e.material=editMat; e.unit=editUnit;
   closeEdit();
   renderHistory();
   showToast('Entry updated ✓');
 }
 
-/* CUSTOMERS */
+/* ── CUSTOMERS ── */
 function renderCustomers() {
-  document.getElementById('customerList').style.display = 'block';
-  document.getElementById('customerDetail').style.display = 'none';
-
-  var byVendor = {};
-  for (var i=0; i<entries.length; i++) {
-    var e = entries[i];
-    if (!byVendor[e.vendor]) byVendor[e.vendor] = {loads:0, totalQty:0, totalAmt:0, materials:[]};
-    byVendor[e.vendor].loads++;
-    byVendor[e.vendor].totalQty += e.quantity;
-    byVendor[e.vendor].totalAmt += (e.amount || 0);
-    if (byVendor[e.vendor].materials.indexOf(e.material) === -1) {
-      byVendor[e.vendor].materials.push(e.material);
-    }
+  document.getElementById('customerList').style.display='block';
+  document.getElementById('customerDetail').style.display='none';
+  var byVendor={};
+  for(var i=0;i<entries.length;i++){
+    var e=entries[i];
+    var vk=toTitleCase(e.vendor||'');
+    if(!byVendor[vk]) byVendor[vk]={loads:0,totalQty:0,totalAmt:0,materials:[]};
+    byVendor[vk].loads++;
+    byVendor[vk].totalQty+=e.quantity;
+    byVendor[vk].totalAmt+=(e.amount||0);
+    if(byVendor[vk].materials.indexOf(e.material)===-1) byVendor[vk].materials.push(e.material);
   }
-
-  var cl = document.getElementById('customerList');
-  var names = Object.keys(byVendor);
-
-  if (!names.length) {
-    cl.innerHTML = '<div class="empty"><div class="empty-icon">👥</div><div class="empty-text">No customers yet.<br>Log your first entry!</div></div>';
+  var cl=document.getElementById('customerList');
+  var names=Object.keys(byVendor);
+  if(!names.length){
+    cl.innerHTML='<div class="empty"><div class="empty-icon">👥</div><div class="empty-text">No customers yet</div></div>';
     return;
   }
-
-  names.sort(function(a,b){ return byVendor[b].totalAmt - byVendor[a].totalAmt; });
-
-  var html = '<div class="list-hdr" style="margin-bottom:12px"><div class="list-title">All Customers</div><div class="list-badge">'+names.length+' vendors</div></div>';
-  for (var i=0; i<names.length; i++) {
-    var v = names[i];
-    var d = byVendor[v];
-    var safeV = v.replace(/\\/g,'\\\\').replace(/'/g,"\\'");
-    html += '<div class="customer-card" onclick="showCustomerDetail(\''+safeV+'\')">';
-    html += '<div class="customer-avatar">'+initials(v)+'</div>';
-    html += '<div class="customer-info"><div class="customer-name">'+v+'</div><div class="customer-meta">'+d.loads+' trips · '+d.materials.join(', ')+'</div></div>';
-    html += '<div class="customer-right"><div class="customer-amt">'+(d.totalAmt>0?fmt(d.totalAmt):'—')+'</div><div class="customer-loads">'+d.totalQty+' qty</div></div>';
-    html += '<div class="chevron">›</div></div>';
+  names.sort(function(a,b){ return byVendor[b].totalAmt-byVendor[a].totalAmt; });
+  var html='<div class="list-hdr" style="margin-bottom:12px"><div class="list-title">All Customers</div><div class="list-badge">'+names.length+' vendors</div></div>';
+  for(var i=0;i<names.length;i++){
+    var v=names[i], d=byVendor[v];
+    var sv=v.replace(/\\/g,'\\\\').replace(/'/g,"\\'");
+    html+='<div class="customer-card" onclick="showCustomerDetail(\''+sv+'\')"><div class="customer-avatar">'+initials(v)+'</div>';
+    html+='<div class="customer-info"><div class="customer-name">'+v+'</div><div class="customer-meta">'+d.loads+' trips · '+d.materials.join(', ')+'</div></div>';
+    html+='<div class="customer-right"><div class="customer-amt">'+(d.totalAmt>0?fmt(d.totalAmt):'—')+'</div><div class="customer-loads">'+d.totalQty+' qty</div></div>';
+    html+='<div class="chevron">›</div></div>';
   }
-  cl.innerHTML = html;
+  cl.innerHTML=html;
 }
 
 function showCustomerDetail(vendor) {
-  var vendorEntries = [];
-  for (var i=0; i<entries.length; i++) {
-    if (entries[i].vendor === vendor) vendorEntries.push(entries[i]);
+  var ve=entries.filter(function(e){ return toTitleCase(e.vendor||'')===vendor; });
+  var totalAmt=0, totalQty=0;
+  ve.forEach(function(e){ totalAmt+=(e.amount||0); totalQty+=e.quantity; });
+  document.getElementById('customerList').style.display='none';
+  var detail=document.getElementById('customerDetail');
+  detail.style.display='block';
+  var html='<div class="detail-header"><button class="back-btn" onclick="renderCustomers()">‹ Back</button><div class="detail-title">'+vendor+'</div></div>';
+  html+='<div class="detail-stats"><div class="ds-item"><div class="ds-num">'+ve.length+'</div><div class="ds-label">Trips</div></div>';
+  html+='<div class="ds-item"><div class="ds-num gold">'+totalQty+'</div><div class="ds-label">Total Qty</div></div>';
+  html+='<div class="ds-item"><div class="ds-num green">'+(totalAmt>0?'₹'+Math.round(totalAmt).toLocaleString('en-IN'):'—')+'</div><div class="ds-label">Amount</div></div></div>';
+  html+='<div class="list-hdr"><div class="list-title">All Trips</div><div class="list-badge">'+ve.length+' entries</div></div>';
+  for(var i=0;i<ve.length;i++){
+    var e=ve[i];
+    html+='<div class="entry-card"><div class="entry-main"><div><div class="entry-vendor" style="font-size:14px;font-weight:500">'+e.timestamp+'</div><div class="entry-time">🚗 '+e.driver+(e.vehicle?' · 🚛 '+e.vehicle:'')+'</div></div>';
+    html+='<div class="entry-qty-pill">'+e.quantity+' '+e.unit+'</div></div>';
+    html+='<div class="entry-meta"><span class="etag '+tagClass(e.material)+'">'+e.material+'</span>';
+    if(e.notes) html+='<span class="etag etag-default">'+e.notes+'</span>';
+    html+='</div>';
+    if(e.amount>0) html+='<div class="entry-amount-row"><span class="entry-amount-label">Amount</span><span class="entry-amount-val">'+fmt(e.amount)+'</span></div>';
+    html+='</div>';
   }
-  var totalAmt = 0, totalQty = 0;
-  for (var i=0; i<vendorEntries.length; i++) {
-    totalAmt += (vendorEntries[i].amount || 0);
-    totalQty += vendorEntries[i].quantity;
+  html+='<div class="total-bar"><div class="total-bar-label">Total Amount</div><div class="total-bar-val">'+(totalAmt>0?fmt(totalAmt):'—')+'</div></div>';
+  html+='<button class="share-btn" onclick="shareReport(\''+vendor.replace(/'/g,"\\'")+'\')">📤 Share Report</button>';
+  detail.innerHTML=html;
+}
+
+/* ── SHARE REPORT ── */
+function shareReport(vendor) {
+  var ve=entries.filter(function(e){ return toTitleCase(e.vendor||'')===vendor; });
+  var totalAmt=0, totalQty=0;
+  ve.forEach(function(e){ totalAmt+=(e.amount||0); totalQty+=e.quantity; });
+  var text='*AMCO Quarry Report*\n';
+  text+='Customer: '+vendor+'\n';
+  text+='Date: '+new Date().toLocaleDateString('en-IN')+'\n\n';
+  text+='Total Trips: '+ve.length+'\n';
+  text+='Total Qty: '+totalQty+'\n';
+  text+='Total Amount: '+(totalAmt>0?fmt(totalAmt):'—')+'\n\n';
+  text+='--- Trip Details ---\n';
+  for(var i=0;i<ve.length;i++){
+    var e=ve[i];
+    text+='\n'+e.timestamp+'\n';
+    text+='Driver: '+e.driver+(e.vehicle?' | Vehicle: '+e.vehicle:'')+'\n';
+    text+='Material: '+e.material+' | Qty: '+e.quantity+' '+e.unit+'\n';
+    if(e.amount>0) text+='Amount: '+fmt(e.amount)+'\n';
   }
-  var loads = vendorEntries.length;
-
-  document.getElementById('customerList').style.display = 'none';
-  var detail = document.getElementById('customerDetail');
-  detail.style.display = 'block';
-
-  var html = '';
-  html += '<div class="detail-header"><button class="back-btn" onclick="renderCustomers()">‹ Back</button><div class="detail-title">'+vendor+'</div></div>';
-  html += '<div class="detail-stats">';
-  html += '<div class="ds-item"><div class="ds-num">'+loads+'</div><div class="ds-label">Trips</div></div>';
-  html += '<div class="ds-item"><div class="ds-num gold">'+totalQty+'</div><div class="ds-label">Total Qty</div></div>';
-  html += '<div class="ds-item"><div class="ds-num green">'+(totalAmt>0?'₹'+Math.round(totalAmt).toLocaleString('en-IN'):'—')+'</div><div class="ds-label">Amount</div></div>';
-  html += '</div>';
-  html += '<div class="list-hdr"><div class="list-title">All Trips</div><div class="list-badge">'+loads+' entries</div></div>';
-
-  for (var i=0; i<vendorEntries.length; i++) {
-    var e = vendorEntries[i];
-    html += '<div class="entry-card">';
-    html += '<div class="entry-main"><div><div class="entry-vendor" style="font-size:14px;font-weight:500">'+e.timestamp+'</div><div class="entry-time">🚗 '+e.driver+'</div></div>';
-    html += '<div class="entry-qty-pill">'+e.quantity+' '+e.unit+'</div></div>';
-    html += '<div class="entry-meta"><span class="etag '+tagClass(e.material)+'">'+e.material+'</span>';
-    if (e.notes) html += '<span class="etag etag-default">'+e.notes+'</span>';
-    html += '</div>';
-    if (e.amount>0) html += '<div class="entry-amount-row"><span class="entry-amount-label">Amount</span><span class="entry-amount-val">'+fmt(e.amount)+'</span></div>';
-    html += '</div>';
+  if (navigator.share) {
+    navigator.share({ title: 'AMCO Report - '+vendor, text: text });
+  } else {
+    // Fallback: copy to clipboard
+    var ta=document.createElement('textarea');
+    ta.value=text; document.body.appendChild(ta);
+    ta.select(); document.execCommand('copy');
+    document.body.removeChild(ta);
+    showToast('Report copied to clipboard ✓');
   }
-
-  html += '<div class="total-bar"><div class="total-bar-label">Total Amount</div><div class="total-bar-val">'+(totalAmt>0?fmt(totalAmt):'—')+'</div></div>';
-  detail.innerHTML = html;
 }
 </script>
 </body>
