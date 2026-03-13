@@ -367,10 +367,28 @@ var selUnit = 'Brass';
 var editMat = '20mm';
 var editUnit = 'Brass';
 var editIdx = -1;
-var entries = JSON.parse(localStorage.getItem('amcoEntries') || '[]');
+var entries = [];
+
+function loadFromSheet() {
+  fetch(SCRIPT_URL, { method: 'GET', mode: 'cors' })
+    .then(function(r){ return r.json(); })
+    .then(function(data){
+      if (data.status === 'ok' && data.entries) {
+        entries = data.entries;
+        localStorage.setItem('amcoEntries', JSON.stringify(entries));
+        refreshSuggestions();
+      }
+    })
+    .catch(function(){
+      // Fall back to localStorage if offline
+      entries = JSON.parse(localStorage.getItem('amcoEntries') || '[]');
+      refreshSuggestions();
+    });
+}
 
 document.getElementById('dateBadge').textContent = new Date().toLocaleDateString('en-IN', {day:'numeric',month:'short',year:'numeric'});
 refreshSuggestions();
+loadFromSheet();
 
 function refreshSuggestions() {
   var vendors = [];
