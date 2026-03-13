@@ -377,7 +377,6 @@ function loadFromSheet() {
   window.amcoCallback = function(data) {
     if (data.status === 'ok' && data.entries) {
       entries = data.entries;
-      localStorage.setItem('amcoEntries', JSON.stringify(entries));
       refreshSuggestions();
       // Refresh current tab if on history or customers
       var active = document.querySelector('.seg-btn.active');
@@ -396,6 +395,7 @@ function loadFromSheet() {
 }
 
 document.getElementById('dateBadge').textContent = new Date().toLocaleDateString('en-IN', {day:'numeric',month:'short',year:'numeric'});
+localStorage.removeItem('amcoEntries');
 refreshSuggestions();
 loadFromSheet();
 
@@ -481,7 +481,6 @@ function submitEntry() {
   };
 
   entries.unshift(entry);
-  localStorage.setItem('amcoEntries', JSON.stringify(entries));
   refreshSuggestions();
 
   var btn = document.getElementById('saveBtn');
@@ -557,7 +556,6 @@ function renderHistory() {
 function deleteEntry(i) {
   if (!confirm('Delete this entry?')) return;
   entries.splice(i, 1);
-  localStorage.setItem('amcoEntries', JSON.stringify(entries));
   renderHistory();
   showToast('Entry deleted');
 }
@@ -616,7 +614,6 @@ function saveEdit() {
   e.amount = parseFloat(document.getElementById('e-amount').value) || 0;
   e.material = editMat;
   e.unit = editUnit;
-  localStorage.setItem('amcoEntries', JSON.stringify(entries));
   closeEdit();
   renderHistory();
   showToast('Entry updated ✓');
