@@ -342,6 +342,9 @@
 
 <script>
 function sendToSheet(data, cb) {
+  var old = document.getElementById('jsonp-save');
+  if (old) old.parentNode.removeChild(old);
+
   var params = 'vendor=' + encodeURIComponent(data.vendor)
     + '&driver=' + encodeURIComponent(data.driver)
     + '&material=' + encodeURIComponent(data.material)
@@ -351,13 +354,12 @@ function sendToSheet(data, cb) {
     + '&notes=' + encodeURIComponent(data.notes || '')
     + '&timestamp=' + encodeURIComponent(data.timestamp);
 
-  var img = new Image();
-  img.onload = img.onerror = function() { cb(true); };
-  img.src = SCRIPT_URL + '?' + params;
+  window.amcoSaveCallback = function(result) { cb(result.status === 'success'); };
 
-  // Also try fetch as backup
-  fetch(SCRIPT_URL + '?' + params, { method: 'GET', mode: 'no-cors' }).catch(function(){});
-  setTimeout(function(){ cb(true); }, 2000);
+  var s = document.createElement('script');
+  s.id = 'jsonp-save';
+  s.src = SCRIPT_URL + '?' + params + '&callback=amcoSaveCallback';
+  document.body.appendChild(s);
 }
 
 var SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbzZ2zCHDxUiOQJky2ZOjrmqg2KIuq7NMO94x1-V08rHRNkaCEMoz-5ICwGBzIiKdvC9/exec';
