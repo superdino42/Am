@@ -555,9 +555,27 @@ function renderHistory() {
 
 function deleteEntry(i) {
   if (!confirm('Delete this entry?')) return;
+  var entry = entries[i];
   entries.splice(i, 1);
   renderHistory();
-  showToast('Entry deleted');
+  showToast('Deleting...');
+
+  // Delete from sheet via JSONP
+  var old = document.getElementById('jsonp-delete');
+  if (old) old.parentNode.removeChild(old);
+
+  window.amcoDeleteCallback = function(data) {
+    if (data.status === 'deleted') {
+      showToast('Entry deleted ✓');
+    } else {
+      showToast('Deleted locally only', false);
+    }
+  };
+
+  var s = document.createElement('script');
+  s.id = 'jsonp-delete';
+  s.src = SCRIPT_URL + '?action=delete&timestamp=' + encodeURIComponent(entry.timestamp) + '&callback=amcoDeleteCallback';
+  document.body.appendChild(s);
 }
 
 /* EDIT */
