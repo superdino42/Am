@@ -480,9 +480,6 @@ function submitEntry() {
     notes: notes, amount: amount
   };
 
-  entries.unshift(entry);
-  refreshSuggestions();
-
   var btn = document.getElementById('saveBtn');
   btn.disabled = true;
   btn.textContent = 'Saving...';
@@ -491,6 +488,8 @@ function submitEntry() {
     showToast(ok ? 'Saved to sheet ✓' : 'Saved locally ✓');
     btn.disabled = false;
     btn.textContent = 'Save Entry';
+    // Reload from sheet after save so history is fresh
+    loadFromSheet();
   });
 
   document.getElementById('vendor').value = '';
@@ -567,8 +566,10 @@ function deleteEntry(i) {
   window.amcoDeleteCallback = function(data) {
     if (data.status === 'deleted') {
       showToast('Entry deleted ✓');
+      loadFromSheet();
     } else {
-      showToast('Deleted locally only', false);
+      showToast('Could not delete from sheet', false);
+      loadFromSheet();
     }
   };
 
