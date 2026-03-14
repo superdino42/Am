@@ -732,7 +732,7 @@ function renderCustomers() {
   }
   names.sort(function(a,b){ return byVendor[b].totalAmt-byVendor[a].totalAmt; });
   var html='<div class="list-hdr" style="margin-bottom:12px"><div class="list-title">All Customers</div><div class="list-badge">'+names.length+' vendors</div></div>';
-  html+='<button class="share-btn" style="margin-bottom:16px" onclick="shareWeeklyReport()">📤 Send Weekly Report (All Vendors)</button>';
+  html+='<button class="share-btn" style="margin-bottom:16px" onclick="shareAllWeeklyReports()">📤 Weekly Reports (All Vendors)</button>';
   for(var i=0;i<names.length;i++){
     var v=names[i], d=byVendor[v];
     var sv=v.replace(/\\/g,'\\\\').replace(/'/g,"\\'");
@@ -808,6 +808,94 @@ function shareReport(vendor) {
 }
 
 /* WEEKLY REPORT */
+function buildVendorWeeklyText(vendor, ve) {
+  var now = new Date();
+  var weekStart = new Date(now); weekStart.setDate(now.getDate()-now.getDay()); weekStart.setHours(0,0,0,0);
+  var weekEnd = new Date(weekStart); weekEnd.setDate(weekStart.getDate()+6);
+  var weekLabel = weekStart.toLocaleDateString('en-IN',{day:'numeric',month:'short'})
+    + ' - ' + weekEnd.toLocaleDateString('en-IN',{day:'numeric',month:'short',year:'numeric'});
+  var totalAmt=0, totalPamt=0, totalQty=0;
+  ve.forEach(function(e){ totalAmt+=(e.amount||0); totalPamt+=(e.pamount||0); totalQty+=parseFloat(e.quantity)||0; });
+  var text = '*AMCO Quarry - Weekly Report*' + '\n';
+  text += 'Customer: ' + vendor + '\n';
+  text += 'Week: ' + weekLabel + '\n';
+  text += '---------------------' + '\n\n';
+  text += 'Total Trips: ' + ve.length + '\n';
+  text += 'Total Qty: ' + totalQty + '\n';
+  if(totalAmt>0) text += 'Amount: ' + fmt(totalAmt) + '\n';
+  if(totalPamt>0) text += 'P-Amount: ' + fmt(totalPamt) + '\n';
+  text += '\n--- Trip Details ---\n';
+  ve.forEach(function(e){
+    text += '\n' + e.timestamp + '\n';
+    text += 'Driver: ' + e.driver + (e.vehicle?' | Vehicle: '+e.vehicle:'') + '\n';
+    text += 'Material: ' + e.material + ' | Qty: ' + e.quantity + ' ' + e.unit + '\n';
+    if(e.amount>0) text += 'Amount: ' + fmt(e.amount) + '\n';
+    if(e.pamount>0) text += 'P-Amount: ' + fmt(e.pamount) + '\n';
+  });
+  return text;
+}
+
+function getWeeklyByVendor() {
+  var weekEntries = entries.filter(function(e){ return isThisWeek(e.timestamp); });
+  var byVendor = {};
+  weekEntries.forEach(function(e){
+    var vk = toTitleCase(e.vendor||'');
+    if (!byVendor[vk]) byVendor[vk] = [];
+    byVendor[vk].push(e);
+  });
+  return byVendor;
+}
+
+function shareWeeklyForVendor(vendor) {
+  var byVendor = getWeeklyByVendor();
+  var ve = byVendor[vendor];
+  if (!ve || !ve.length) { showToast('No entries this week for ' + vendor, false); return; }
+  var text = buildVendorWeeklyText(vendor, ve);
+  if (navigator.share) {
+    navigator.share({ title: 'AMCO Weekly - ' + vendor, text: text });
+  } else {
+    var ta=document.createElement('textarea');
+    ta.value=text; document.body.appendChild(ta);
+    ta.select(); document.execCommand('copy');
+    document.body.removeChild(ta);
+    showToast('Report for ' + vendor + ' copied!');
+  }
+}
+
+function shareAllWeeklyReports() {
+  var byVendor = getWeeklyByVendor();
+  var names = Object.keys(byVendor);
+  if (!names.length) { showToast('No entries this week', false); return; }
+  // Show a picker modal
+  var overlay = document.createElement('div');
+  overlay.style.cssText='position:fixed;inset:0;background:rgba(0,0,0,0.5);z-index:300;display:flex;align-items:flex-end;justify-content:center;';
+  var box = document.createElement('div');
+  box.style.cssText='background:var(--bg);border-radius:20px 20px 0 0;width:100%;max-width:430px;padding:20px 16px 40px;';
+  var html='<div style="width:36px;height:4px;background:var(--sep);border-radius:2px;margin:0 auto 16px"></div>';
+  html+='<div style="font-size:17px;font-weight:700;text-align:center;margin-bottom:16px">Weekly Report - Select Vendor</div>';
+  names.sort().forEach(function(v){
+    var sv = v.replace(/'/g,"\'");
+    html+='<div class="wk-vendor-row" data-vendor="'+encodeURIComponent(v)+'" '
+      +'style="background:var(--card);border-radius:12px;padding:16px;margin-bottom:8px;display:flex;justify-content:space-between;align-items:center;cursor:pointer">'
+      +'<span style="font-size:16px;font-weight:600">'+v+'</span>'
+      +'<span style="color:var(--blue);font-size:14px;font-weight:600">Share &#8250;</span>'
+      +'</div>';
+  });
+  html+='<button onclick="this.parentNode.parentNode.remove()" style="width:100%;padding:14px;margin-top:8px;background:var(--sep-light);border:none;border-radius:12px;font-size:16px;font-weight:600;font-family:var(--font);cursor:pointer">Cancel</button>';
+  box.innerHTML=html;
+  overlay.appendChild(box);
+  overlay.addEventListener('click',function(ev){
+    if(ev.target===overlay) { overlay.remove(); return; }
+    var row = ev.target.closest('.wk-vendor-row');
+    if (row) {
+      var vendor = decodeURIComponent(row.getAttribute('data-vendor'));
+      overlay.remove();
+      shareWeeklyForVendor(vendor);
+    }
+  });
+  document.body.appendChild(overlay);
+}
+
 function shareWeeklyReport() {
   var now = new Date();
   var weekStart = new Date(now); weekStart.setDate(now.getDate()-now.getDay()); weekStart.setHours(0,0,0,0);
