@@ -832,6 +832,13 @@ function buildVendorWeeklyText(vendor, ve) {
     if(e.amount>0) text += 'Amount: ' + fmt(e.amount) + '\n';
     if(e.pamount>0) text += 'P-Amount: ' + fmt(e.pamount) + '\n';
   });
+  text += '\n=====================\n';
+  text += 'TOTAL SUMMARY\n';
+  text += 'Trips: ' + ve.length + ' | Qty: ' + totalQty + '\n';
+  if(totalAmt>0) text += 'Total Amount: ' + fmt(totalAmt) + '\n';
+  if(totalPamt>0) text += 'Total P-Amount: ' + fmt(totalPamt) + '\n';
+  if(totalAmt>0 && totalPamt>0) text += 'Grand Total: ' + fmt(totalAmt+totalPamt) + '\n';
+  text += '=====================\n';
   return text;
 }
 
