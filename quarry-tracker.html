@@ -270,6 +270,11 @@
             <span class="rupee">₹</span>
             <input class="amount-input" type="number" id="amount" placeholder="0.00" min="0" step="0.01">
           </div>
+          <div style="border-top:0.5px solid var(--sep-light)" class="amount-row">
+            <span class="amount-label">P-Amount</span>
+            <span class="rupee">₹</span>
+            <input class="amount-input" type="number" id="pamount" placeholder="Pass amount" min="0" step="0.01">
+          </div>
         </div>
       </div>
 
@@ -349,6 +354,11 @@
           <span class="rupee">₹</span>
           <input class="amount-input" type="number" id="e-amount" placeholder="0.00" min="0" step="0.01">
         </div>
+        <div style="border-top:0.5px solid var(--sep-light)" class="amount-row">
+          <span class="amount-label">P-Amount</span>
+          <span class="rupee">₹</span>
+          <input class="amount-input" type="number" id="e-pamount" placeholder="Pass amount" min="0" step="0.01">
+        </div>
       </div>
     </div>
     <div class="modal-actions">
@@ -373,7 +383,7 @@ var activeFilter = 'all';
 document.getElementById('dateBadge').textContent = new Date().toLocaleDateString('en-IN', {day:'numeric',month:'short',year:'numeric'});
 loadFromSheet();
 
-/* ── SHEET SYNC ── */
+/* SHEET SYNC */
 function loadFromSheet() {
   var old = document.getElementById('jsonp-load');
   if (old) old.parentNode.removeChild(old);
@@ -406,6 +416,7 @@ function sendToSheet(data, cb) {
     + '&unit=' + encodeURIComponent(data.unit)
     + '&amount=' + encodeURIComponent(data.amount || 0)
     + '&notes=' + encodeURIComponent(data.notes || '')
+    + '&pamount=' + encodeURIComponent(data.pamount || 0)
     + '&timestamp=' + encodeURIComponent(data.timestamp);
   window.amcoSaveCallback = function(result) { cb(result.status === 'success'); };
   var s = document.createElement('script');
@@ -414,7 +425,7 @@ function sendToSheet(data, cb) {
   document.body.appendChild(s);
 }
 
-/* ── SUGGESTIONS ── */
+/* SUGGESTIONS */
 function toTitleCase(str) {
   return str.replace(/\b\w/g, function(c){ return c.toUpperCase(); });
 }
@@ -434,7 +445,7 @@ function refreshSuggestions() {
   if (vcl) vcl.innerHTML = vehicles.map(function(v){return '<option value="'+v+'">';}).join('');
 }
 
-/* ── TABS ── */
+/* TABS */
 function switchTab(t) {
   var tabs = ['log','history','customers'];
   for (var i=0; i<tabs.length; i++) {
@@ -448,7 +459,7 @@ function switchTab(t) {
   if (t==='customers') { loadFromSheet(); renderCustomers(); }
 }
 
-/* ── MAT / UNIT ── */
+/* MAT / UNIT */
 function matId(m) { return m==='20mm'?'20mm':m==='M-Sand'?'msand':'wsand'; }
 function selectMat(m) {
   selMat = m;
@@ -465,7 +476,7 @@ function changeQty(d) {
   el.value=Math.max(0.5,Math.round(((parseFloat(el.value)||1)+d*0.5)*10)/10);
 }
 
-/* ── TOAST ── */
+/* TOAST */
 function showToast(msg,ok) {
   if (ok===undefined) ok=true;
   var t=document.getElementById('toast');
@@ -475,7 +486,7 @@ function showToast(msg,ok) {
   setTimeout(function(){ t.className='toast '+(ok?'ok':'err'); },2600);
 }
 
-/* ── SUBMIT ── */
+/* SUBMIT */
 function submitEntry() {
   var vendor  = toTitleCase(document.getElementById('vendor').value.trim());
   var driver  = toTitleCase(document.getElementById('driver').value.trim());
@@ -488,11 +499,12 @@ function submitEntry() {
   if (!driver) return showToast('Enter driver name', false);
   if (!qty||qty<=0) return showToast('Enter valid quantity', false);
 
+  var pamount = parseFloat(document.getElementById('pamount').value) || 0;
   var entry = {
     timestamp: new Date().toLocaleString('en-IN'),
     vendor: vendor, driver: driver, vehicle: vehicle,
     material: selMat, quantity: qty, unit: selUnit,
-    notes: notes, amount: amount
+    notes: notes, amount: amount, pamount: pamount
   };
 
   var btn = document.getElementById('saveBtn');
@@ -510,10 +522,11 @@ function submitEntry() {
   document.getElementById('qty').value=1;
   document.getElementById('notes').value='';
   document.getElementById('amount').value='';
+  document.getElementById('pamount').value='';
   selectMat('20mm'); selectUnit('Brass');
 }
 
-/* ── HELPERS ── */
+/* HELPERS */
 function tagClass(m) { return m==='20mm'?'etag-20mm':m==='M-Sand'?'etag-msand':'etag-wsand'; }
 function fmt(n) { return n>0?'₹'+Number(n).toLocaleString('en-IN'):'—'; }
 function initials(name) {
@@ -521,23 +534,33 @@ function initials(name) {
   for (var i=0;i<Math.min(p.length,2);i++) if(p[i].length>0) r+=p[i][0].toUpperCase();
   return r||'?';
 }
+function parseTS(ts) {
+  // Handle Indian locale format: "13/3/2026, 2:15:03 AM"
+  if (!ts) return new Date(0);
+  var s = String(ts);
+  var m = s.match(/^(\d{1,2})\/(\d{1,2})\/(\d{4}),?\s*(.*)/);
+  if (m) {
+    var day=m[1], mon=m[2], yr=m[3], time=m[4]||'';
+    return new Date(yr+'/'+mon+'/'+day+' '+time);
+  }
+  return new Date(ts);
+}
 function isToday(ts) {
-  var d = new Date(ts);
-  var n = new Date();
+  var d=parseTS(ts), n=new Date();
   return d.getDate()===n.getDate()&&d.getMonth()===n.getMonth()&&d.getFullYear()===n.getFullYear();
 }
 function isThisWeek(ts) {
-  var d=new Date(ts), n=new Date();
+  var d=parseTS(ts), n=new Date();
   var start=new Date(n); start.setDate(n.getDate()-n.getDay());
   start.setHours(0,0,0,0);
   return d>=start;
 }
 function isThisMonth(ts) {
-  var d=new Date(ts), n=new Date();
+  var d=parseTS(ts), n=new Date();
   return d.getMonth()===n.getMonth()&&d.getFullYear()===n.getFullYear();
 }
 
-/* ── FILTER ── */
+/* FILTER */
 function setFilter(f) {
   activeFilter = f;
   ['all','today','week','month'].forEach(function(x){
@@ -568,7 +591,7 @@ function getFilteredEntries() {
   });
 }
 
-/* ── TODAY BANNER ── */
+/* TODAY BANNER */
 function renderTodayBanner() {
   var todayEntries = entries.filter(function(e){ return isToday(e.timestamp); });
   var banner = document.getElementById('todayBanner');
@@ -584,7 +607,7 @@ function renderTodayBanner() {
     + '</div></div>';
 }
 
-/* ── HISTORY ── */
+/* HISTORY */
 function renderHistory() {
   renderTodayBanner();
   var filtered = getFilteredEntries();
@@ -607,7 +630,12 @@ function renderHistory() {
     if (e.vehicle) html+='<span class="etag etag-default">🚛 '+e.vehicle+'</span>';
     if (e.notes) html+='<span class="etag etag-default">'+e.notes+'</span>';
     html+='</div>';
-    if (e.amount>0) html+='<div class="entry-amount-row"><span class="entry-amount-label">Amount</span><span class="entry-amount-val">'+fmt(e.amount)+'</span></div>';
+    if(e.amount>0||e.pamount>0){
+      html+='<div class="entry-amount-row">';
+      if(e.amount>0) html+='<span class="entry-amount-label">Amt: <b>'+fmt(e.amount)+'</b></span>';
+      if(e.pamount>0) html+='<span class="entry-amount-label" style="margin-left:auto">P-Amt: <b>'+fmt(e.pamount)+'</b></span>';
+      html+='</div>';
+    }
     html+='<div class="entry-actions">';
     html+='<button class="action-btn action-edit" onclick="openEdit('+realIdx+')">✏️ Edit</button>';
     html+='<button class="action-btn action-delete" onclick="deleteEntry('+realIdx+')">🗑 Delete</button>';
@@ -616,7 +644,7 @@ function renderHistory() {
   el.innerHTML=html;
 }
 
-/* ── DELETE ── */
+/* DELETE */
 function deleteEntry(i) {
   if (!confirm('Delete this entry?')) return;
   var entry=entries[i];
@@ -635,7 +663,7 @@ function deleteEntry(i) {
   document.body.appendChild(s);
 }
 
-/* ── EDIT ── */
+/* EDIT */
 function openEdit(i) {
   editIdx=i;
   var e=entries[i];
@@ -645,6 +673,7 @@ function openEdit(i) {
   document.getElementById('e-notes').value=e.notes||'';
   document.getElementById('e-qty').value=e.quantity;
   document.getElementById('e-amount').value=e.amount||'';
+  document.getElementById('e-pamount').value=e.pamount||'';
   editSelectMat(e.material);
   editSelectUnit(e.unit);
   document.getElementById('editModal').className='modal-overlay show';
@@ -674,13 +703,14 @@ function saveEdit() {
   e.notes=document.getElementById('e-notes').value.trim();
   e.quantity=parseFloat(document.getElementById('e-qty').value)||e.quantity;
   e.amount=parseFloat(document.getElementById('e-amount').value)||0;
+  e.pamount=parseFloat(document.getElementById('e-pamount').value)||0;
   e.material=editMat; e.unit=editUnit;
   closeEdit();
   renderHistory();
   showToast('Entry updated ✓');
 }
 
-/* ── CUSTOMERS ── */
+/* CUSTOMERS */
 function renderCustomers() {
   document.getElementById('customerList').style.display='block';
   document.getElementById('customerDetail').style.display='none';
@@ -702,6 +732,7 @@ function renderCustomers() {
   }
   names.sort(function(a,b){ return byVendor[b].totalAmt-byVendor[a].totalAmt; });
   var html='<div class="list-hdr" style="margin-bottom:12px"><div class="list-title">All Customers</div><div class="list-badge">'+names.length+' vendors</div></div>';
+  html+='<button class="share-btn" style="margin-bottom:16px" onclick="shareWeeklyReport()">📤 Send Weekly Report (All Vendors)</button>';
   for(var i=0;i<names.length;i++){
     var v=names[i], d=byVendor[v];
     var sv=v.replace(/\\/g,'\\\\').replace(/'/g,"\\'");
@@ -732,7 +763,12 @@ function showCustomerDetail(vendor) {
     html+='<div class="entry-meta"><span class="etag '+tagClass(e.material)+'">'+e.material+'</span>';
     if(e.notes) html+='<span class="etag etag-default">'+e.notes+'</span>';
     html+='</div>';
-    if(e.amount>0) html+='<div class="entry-amount-row"><span class="entry-amount-label">Amount</span><span class="entry-amount-val">'+fmt(e.amount)+'</span></div>';
+    if(e.amount>0||e.pamount>0) {
+      html+='<div class="entry-amount-row">';
+      if(e.amount>0) html+='<span class="entry-amount-label">Amt: <b>'+fmt(e.amount)+'</b></span>';
+      if(e.pamount>0) html+='<span class="entry-amount-label" style="margin-left:auto">P-Amt: <b>'+fmt(e.pamount)+'</b></span>';
+      html+='</div>';
+    }
     html+='</div>';
   }
   html+='<div class="total-bar"><div class="total-bar-label">Total Amount</div><div class="total-bar-val">'+(totalAmt>0?fmt(totalAmt):'—')+'</div></div>';
@@ -740,7 +776,7 @@ function showCustomerDetail(vendor) {
   detail.innerHTML=html;
 }
 
-/* ── SHARE REPORT ── */
+/* SHARE REPORT */
 function shareReport(vendor) {
   var ve=entries.filter(function(e){ return toTitleCase(e.vendor||'')===vendor; });
   var totalAmt=0, totalQty=0;
@@ -768,6 +804,72 @@ function shareReport(vendor) {
     ta.select(); document.execCommand('copy');
     document.body.removeChild(ta);
     showToast('Report copied to clipboard ✓');
+  }
+}
+
+/* WEEKLY REPORT */
+function shareWeeklyReport() {
+  var now = new Date();
+  var weekStart = new Date(now); weekStart.setDate(now.getDate()-now.getDay()); weekStart.setHours(0,0,0,0);
+  var weekEnd = new Date(weekStart); weekEnd.setDate(weekStart.getDate()+6); weekEnd.setHours(23,59,59,999);
+
+  var weekEntries = entries.filter(function(e){ return isThisWeek(e.timestamp); });
+  if (!weekEntries.length) { showToast('No entries this week', false); return; }
+
+  // Group by vendor
+  var byVendor = {};
+  weekEntries.forEach(function(e){
+    var vk = toTitleCase(e.vendor||'');
+    if (!byVendor[vk]) byVendor[vk] = [];
+    byVendor[vk].push(e);
+  });
+
+  var weekLabel = weekStart.toLocaleDateString('en-IN',{day:'numeric',month:'short'})
+    + ' – ' + weekEnd.toLocaleDateString('en-IN',{day:'numeric',month:'short',year:'numeric'});
+
+  var text = '*AMCO Quarry - Weekly Report*\n';
+  text += 'Week: ' + weekLabel + '\n';
+  text += '━━━━━━━━━━━━━━━━━━━━━\n\n';
+
+  var grandAmt=0, grandPamt=0, grandTrips=0;
+
+  Object.keys(byVendor).sort().forEach(function(vendor){
+    var ve = byVendor[vendor];
+    var totalAmt=0, totalPamt=0, totalQty=0;
+    ve.forEach(function(e){ totalAmt+=(e.amount||0); totalPamt+=(e.pamount||0); totalQty+=e.quantity; });
+    grandAmt+=totalAmt; grandPamt+=totalPamt; grandTrips+=ve.length;
+
+    text += '*' + vendor + '*\n';
+    text += 'Trips: '+ve.length+' | Qty: '+totalQty+'\n';
+    if(totalAmt>0) text += 'Amount: '+fmt(totalAmt)+'\n';
+    if(totalPamt>0) text += 'P-Amount: '+fmt(totalPamt)+'\n';
+    text += '\n';
+    ve.forEach(function(e){
+      text += '  • '+e.timestamp+'\n';
+      text += '    '+e.material+' '+e.quantity+' '+e.unit+' | '+e.driver+(e.vehicle?' | '+e.vehicle:'')+'\n';
+      if(e.amount>0||e.pamount>0){
+        var amtLine='    ';
+        if(e.amount>0) amtLine+=fmt(e.amount);
+        if(e.pamount>0) amtLine+=(e.amount>0?' | ':'')+' P:'+fmt(e.pamount);
+        text+=amtLine+'\n';
+      }
+    });
+    text += '─────────────────────\n';
+  });
+
+  text += '\n*TOTAL*\n';
+  text += 'Trips: '+grandTrips+'\n';
+  if(grandAmt>0) text += 'Amount: '+fmt(grandAmt)+'\n';
+  if(grandPamt>0) text += 'P-Amount: '+fmt(grandPamt)+'\n';
+
+  if (navigator.share) {
+    navigator.share({ title: 'AMCO Weekly Report', text: text });
+  } else {
+    var ta=document.createElement('textarea');
+    ta.value=text; document.body.appendChild(ta);
+    ta.select(); document.execCommand('copy');
+    document.body.removeChild(ta);
+    showToast('Weekly report copied ✓');
   }
 }
 </script>
