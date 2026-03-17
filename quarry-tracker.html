@@ -487,7 +487,11 @@ function showToast(msg,ok) {
 }
 
 /* SUBMIT */
+var isSaving = false;
+
 function submitEntry() {
+  if (isSaving) return;
+
   var vendor  = toTitleCase(document.getElementById('vendor').value.trim());
   var driver  = toTitleCase(document.getElementById('driver').value.trim());
   var vehicle = document.getElementById('vehicle').value.trim().toUpperCase();
@@ -496,7 +500,6 @@ function submitEntry() {
   var amount  = parseFloat(document.getElementById('amount').value) || 0;
 
   if (!vendor) return showToast('Enter vendor name', false);
-  if (!driver) return showToast('Enter driver name', false);
   if (!qty||qty<=0) return showToast('Enter valid quantity', false);
 
   var pamount = parseFloat(document.getElementById('pamount').value) || 0;
@@ -507,10 +510,12 @@ function submitEntry() {
     notes: notes, amount: amount, pamount: pamount
   };
 
+  isSaving = true;
   var btn = document.getElementById('saveBtn');
   btn.disabled = true; btn.textContent = 'Saving...';
 
   sendToSheet(entry, function(ok) {
+    isSaving = false;
     showToast(ok ? 'Saved to sheet ✓' : 'Saved locally ✓');
     btn.disabled = false; btn.textContent = 'Save Entry';
     loadFromSheet();
@@ -654,8 +659,9 @@ function deleteEntry(i) {
   var old=document.getElementById('jsonp-delete');
   if(old) old.parentNode.removeChild(old);
   window.amcoDeleteCallback=function(data){
-    if(data.status==='deleted'){ showToast('Deleted ✓'); loadFromSheet(); }
-    else { showToast('Could not delete from sheet',false); loadFromSheet(); }
+    if(data.status==='deleted'){ showToast('Deleted ✓'); }
+    else { showToast('Could not delete from sheet',false); }
+    loadFromSheet();
   };
   var s=document.createElement('script');
   s.id='jsonp-delete';
