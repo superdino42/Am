@@ -351,7 +351,7 @@ function renderBanner(){
   else if(activeFilter==='unpaid'){subset=entries.filter(function(e){return payStatus(e)!=='paid';});label='Unpaid';bgColor='linear-gradient(135deg,#FFF0F0,#FFE0E0)';tc='#CC2200';}
   else{subset=entries;label='All Time';bgColor='linear-gradient(135deg,#F2F2F7,#E8E8F0)';tc='#3C3C43';}
   if(!subset.length){document.getElementById('dynBanner').innerHTML='';return;}
-  var tQty=0,tAmt=0,tPend=0;subset.forEach(function(e){tQty+=parseFloat(e.quantity)||0;tAmt+=(parseFloat(e.amount)||0)+(parseFloat(e.pamount)||0);tPend+=pendingAmt(e);});
+  var tQty=0,tAmt=0,tPend=0;subset.forEach(function(e){tQty=Math.round((tQty+(parseFloat(e.quantity)||0))*1000)/1000;tAmt+=(parseFloat(e.amount)||0)+(parseFloat(e.pamount)||0);tPend+=pendingAmt(e);});
   var html='<div class="sbanner" style="background:'+bgColor+';border:1px solid rgba(0,0,0,.07)"><div class="sbanner-title" style="color:'+tc+'">'+label+'</div><div class="sbanner-stats">';
   html+='<div class="sstat"><div class="sstat-num" style="color:'+tc+'">'+subset.length+'</div><div class="sstat-lbl" style="color:'+tc+'">Trips</div></div>';
   html+='<div class="sstat"><div class="sstat-num" style="color:'+tc+'">'+tQty+'</div><div class="sstat-lbl" style="color:'+tc+'">Qty</div></div>';
@@ -368,9 +368,9 @@ function renderDashboard(){
   function sumPend(arr){var t=0;arr.forEach(function(e){t+=pendingAmt(e);});return t;}
   var todayAmt=sumAmt(todayE),weekAmt=sumAmt(weekE),mAmt=sumAmt(monthE),mPaid=sumPaid(monthE),mPend=sumPend(monthE);
   var matT={'20mm':{qty:0,amt:0},'M-Sand':{qty:0,amt:0},'Washed Sand':{qty:0,amt:0}};
-  monthE.forEach(function(e){if(matT[e.material]){matT[e.material].qty+=parseFloat(e.quantity)||0;matT[e.material].amt+=(parseFloat(e.amount)||0)+(parseFloat(e.pamount)||0);}});
+  monthE.forEach(function(e){if(matT[e.material]){matT[e.material].qty=Math.round((matT[e.material].qty+(parseFloat(e.quantity)||0))*1000)/1000;matT[e.material].amt+=(parseFloat(e.amount)||0)+(parseFloat(e.pamount)||0);}});
   var byV={};
-  monthE.forEach(function(e){var vk=titleCase(e.vendor||'Unknown');if(!byV[vk])byV[vk]={trips:0,qty:0,amt:0,paid:0,pend:0,mats:{}};byV[vk].trips++;byV[vk].qty+=parseFloat(e.quantity)||0;byV[vk].amt+=(parseFloat(e.amount)||0)+(parseFloat(e.pamount)||0);byV[vk].paid+=parseFloat(e.paidnow)||0;byV[vk].pend+=pendingAmt(e);var m=e.material;if(!byV[vk].mats[m])byV[vk].mats[m]=0;byV[vk].mats[m]+=parseFloat(e.quantity)||0;});
+  monthE.forEach(function(e){var vk=titleCase(e.vendor||'Unknown');if(!byV[vk])byV[vk]={trips:0,qty:0,amt:0,paid:0,pend:0,mats:{}};byV[vk].trips++;byV[vk].qty=Math.round((byV[vk].qty+(parseFloat(e.quantity)||0))*1000)/1000;byV[vk].amt+=(parseFloat(e.amount)||0)+(parseFloat(e.pamount)||0);byV[vk].paid+=parseFloat(e.paidnow)||0;byV[vk].pend+=pendingAmt(e);var m=e.material;if(!byV[vk].mats[m])byV[vk].mats[m]=0;byV[vk].mats[m]+=parseFloat(e.quantity)||0;});
   var vnames=Object.keys(byV);vnames.sort(function(a,b){return byV[b].amt-byV[a].amt;});
   if(!monthE.length){document.getElementById('dashContent').innerHTML='<div class="empty"><div class="empty-icon">&#128202;</div><div class="empty-txt">No entries this month yet.<br>Start logging trips!</div></div>';return;}
   var html='<div class="dashg"><div class="dc"><div class="dlbl">Today</div><div class="dnum gold">'+todayE.length+' trips</div><div class="dsub">'+(todayAmt>0?fmtN(todayAmt):'\u2014')+'</div></div>';
@@ -433,7 +433,7 @@ function renderVendors(){
   document.getElementById('vendorList2').innerHTML=html;}
 function showVendorDetail(ev){
   var vendor=decodeURIComponent(ev);var ve=entries.filter(function(e){return titleCase(e.vendor||'')===vendor;});
-  var tAmt=0,tPamt=0,tPaid=0,tPend=0,tQty=0;ve.forEach(function(e){tAmt+=parseFloat(e.amount)||0;tPamt+=parseFloat(e.pamount)||0;tPaid+=parseFloat(e.paidnow)||0;tPend+=pendingAmt(e);tQty+=parseFloat(e.quantity)||0;});
+  var tAmt=0,tPamt=0,tPaid=0,tPend=0,tQty=0;ve.forEach(function(e){tAmt+=parseFloat(e.amount)||0;tPamt+=parseFloat(e.pamount)||0;tPaid+=parseFloat(e.paidnow)||0;tPend+=pendingAmt(e);tQty=Math.round((tQty+(parseFloat(e.quantity)||0))*1000)/1000;});
   var ka=isKA(vendor);document.getElementById('vendorList2').style.display='none';var det=document.getElementById('vendorDetail');det.style.display='block';
   var html='<div class="dhdr"><button class="back" onclick="renderVendors()">&#8249; Back</button><div class="dtitle">'+vendor+'</div></div>';
   html+='<div class="ka-toggle"><div><div class="ka-toggle-l">Key Account</div><div class="ka-toggle-s" id="ka-sub">'+(ka?'Gets CSV report':'Gets WhatsApp report')+'</div></div><label class="toggle"><input type="checkbox" id="ka-chk"'+(ka?' checked':'')+'onchange="toggleKA(\''+vendor+'\',this.checked);document.getElementById(\'ka-sub\').textContent=this.checked?\'Gets CSV report\':\'Gets WhatsApp report\';renderShareBtn(\''+ev+'\')"><span class="tslider"></span></label></div>';
@@ -452,7 +452,7 @@ function renderShareBtn(ev){var vendor=decodeURIComponent(ev);var ka=isKA(vendor
 function weekLabel(){var s=weekStart(),e=new Date(s);e.setDate(s.getDate()+5);return s.toLocaleDateString('en-IN',{day:'numeric',month:'short'})+' \u2013 '+e.toLocaleDateString('en-IN',{day:'numeric',month:'short',year:'numeric'});}
 function getWeekEntries(vendor){return entries.filter(function(e){return titleCase(e.vendor||'')===vendor&&isThisWeek(e.timestamp);});}
 function buildWhatsAppText(vendor,ve){
-  var tAmt=0,tPamt=0,tPaid=0,tPend=0,tQty=0;ve.forEach(function(e){tAmt+=parseFloat(e.amount)||0;tPamt+=parseFloat(e.pamount)||0;tPaid+=parseFloat(e.paidnow)||0;tPend+=pendingAmt(e);tQty+=parseFloat(e.quantity)||0;});
+  var tAmt=0,tPamt=0,tPaid=0,tPend=0,tQty=0;ve.forEach(function(e){tAmt+=parseFloat(e.amount)||0;tPamt+=parseFloat(e.pamount)||0;tPaid+=parseFloat(e.paidnow)||0;tPend+=pendingAmt(e);tQty=Math.round((tQty+(parseFloat(e.quantity)||0))*1000)/1000;});
   var grand=tAmt+tPamt;var t='*AMCO Quarry - Weekly Report*\nCustomer: '+vendor+'\nWeek: '+weekLabel()+'\n---------------------\n\nTrips: '+ve.length+' | Qty: '+tQty+'\n';
   if(grand>0)t+='Total: '+fmtN(grand)+'\n';if(tAmt>0)t+='  Amount: '+fmtN(tAmt)+'\n';if(tPamt>0)t+='  P-Amount: '+fmtN(tPamt)+'\n';if(tPaid>0)t+='Paid: '+fmtN(tPaid)+'\n';if(tPend>0)t+='Pending: '+fmtN(tPend)+'\n';
   t+='\n--- Trips ---\n';ve.forEach(function(e){t+='\n'+e.timestamp+'\n';if(e.driver)t+='Driver: '+e.driver+(e.vehicle?' | '+e.vehicle:'')+'\n';t+='Material: '+e.material+' | Qty: '+e.quantity+' '+e.unit+'\n';var tot=(parseFloat(e.amount)||0)+(parseFloat(e.pamount)||0);if(tot>0){t+=fmtN(tot);if(e.paidnow>0)t+=' | Paid: '+fmtN(e.paidnow);if(pendingAmt(e)>0)t+=' | Pend: '+fmtN(pendingAmt(e));t+='\n';}});
@@ -460,7 +460,7 @@ function buildWhatsAppText(vendor,ve){
 function shareWhatsApp(ev){var vendor=decodeURIComponent(ev),ve=getWeekEntries(vendor);if(!ve.length){showToast('No entries this week for '+vendor,false);return;}var text=buildWhatsAppText(vendor,ve);if(navigator.share){navigator.share({title:'AMCO Weekly - '+vendor,text:text});}else{var ta=document.createElement('textarea');ta.value=text;document.body.appendChild(ta);ta.select();document.execCommand('copy');document.body.removeChild(ta);showToast('Report copied!');}}
 function downloadCSV(ev){
   var vendor=decodeURIComponent(ev),ve=getWeekEntries(vendor);if(!ve.length){showToast('No entries this week for '+vendor,false);return;}
-  var tAmt=0,tPamt=0,tPaid=0,tPend=0,tQty=0;ve.forEach(function(e){tAmt+=parseFloat(e.amount)||0;tPamt+=parseFloat(e.pamount)||0;tPaid+=parseFloat(e.paidnow)||0;tPend+=pendingAmt(e);tQty+=parseFloat(e.quantity)||0;});
+  var tAmt=0,tPamt=0,tPaid=0,tPend=0,tQty=0;ve.forEach(function(e){tAmt+=parseFloat(e.amount)||0;tPamt+=parseFloat(e.pamount)||0;tPaid+=parseFloat(e.paidnow)||0;tPend+=pendingAmt(e);tQty=Math.round((tQty+(parseFloat(e.quantity)||0))*1000)/1000;});
   var rows=[['AMCO Quarry - Weekly Report'],['Customer',vendor],['Week',weekLabel()],['Generated',new Date().toLocaleString('en-IN')],[],['SUMMARY'],['Total Trips',ve.length,'Total Qty',tQty],['Total Amount',tAmt+tPamt,'',''],['Amount',tAmt,'P-Amount',tPamt],['Total Paid',tPaid,'Total Pending',tPend],[],['TRIP DETAILS'],['Date & Time','Driver','Vehicle','Material','Qty','Unit','Amount','P-Amount','Paid','Pending','Status']];
   ve.forEach(function(e){rows.push([e.timestamp,e.driver||'',e.vehicle||'',e.material,e.quantity,e.unit,parseFloat(e.amount)||0,parseFloat(e.pamount)||0,parseFloat(e.paidnow)||0,pendingAmt(e),payStatus(e)]);});
   var csv=rows.map(function(r){return r.map(function(c){var s=String(c===null||c===undefined?'':c);if(s.indexOf(',')>-1||s.indexOf('"')>-1||s.indexOf('\n')>-1)s='"'+s.replace(/"/g,'""')+'"';return s;}).join(',');}).join('\n');
