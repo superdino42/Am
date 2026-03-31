@@ -7,972 +7,478 @@
 <meta name="apple-mobile-web-app-status-bar-style" content="default">
 <meta name="apple-mobile-web-app-title" content="AMCO">
 <title>AMCO Quarry</title>
-<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
 <style>
-  :root {
-    --bg:#F2F2F7; --card:#FFFFFF; --accent:#B8860B; --accent-bg:#FFF8E8;
-    --text:#000000; --text2:#3C3C43; --text3:#8E8E93;
-    --sep:#C6C6C8; --sep-light:#E5E5EA;
-    --blue:#007AFF; --green:#34C759; --orange:#FF9500; --red:#FF3B30;
-    --font:'Inter',-apple-system,BlinkMacSystemFont,sans-serif;
-    --r:16px; --r-sm:12px;
-  }
-  *{box-sizing:border-box;margin:0;padding:0;-webkit-tap-highlight-color:transparent;}
-  html,body{height:100%;background:var(--bg);font-family:var(--font);color:var(--text);-webkit-font-smoothing:antialiased;}
-  .app{max-width:430px;margin:0 auto;min-height:100dvh;display:flex;flex-direction:column;}
-
-  /* HEADER */
-  .header{background:rgba(242,242,247,0.95);backdrop-filter:blur(20px);-webkit-backdrop-filter:blur(20px);padding:56px 20px 0;position:sticky;top:0;z-index:20;border-bottom:0.5px solid var(--sep);}
-  .header-top{display:flex;align-items:center;justify-content:space-between;padding-bottom:14px;}
-  .brand{display:flex;align-items:center;gap:11px;}
-  .brand-mark{width:40px;height:40px;border-radius:10px;background:linear-gradient(145deg,#D4A843,#A07828);display:flex;align-items:center;justify-content:center;font-weight:800;font-size:13px;color:white;letter-spacing:0.5px;box-shadow:0 2px 8px rgba(160,120,40,0.3);}
-  .brand-name{font-size:20px;font-weight:700;letter-spacing:-0.3px;}
-  .brand-sub{font-size:11px;color:var(--text3);margin-top:1px;}
-  .date-pill{font-size:12px;font-weight:500;color:var(--text3);background:var(--card);border:0.5px solid var(--sep);padding:5px 11px;border-radius:20px;}
-  .seg-wrap{padding:0 0 12px;}
-  .seg{display:flex;background:rgba(118,118,128,0.12);border-radius:9px;padding:2px;gap:2px;}
-  .seg-btn{flex:1;padding:7px 4px;text-align:center;font-size:13px;font-weight:500;color:var(--text2);border-radius:7px;cursor:pointer;border:none;background:none;transition:all 0.18s;font-family:var(--font);}
-  .seg-btn.active{background:var(--card);color:var(--text);font-weight:600;box-shadow:0 1px 4px rgba(0,0,0,0.12),0 0.5px 1px rgba(0,0,0,0.08);}
-
-  /* CONTENT */
-  .content{flex:1;padding:20px 16px 60px;overflow-y:auto;}
-
-  /* SECTIONS */
-  .section{margin-bottom:20px;}
-  .section-label{font-size:13px;color:var(--text3);text-transform:uppercase;letter-spacing:0.4px;padding:0 16px;margin-bottom:6px;}
-  .group{background:var(--card);border-radius:var(--r);overflow:hidden;}
-  .group-row{display:flex;align-items:center;padding:0 16px;min-height:52px;gap:12px;border-bottom:0.5px solid var(--sep-light);}
-  .group-row:last-child{border-bottom:none;}
-  .row-label{font-size:15px;color:var(--text);min-width:110px;flex-shrink:0;}
-  .row-input{flex:1;font-size:15px;color:var(--text2);background:none;border:none;outline:none;font-family:var(--font);text-align:right;padding:14px 0;}
-  .row-input::placeholder{color:var(--text3);}
-
-  /* MATERIAL */
-  .mat-group{background:var(--card);border-radius:var(--r);padding:14px;display:flex;gap:8px;}
-  .mat-pill{flex:1;display:flex;flex-direction:column;align-items:center;gap:5px;padding:11px 6px;border-radius:var(--r-sm);border:1.5px solid var(--sep-light);background:var(--bg);cursor:pointer;transition:all 0.15s;user-select:none;}
-  .mat-pill-icon{font-size:20px;}
-  .mat-pill-label{font-size:11px;font-weight:600;color:var(--text3);text-align:center;line-height:1.3;}
-  .mat-pill.active{border-color:var(--accent);background:var(--accent-bg);}
-  .mat-pill.active .mat-pill-label{color:var(--accent);}
-
-  /* QUANTITY */
-  .qty-group{background:var(--card);border-radius:var(--r);overflow:hidden;}
-  .qty-main{display:flex;align-items:center;padding:12px 16px;gap:12px;border-bottom:0.5px solid var(--sep-light);}
-  .qty-btn{width:36px;height:36px;border-radius:50%;flex-shrink:0;background:var(--sep-light);border:none;font-size:22px;color:var(--blue);display:flex;align-items:center;justify-content:center;cursor:pointer;user-select:none;transition:all 0.1s;font-family:var(--font);}
-  .qty-btn:active{background:var(--sep);transform:scale(0.93);}
-  .qty-val{flex:1;text-align:center;font-size:28px;font-weight:700;color:var(--text);background:none;border:none;outline:none;font-family:var(--font);}
-  .unit-row{display:flex;}
-  .unit-opt{flex:1;padding:12px 0;text-align:center;font-size:15px;font-weight:500;color:var(--text3);cursor:pointer;user-select:none;border-right:0.5px solid var(--sep-light);transition:color 0.15s;}
-  .unit-opt:last-child{border-right:none;}
-  .unit-opt.active{color:var(--blue);font-weight:600;}
-
-  /* AMOUNT */
-  .amount-row{display:flex;align-items:center;padding:0 16px;min-height:52px;gap:8px;}
-  .amount-label{font-size:15px;color:var(--text);min-width:110px;flex-shrink:0;}
-  .rupee{font-size:15px;color:var(--text3);}
-  .amount-input{flex:1;font-size:15px;font-weight:500;color:var(--text);background:none;border:none;outline:none;font-family:var(--font);text-align:right;padding:14px 0;}
-  .amount-input::placeholder{color:var(--text3);font-weight:400;}
-
-  /* SAVE */
-  .save-btn{width:100%;padding:16px;background:var(--blue);color:white;border:none;border-radius:var(--r);font-family:var(--font);font-size:17px;font-weight:600;cursor:pointer;transition:all 0.15s;margin-top:8px;}
-  .save-btn:active{transform:scale(0.98);background:#0065D1;}
-  .save-btn:disabled{background:var(--sep);color:var(--text3);}
-
-  /* TOAST */
-  .toast{position:fixed;bottom:32px;left:50%;transform:translateX(-50%) translateY(90px);padding:12px 22px;border-radius:40px;font-size:14px;font-weight:600;display:flex;align-items:center;gap:8px;transition:transform 0.35s cubic-bezier(0.34,1.56,0.64,1);white-space:nowrap;z-index:200;box-shadow:0 4px 24px rgba(0,0,0,0.18);}
-  .toast.show{transform:translateX(-50%) translateY(0);}
-  .toast.ok{background:#1C1C1E;color:white;}
-  .toast.err{background:var(--red);color:white;}
-
-  /* LIST HEADER */
-  .list-hdr{display:flex;align-items:center;justify-content:space-between;padding:0 4px;margin-bottom:8px;}
-  .list-title{font-size:13px;font-weight:600;color:var(--text3);text-transform:uppercase;letter-spacing:0.5px;}
-  .list-badge{font-size:12px;color:var(--text3);background:var(--card);border:0.5px solid var(--sep);padding:3px 9px;border-radius:20px;}
-
-  /* SEARCH BAR */
-  .search-wrap{background:var(--card);border-radius:var(--r-sm);display:flex;align-items:center;padding:0 14px;gap:8px;margin-bottom:12px;border:0.5px solid var(--sep);}
-  .search-icon{font-size:15px;color:var(--text3);}
-  .search-input{flex:1;padding:12px 0;font-size:15px;color:var(--text);background:none;border:none;outline:none;font-family:var(--font);}
-  .search-input::placeholder{color:var(--text3);}
-  .search-clear{font-size:18px;color:var(--text3);cursor:pointer;padding:4px;}
-
-  /* DATE FILTER */
-  .filter-row{display:flex;gap:8px;margin-bottom:12px;overflow-x:auto;padding-bottom:2px;}
-  .filter-chip{padding:6px 14px;border-radius:20px;font-size:13px;font-weight:500;white-space:nowrap;cursor:pointer;border:1px solid var(--sep);background:var(--card);color:var(--text2);transition:all 0.15s;flex-shrink:0;}
-  .filter-chip.active{background:var(--blue);color:white;border-color:var(--blue);}
-
-  /* TODAY BANNER */
-  .today-banner{background:linear-gradient(135deg,#FFF8E8,#FFF3D0);border:1px solid rgba(184,134,11,0.2);border-radius:var(--r);padding:16px;margin-bottom:16px;}
-  .today-banner-title{font-size:12px;font-weight:600;color:var(--accent);text-transform:uppercase;letter-spacing:0.5px;margin-bottom:10px;}
-  .today-stats{display:flex;gap:0;}
-  .today-stat{flex:1;text-align:center;border-right:1px solid rgba(184,134,11,0.15);}
-  .today-stat:last-child{border-right:none;}
-  .today-num{font-size:22px;font-weight:700;color:var(--text);}
-  .today-label{font-size:11px;color:var(--accent);margin-top:2px;font-weight:500;}
-
-  /* ENTRY CARDS */
-  .entry-card{background:var(--card);border-radius:var(--r);margin-bottom:10px;overflow:hidden;}
-  .entry-main{padding:14px 16px;display:flex;align-items:flex-start;justify-content:space-between;border-bottom:0.5px solid var(--sep-light);}
-  .entry-vendor{font-size:16px;font-weight:600;}
-  .entry-time{font-size:12px;color:var(--text3);margin-top:2px;}
-  .entry-qty-pill{background:var(--accent-bg);color:var(--accent);font-size:13px;font-weight:700;padding:5px 12px;border-radius:20px;border:1px solid rgba(184,134,11,0.25);white-space:nowrap;flex-shrink:0;margin-left:8px;}
-  .entry-meta{padding:10px 16px;display:flex;gap:6px;flex-wrap:wrap;}
-  .etag{font-size:12px;font-weight:500;padding:4px 10px;border-radius:20px;}
-  .etag-default{background:var(--bg);color:var(--text3);}
-  .etag-20mm{background:#FFF8E8;color:#A07828;}
-  .etag-msand{background:#EBF4FF;color:#0055BB;}
-  .etag-wsand{background:#EAFAF2;color:#1A7A45;}
-  .entry-amount-row{padding:10px 16px;border-top:0.5px solid var(--sep-light);display:flex;justify-content:space-between;align-items:center;}
-  .entry-amount-label{font-size:14px;color:var(--text3);}
-  .entry-amount-val{font-size:15px;font-weight:700;color:var(--text);}
-  .entry-actions{display:flex;border-top:0.5px solid var(--sep-light);}
-  .action-btn{flex:1;padding:12px;text-align:center;font-size:14px;font-weight:600;cursor:pointer;border:none;background:none;border-right:0.5px solid var(--sep-light);font-family:var(--font);}
-  .action-btn:last-child{border-right:none;}
-  .action-edit{color:var(--blue);}
-  .action-delete{color:var(--red);}
-
-  /* CUSTOMERS */
-  .customer-card{background:var(--card);border-radius:var(--r);margin-bottom:10px;display:flex;align-items:center;padding:16px;gap:14px;cursor:pointer;}
-  .customer-card:active{background:var(--sep-light);}
-  .customer-avatar{width:44px;height:44px;border-radius:50%;background:var(--accent-bg);border:1.5px solid rgba(184,134,11,0.25);display:flex;align-items:center;justify-content:center;font-size:15px;font-weight:700;color:var(--accent);flex-shrink:0;}
-  .customer-info{flex:1;min-width:0;}
-  .customer-name{font-size:16px;font-weight:600;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;}
-  .customer-meta{font-size:13px;color:var(--text3);margin-top:2px;}
-  .customer-right{text-align:right;flex-shrink:0;}
-  .customer-amt{font-size:15px;font-weight:700;}
-  .customer-loads{font-size:12px;color:var(--text3);margin-top:2px;}
-  .chevron{color:var(--sep);font-size:20px;margin-left:4px;flex-shrink:0;}
-
-  /* DETAIL */
-  .detail-header{display:flex;align-items:center;gap:12px;margin-bottom:20px;}
-  .back-btn{font-size:17px;font-weight:600;color:var(--blue);cursor:pointer;background:none;border:none;font-family:var(--font);padding:0;display:flex;align-items:center;gap:2px;}
-  .detail-title{font-size:18px;font-weight:700;}
-  .detail-stats{background:var(--card);border-radius:var(--r);padding:16px;margin-bottom:16px;display:grid;grid-template-columns:1fr 1fr 1fr;gap:12px;}
-  .ds-item{text-align:center;}
-  .ds-num{font-size:22px;font-weight:700;}
-  .ds-num.gold{color:var(--accent);}
-  .ds-num.green{color:var(--green);}
-  .ds-label{font-size:11px;color:var(--text3);margin-top:3px;font-weight:500;text-transform:uppercase;letter-spacing:0.4px;}
-  .total-bar{background:var(--card);border-radius:var(--r);padding:16px 20px;margin-top:12px;display:flex;justify-content:space-between;align-items:center;}
-  .total-bar-label{font-size:15px;font-weight:600;color:var(--text2);}
-  .total-bar-val{font-size:22px;font-weight:800;}
-
-  /* SHARE BTN */
-  .share-btn{width:100%;padding:14px;background:var(--bg);color:var(--blue);border:1px solid var(--sep);border-radius:var(--r);font-family:var(--font);font-size:15px;font-weight:600;cursor:pointer;margin-top:10px;display:flex;align-items:center;justify-content:center;gap:8px;}
-  .share-btn:active{background:var(--sep-light);}
-
-  /* EDIT MODAL */
-  .modal-overlay{position:fixed;inset:0;background:rgba(0,0,0,0.4);z-index:100;display:flex;align-items:flex-end;justify-content:center;opacity:0;pointer-events:none;transition:opacity 0.2s;}
-  .modal-overlay.show{opacity:1;pointer-events:all;}
-  .modal{background:var(--bg);border-radius:20px 20px 0 0;width:100%;max-width:430px;padding:20px 16px 40px;transform:translateY(100%);transition:transform 0.3s cubic-bezier(0.34,1.2,0.64,1);max-height:90vh;overflow-y:auto;}
-  .modal-overlay.show .modal{transform:translateY(0);}
-  .modal-handle{width:36px;height:4px;background:var(--sep);border-radius:2px;margin:0 auto 20px;}
-  .modal-title{font-size:17px;font-weight:700;text-align:center;margin-bottom:20px;}
-  .modal-actions{display:flex;gap:10px;margin-top:12px;}
-  .modal-cancel{flex:1;padding:14px;background:var(--sep-light);color:var(--text2);border:none;border-radius:var(--r-sm);font-family:var(--font);font-size:16px;font-weight:600;cursor:pointer;}
-  .modal-save{flex:1;padding:14px;background:var(--blue);color:white;border:none;border-radius:var(--r-sm);font-family:var(--font);font-size:16px;font-weight:600;cursor:pointer;}
-
-  .empty{text-align:center;padding:60px 24px;color:var(--text3);}
-  .empty-icon{font-size:44px;margin-bottom:14px;opacity:0.4;}
-  .empty-text{font-size:14px;line-height:1.6;}
-  .loading{text-align:center;padding:40px;color:var(--text3);font-size:14px;}
+:root{--bg:#F2F2F7;--card:#FFF;--accent:#B8860B;--abg:#FFF8E8;--t:#000;--t2:#3C3C43;--t3:#8E8E93;--sep:#C6C6C8;--sepl:#E5E5EA;--blue:#007AFF;--green:#34C759;--orange:#FF9500;--red:#FF3B30;--r:14px;--rs:10px;--f:'Inter',-apple-system,sans-serif;}
+*{box-sizing:border-box;margin:0;padding:0;-webkit-tap-highlight-color:transparent;}
+html,body{height:100%;background:var(--bg);font-family:var(--f);color:var(--t);-webkit-font-smoothing:antialiased;}
+.app{max-width:430px;margin:0 auto;min-height:100dvh;display:flex;flex-direction:column;}
+.hdr{background:rgba(242,242,247,.96);backdrop-filter:blur(20px);-webkit-backdrop-filter:blur(20px);padding:50px 16px 0;position:sticky;top:0;z-index:20;border-bottom:.5px solid var(--sep);}
+.hdr-top{display:flex;align-items:center;justify-content:space-between;padding-bottom:10px;}
+.brand{display:flex;align-items:center;gap:10px;}
+.bmark{width:38px;height:38px;border-radius:9px;background:linear-gradient(145deg,#D4A843,#A07828);display:flex;align-items:center;justify-content:center;font-weight:800;font-size:12px;color:#fff;}
+.bname{font-size:19px;font-weight:700;letter-spacing:-.3px;}
+.bsub{font-size:11px;color:var(--t3);margin-top:1px;}
+.dpill{font-size:11px;font-weight:500;color:var(--t3);background:var(--card);border:.5px solid var(--sep);padding:4px 10px;border-radius:20px;}
+.seg{display:flex;background:rgba(118,118,128,.12);border-radius:9px;padding:2px;gap:2px;margin-bottom:10px;}
+.sb{flex:1;padding:6px 2px;text-align:center;font-size:11.5px;font-weight:500;color:var(--t2);border-radius:7px;cursor:pointer;border:none;background:none;font-family:var(--f);}
+.sb.active{background:var(--card);color:var(--t);font-weight:600;box-shadow:0 1px 4px rgba(0,0,0,.12);}
+.content{flex:1;padding:14px 14px 80px;overflow-y:auto;}
+.sec{margin-bottom:14px;}
+.slabel{font-size:12px;color:var(--t3);text-transform:uppercase;letter-spacing:.4px;padding:0 2px;margin-bottom:5px;}
+.grp{background:var(--card);border-radius:var(--r);overflow:hidden;}
+.grow{display:flex;align-items:center;padding:0 14px;min-height:48px;gap:10px;border-bottom:.5px solid var(--sepl);}
+.grow:last-child{border-bottom:none;}
+.rlbl{font-size:14px;color:var(--t);min-width:95px;flex-shrink:0;}
+.rinp{flex:1;font-size:14px;color:var(--t2);background:none;border:none;outline:none;font-family:var(--f);text-align:right;padding:13px 0;}
+.rinp::placeholder{color:var(--t3);}
+.mats{background:var(--card);border-radius:var(--r);padding:10px;display:flex;gap:7px;margin-bottom:14px;}
+.mat{flex:1;display:flex;flex-direction:column;align-items:center;gap:4px;padding:9px 4px;border-radius:var(--rs);border:1.5px solid var(--sepl);background:var(--bg);cursor:pointer;user-select:none;}
+.mat-icon{font-size:17px;}
+.mat-lbl{font-size:10px;font-weight:600;color:var(--t3);text-align:center;}
+.mat.active{border-color:var(--accent);background:var(--abg);}
+.mat.active .mat-lbl{color:var(--accent);}
+.qtyg{background:var(--card);border-radius:var(--r);overflow:hidden;margin-bottom:14px;}
+.qtyr{display:flex;align-items:center;padding:9px 14px;gap:10px;border-bottom:.5px solid var(--sepl);}
+.qbtn{width:34px;height:34px;border-radius:50%;flex-shrink:0;background:var(--sepl);border:none;font-size:20px;color:var(--blue);display:flex;align-items:center;justify-content:center;cursor:pointer;user-select:none;font-family:var(--f);}
+.qval{flex:1;text-align:center;font-size:26px;font-weight:700;color:var(--t);background:none;border:none;outline:none;font-family:var(--f);}
+.unitr{display:flex;}
+.uopt{flex:1;padding:10px 0;text-align:center;font-size:14px;font-weight:500;color:var(--t3);cursor:pointer;user-select:none;border-right:.5px solid var(--sepl);}
+.uopt:last-child{border-right:none;}
+.uopt.active{color:var(--blue);font-weight:600;}
+.amtr{display:flex;align-items:center;padding:0 14px;min-height:48px;gap:7px;border-bottom:.5px solid var(--sepl);}
+.amtr:last-child{border-bottom:none;}
+.albl{font-size:14px;color:var(--t);min-width:95px;flex-shrink:0;}
+.rs{font-size:14px;color:var(--t3);}
+.ainp{flex:1;font-size:14px;font-weight:500;color:var(--t);background:none;border:none;outline:none;font-family:var(--f);text-align:right;padding:13px 0;}
+.ainp::placeholder{color:var(--t3);font-weight:400;}
+.savebtn{width:100%;padding:15px;background:var(--blue);color:#fff;border:none;border-radius:var(--r);font-family:var(--f);font-size:16px;font-weight:600;cursor:pointer;margin-top:8px;}
+.savebtn:disabled{background:var(--sep);color:var(--t3);}
+.toast{position:fixed;bottom:28px;left:50%;transform:translateX(-50%) translateY(90px);padding:11px 20px;border-radius:40px;font-size:13px;font-weight:600;display:flex;align-items:center;gap:7px;transition:transform .35s cubic-bezier(.34,1.56,.64,1);white-space:nowrap;z-index:500;box-shadow:0 4px 20px rgba(0,0,0,.18);}
+.toast.show{transform:translateX(-50%) translateY(0);}
+.toast.ok{background:#1C1C1E;color:#fff;}
+.toast.err{background:var(--red);color:#fff;}
+.srch{background:var(--card);border-radius:var(--rs);display:flex;align-items:center;padding:0 12px;gap:7px;margin-bottom:9px;border:.5px solid var(--sep);}
+.srch input{flex:1;padding:10px 0;font-size:14px;color:var(--t);background:none;border:none;outline:none;font-family:var(--f);}
+.srch input::placeholder{color:var(--t3);}
+.chips{display:flex;gap:5px;margin-bottom:9px;overflow-x:auto;padding-bottom:2px;}
+.chip{padding:5px 11px;border-radius:20px;font-size:12px;font-weight:500;white-space:nowrap;cursor:pointer;border:1px solid var(--sep);background:var(--card);color:var(--t2);flex-shrink:0;}
+.chip.active{background:var(--blue);color:#fff;border-color:var(--blue);}
+.lhdr{display:flex;align-items:center;justify-content:space-between;padding:0 2px;margin-bottom:7px;}
+.ltitle{font-size:12px;font-weight:600;color:var(--t3);text-transform:uppercase;letter-spacing:.5px;}
+.lbadge{font-size:11px;color:var(--t3);background:var(--card);border:.5px solid var(--sep);padding:2px 8px;border-radius:20px;}
+.sbanner{border-radius:var(--r);padding:12px;margin-bottom:12px;}
+.sbanner-title{font-size:10px;font-weight:600;text-transform:uppercase;letter-spacing:.5px;margin-bottom:7px;}
+.sbanner-stats{display:flex;}
+.sstat{flex:1;text-align:center;border-right:1px solid rgba(0,0,0,.08);}
+.sstat:last-child{border-right:none;}
+.sstat-num{font-size:19px;font-weight:700;}
+.sstat-lbl{font-size:10px;margin-top:2px;font-weight:500;}
+.ecard{background:var(--card);border-radius:var(--r);margin-bottom:9px;overflow:hidden;}
+.emain{padding:11px 14px;display:flex;align-items:flex-start;justify-content:space-between;border-bottom:.5px solid var(--sepl);}
+.evendor{font-size:15px;font-weight:600;}
+.etime{font-size:11px;color:var(--t3);margin-top:2px;}
+.eqpill{font-size:12px;font-weight:700;padding:4px 9px;border-radius:20px;border:1px solid rgba(184,134,11,.25);background:var(--abg);color:var(--accent);white-space:nowrap;flex-shrink:0;margin-left:7px;}
+.emeta{padding:7px 14px;display:flex;gap:5px;flex-wrap:wrap;}
+.etag{font-size:11px;font-weight:500;padding:3px 8px;border-radius:20px;}
+.tdef{background:var(--bg);color:var(--t3);}
+.t20{background:#FFF8E8;color:#A07828;}
+.tms{background:#EBF4FF;color:#0055BB;}
+.tws{background:#EAFAF2;color:#1A7A45;}
+.eamts{padding:7px 14px;border-top:.5px solid var(--sepl);display:flex;gap:14px;flex-wrap:wrap;}
+.aitm .al{font-size:10px;color:var(--t3);font-weight:500;}
+.aitm .av{font-size:13px;font-weight:700;color:var(--t);}
+.epay{padding:7px 14px;border-top:.5px solid var(--sepl);display:flex;align-items:center;justify-content:space-between;}
+.pbadge{font-size:11px;font-weight:600;padding:3px 9px;border-radius:20px;}
+.ppaid{background:#E8F8EE;color:#1A7A45;}
+.ppart{background:#FFF3E0;color:#A05000;}
+.punpd{background:#FFF0F0;color:#CC2200;}
+.pupdbtn{font-size:12px;font-weight:600;color:var(--blue);background:none;border:none;cursor:pointer;font-family:var(--f);}
+.eacts{display:flex;border-top:.5px solid var(--sepl);}
+.abt{flex:1;padding:10px;text-align:center;font-size:13px;font-weight:600;cursor:pointer;border:none;background:none;border-right:.5px solid var(--sepl);font-family:var(--f);}
+.abt:last-child{border-right:none;}
+.aedit{color:var(--blue);}
+.adel{color:var(--red);}
+.dc{background:var(--card);border-radius:var(--r);padding:13px;border:.5px solid var(--sepl);margin-bottom:10px;}
+.dashg{display:grid;grid-template-columns:1fr 1fr;gap:9px;margin-bottom:10px;}
+.dashg .dc{margin-bottom:0;}
+.dlbl{font-size:10px;font-weight:600;color:var(--t3);text-transform:uppercase;letter-spacing:.4px;margin-bottom:4px;}
+.dnum{font-size:22px;font-weight:800;color:var(--t);}
+.dnum.gold{color:var(--accent);}
+.dnum.green{color:var(--green);}
+.dnum.red{color:var(--red);}
+.dsub{font-size:11px;color:var(--t3);margin-top:3px;}
+.ccard{background:var(--card);border-radius:var(--r);margin-bottom:9px;display:flex;align-items:center;padding:13px;gap:12px;cursor:pointer;}
+.ccard:active{background:var(--sepl);}
+.cav{width:40px;height:40px;border-radius:50%;background:var(--abg);border:1.5px solid rgba(184,134,11,.25);display:flex;align-items:center;justify-content:center;font-size:13px;font-weight:700;color:var(--accent);flex-shrink:0;}
+.cname{font-size:15px;font-weight:600;}
+.cmeta{font-size:12px;color:var(--t3);margin-top:2px;}
+.cright{text-align:right;margin-left:auto;flex-shrink:0;}
+.camt{font-size:14px;font-weight:700;}
+.cpend{font-size:11px;font-weight:600;color:var(--red);margin-top:2px;}
+.cok{font-size:11px;font-weight:600;color:var(--green);margin-top:2px;}
+.chev{color:var(--sep);font-size:18px;margin-left:3px;}
+.ka-badge{font-size:9px;font-weight:600;background:#EBF4FF;color:#0055BB;padding:1px 6px;border-radius:20px;margin-left:5px;display:inline-block;vertical-align:middle;}
+.dhdr{display:flex;align-items:center;gap:10px;margin-bottom:14px;}
+.back{font-size:16px;font-weight:600;color:var(--blue);cursor:pointer;background:none;border:none;font-family:var(--f);padding:0;}
+.dtitle{font-size:17px;font-weight:700;}
+.dstats{background:var(--card);border-radius:var(--r);padding:13px;margin-bottom:12px;display:grid;grid-template-columns:1fr 1fr 1fr;gap:8px;}
+.dsi{text-align:center;}
+.dsi .dn{font-size:19px;font-weight:700;}
+.dsi .dl{font-size:10px;color:var(--t3);margin-top:2px;font-weight:500;text-transform:uppercase;letter-spacing:.3px;}
+.psum{background:var(--card);border-radius:var(--r);padding:13px;margin-bottom:12px;}
+.psum-t{font-size:12px;font-weight:600;color:var(--t3);text-transform:uppercase;letter-spacing:.4px;margin-bottom:9px;}
+.psum-row{display:flex;justify-content:space-between;align-items:center;padding:5px 0;border-bottom:.5px solid var(--sepl);}
+.psum-row:last-child{border-bottom:none;}
+.psum-l{font-size:13px;color:var(--t2);}
+.psum-v{font-size:14px;font-weight:700;}
+.ka-toggle{display:flex;align-items:center;justify-content:space-between;background:var(--card);border-radius:var(--r);padding:13px 14px;margin-bottom:12px;}
+.ka-toggle-l{font-size:14px;font-weight:600;}
+.ka-toggle-s{font-size:12px;color:var(--t3);margin-top:2px;}
+.toggle{position:relative;width:44px;height:26px;flex-shrink:0;}
+.toggle input{opacity:0;width:0;height:0;}
+.tslider{position:absolute;cursor:pointer;inset:0;background:var(--sep);border-radius:13px;transition:.3s;}
+.tslider:before{position:absolute;content:'';height:20px;width:20px;left:3px;bottom:3px;background:#fff;border-radius:50%;transition:.3s;}
+.toggle input:checked + .tslider{background:var(--blue);}
+.toggle input:checked + .tslider:before{transform:translateX(18px);}
+.sharebtn{width:100%;padding:12px;background:var(--bg);color:var(--blue);border:1px solid var(--sep);border-radius:var(--r);font-family:var(--f);font-size:14px;font-weight:600;cursor:pointer;display:flex;align-items:center;justify-content:center;gap:7px;margin-bottom:8px;}
+.modal-ov{position:fixed;inset:0;background:rgba(0,0,0,.4);z-index:100;display:flex;align-items:flex-end;justify-content:center;opacity:0;pointer-events:none;transition:opacity .2s;}
+.modal-ov.show{opacity:1;pointer-events:all;}
+.modal{background:var(--bg);border-radius:20px 20px 0 0;width:100%;max-width:430px;padding:18px 14px 38px;transform:translateY(100%);transition:transform .3s cubic-bezier(.34,1.2,.64,1);max-height:90vh;overflow-y:auto;}
+.modal-ov.show .modal{transform:translateY(0);}
+.mhandle{width:36px;height:4px;background:var(--sep);border-radius:2px;margin:0 auto 15px;}
+.mtitle{font-size:16px;font-weight:700;text-align:center;margin-bottom:5px;}
+.msub{font-size:12px;color:var(--t3);text-align:center;margin-bottom:14px;}
+.payopts{display:flex;gap:7px;margin-bottom:12px;}
+.popt{flex:1;padding:11px 5px;border-radius:var(--rs);border:1.5px solid var(--sepl);text-align:center;cursor:pointer;}
+.popt.active{border-color:var(--blue);background:#EBF4FF;}
+.popt-icon{font-size:18px;margin-bottom:3px;}
+.popt-lbl{font-size:13px;font-weight:600;color:var(--t2);}
+.macts{display:flex;gap:8px;margin-top:10px;}
+.mcancel{flex:1;padding:13px;background:var(--sepl);color:var(--t2);border:none;border-radius:var(--rs);font-family:var(--f);font-size:15px;font-weight:600;cursor:pointer;}
+.msave{flex:1;padding:13px;background:var(--blue);color:#fff;border:none;border-radius:var(--rs);font-family:var(--f);font-size:15px;font-weight:600;cursor:pointer;}
+.empty{text-align:center;padding:50px 20px;color:var(--t3);}
+.empty-icon{font-size:38px;margin-bottom:12px;opacity:.4;}
+.empty-txt{font-size:13px;line-height:1.6;}
 </style>
 </head>
 <body>
 <div class="app">
-  <div class="header">
-    <div class="header-top">
+  <div class="hdr">
+    <div class="hdr-top">
       <div class="brand">
-        <div class="brand-mark">AM</div>
-        <div>
-          <div class="brand-name">AMCO</div>
-          <div class="brand-sub">Quarry Operations</div>
-        </div>
+        <div class="bmark">AM</div>
+        <div><div class="bname">AMCO</div><div class="bsub">Quarry Operations</div></div>
       </div>
-      <div class="date-pill" id="dateBadge"></div>
+      <div class="dpill" id="dateBadge"></div>
     </div>
-    <div class="seg-wrap">
-      <div class="seg">
-        <button class="seg-btn active" onclick="switchTab('log')">Log</button>
-        <button class="seg-btn" onclick="switchTab('history')">History</button>
-        <button class="seg-btn" onclick="switchTab('customers')">Customers</button>
-      </div>
+    <div class="seg">
+      <button class="sb active" onclick="switchTab('dash')">Dashboard</button>
+      <button class="sb" onclick="switchTab('log')">Log</button>
+      <button class="sb" onclick="switchTab('history')">History</button>
+      <button class="sb" onclick="switchTab('vendors')">Vendors</button>
     </div>
   </div>
-
   <div class="content">
-
-    <!-- LOG TAB -->
-    <div id="tab-log">
-      <div class="section">
-        <div class="section-label">Details</div>
-        <div class="group">
-          <div class="group-row">
-            <span class="row-label">Vendor</span>
-            <input class="row-input" type="text" id="vendor" placeholder="Contractor name" autocomplete="off" list="vendorList">
-            <datalist id="vendorList"></datalist>
-          </div>
-          <div class="group-row">
-            <span class="row-label">Driver</span>
-            <input class="row-input" type="text" id="driver" placeholder="Driver name" autocomplete="off" list="driverList">
-            <datalist id="driverList"></datalist>
-          </div>
-          <div class="group-row">
-            <span class="row-label">Vehicle No.</span>
-            <input class="row-input" type="text" id="vehicle" placeholder="e.g. TN01AB1234" autocomplete="off" list="vehicleList" style="text-transform:uppercase;">
-            <datalist id="vehicleList"></datalist>
-          </div>
-          <div class="group-row">
-            <span class="row-label">Notes</span>
-            <input class="row-input" type="text" id="notes" placeholder="Optional" autocomplete="off">
-          </div>
+    <div id="tab-dash"><div id="dashContent"><div class="empty"><div class="empty-icon">&#128202;</div><div class="empty-txt">Loading...</div></div></div></div>
+    <div id="tab-log" style="display:none">
+      <div class="sec"><div class="slabel">Details</div>
+        <div class="grp">
+          <div class="grow"><span class="rlbl">Vendor</span><input class="rinp" type="text" id="vendor" placeholder="Contractor name" autocomplete="off" list="vendorList"><datalist id="vendorList"></datalist></div>
+          <div class="grow"><span class="rlbl">Driver</span><input class="rinp" type="text" id="driver" placeholder="Optional" autocomplete="off" list="driverList"><datalist id="driverList"></datalist></div>
+          <div class="grow"><span class="rlbl">Vehicle No.</span><input class="rinp" type="text" id="vehicle" placeholder="Optional" autocomplete="off" list="vehicleList" style="text-transform:uppercase"><datalist id="vehicleList"></datalist></div>
+          <div class="grow" style="border-bottom:none"><span class="rlbl">Notes</span><input class="rinp" type="text" id="notes" placeholder="Optional" autocomplete="off"></div>
         </div>
       </div>
-
-      <div class="section">
-        <div class="section-label">Material</div>
-        <div class="mat-group">
-          <div class="mat-pill active" id="mat-20mm" onclick="selectMat('20mm')">
-            <span class="mat-pill-icon">🪨</span>
-            <span class="mat-pill-label">20mm</span>
-          </div>
-          <div class="mat-pill" id="mat-msand" onclick="selectMat('M-Sand')">
-            <span class="mat-pill-icon">🏖️</span>
-            <span class="mat-pill-label">M-Sand</span>
-          </div>
-          <div class="mat-pill" id="mat-wsand" onclick="selectMat('Washed Sand')">
-            <span class="mat-pill-icon">💧</span>
-            <span class="mat-pill-label">Washed Sand</span>
-          </div>
+      <div class="sec"><div class="slabel">Material</div>
+        <div class="mats">
+          <div class="mat active" id="mat-20mm" onclick="selMat('20mm')"><span class="mat-icon">&#129392;</span><span class="mat-lbl">20mm</span></div>
+          <div class="mat" id="mat-msand" onclick="selMat('M-Sand')"><span class="mat-icon">&#127958;</span><span class="mat-lbl">M-Sand</span></div>
+          <div class="mat" id="mat-wsand" onclick="selMat('Washed Sand')"><span class="mat-icon">&#128166;</span><span class="mat-lbl">Washed Sand</span></div>
         </div>
       </div>
-
-      <div class="section">
-        <div class="section-label">Quantity</div>
-        <div class="qty-group">
-          <div class="qty-main">
-            <button class="qty-btn" onclick="changeQty(-1)">−</button>
-            <input class="qty-val" type="number" id="qty" value="1" min="0.5" step="0.5">
-            <button class="qty-btn" onclick="changeQty(1)">+</button>
-          </div>
-          <div class="unit-row">
-            <div class="unit-opt active" id="unit-brass" onclick="selectUnit('Brass')">Brass</div>
-            <div class="unit-opt" id="unit-tons" onclick="selectUnit('Tons')">Tons</div>
-          </div>
+      <div class="sec"><div class="slabel">Quantity</div>
+        <div class="qtyg">
+          <div class="qtyr"><button class="qbtn" onclick="chgQty(-1)">&#8722;</button><input class="qval" type="number" id="qty" value="1" min="0.5" step="0.5"><button class="qbtn" onclick="chgQty(1)">+</button></div>
+          <div class="unitr"><div class="uopt active" id="unit-brass" onclick="selUnit('Brass')">Brass</div><div class="uopt" id="unit-tons" onclick="selUnit('Tons')">Tons</div></div>
         </div>
       </div>
-
-      <div class="section">
-        <div class="section-label">Payment</div>
-        <div class="group">
-          <div class="amount-row">
-            <span class="amount-label">Amount</span>
-            <span class="rupee">₹</span>
-            <input class="amount-input" type="number" id="amount" placeholder="0.00" min="0" step="0.01">
-          </div>
-          <div style="border-top:0.5px solid var(--sep-light)" class="amount-row">
-            <span class="amount-label">P-Amount</span>
-            <span class="rupee">₹</span>
-            <input class="amount-input" type="number" id="pamount" placeholder="Pass amount" min="0" step="0.01">
-          </div>
+      <div class="sec"><div class="slabel">Payment</div>
+        <div class="grp">
+          <div class="amtr"><span class="albl">Amount</span><span class="rs">&#8377;</span><input class="ainp" type="number" id="amount" placeholder="0" min="0"></div>
+          <div class="amtr"><span class="albl">P-Amount</span><span class="rs">&#8377;</span><input class="ainp" type="number" id="pamount" placeholder="Pass amount" min="0"></div>
+          <div class="amtr" style="border-bottom:none"><span class="albl">Paid Now</span><span class="rs">&#8377;</span><input class="ainp" type="number" id="paidnow" placeholder="Amount received" min="0"></div>
         </div>
       </div>
-
-      <button class="save-btn" id="saveBtn" onclick="submitEntry()">Save Entry</button>
+      <button class="savebtn" id="saveBtn" onclick="submitEntry()">Save Entry</button>
     </div>
-
-    <!-- HISTORY TAB -->
     <div id="tab-history" style="display:none">
-      <div id="todayBanner"></div>
-      <div class="search-wrap">
-        <span class="search-icon">🔍</span>
-        <input class="search-input" type="text" id="searchInput" placeholder="Search vendor, driver, vehicle..." oninput="renderHistory()">
-        <span class="search-clear" onclick="clearSearch()">✕</span>
+      <div id="dynBanner"></div>
+      <div class="srch">
+        <span style="color:var(--t3);font-size:14px">&#128269;</span>
+        <input type="text" id="searchInput" placeholder="Search vendor, driver, vehicle..." oninput="renderHistory()">
+        <span style="color:var(--t3);cursor:pointer;font-size:14px" onclick="document.getElementById('searchInput').value='';renderHistory()">&#10005;</span>
       </div>
-      <div class="filter-row">
-        <div class="filter-chip active" id="filter-all" onclick="setFilter('all')">All</div>
-        <div class="filter-chip" id="filter-today" onclick="setFilter('today')">Today</div>
-        <div class="filter-chip" id="filter-week" onclick="setFilter('week')">This Week</div>
-        <div class="filter-chip" id="filter-month" onclick="setFilter('month')">This Month</div>
+      <div class="chips">
+        <div class="chip active" id="fc-all" onclick="setFilter('all')">All</div>
+        <div class="chip" id="fc-today" onclick="setFilter('today')">Today</div>
+        <div class="chip" id="fc-week" onclick="setFilter('week')">This Week</div>
+        <div class="chip" id="fc-month" onclick="setFilter('month')">This Month</div>
+        <div class="chip" id="fc-unpaid" onclick="setFilter('unpaid')">Unpaid</div>
       </div>
-      <div class="list-hdr">
-        <div class="list-title">Entries</div>
-        <div class="list-badge" id="entryCount">0 entries</div>
-      </div>
+      <div class="lhdr"><div class="ltitle">Entries</div><div class="lbadge" id="entryCount">0</div></div>
       <div id="historyList"></div>
     </div>
-
-    <!-- CUSTOMERS TAB -->
-    <div id="tab-customers" style="display:none">
-      <div id="customerList"></div>
-      <div id="customerDetail" style="display:none"></div>
-    </div>
-
-  </div>
-</div>
-
-<!-- EDIT MODAL -->
-<div class="modal-overlay" id="editModal" onclick="handleModalClick(event)">
-  <div class="modal" id="modalInner">
-    <div class="modal-handle"></div>
-    <div class="modal-title">Edit Entry</div>
-    <div class="section" style="margin-bottom:12px">
-      <div class="group">
-        <div class="group-row"><span class="row-label">Vendor</span><input class="row-input" type="text" id="e-vendor" placeholder="Contractor name"></div>
-        <div class="group-row"><span class="row-label">Driver</span><input class="row-input" type="text" id="e-driver" placeholder="Driver name"></div>
-        <div class="group-row"><span class="row-label">Vehicle No.</span><input class="row-input" type="text" id="e-vehicle" placeholder="e.g. TN01AB1234" style="text-transform:uppercase;"></div>
-        <div class="group-row"><span class="row-label">Notes</span><input class="row-input" type="text" id="e-notes" placeholder="Optional"></div>
-      </div>
-    </div>
-    <div class="section" style="margin-bottom:12px">
-      <div class="section-label">Material</div>
-      <div class="mat-group">
-        <div class="mat-pill active" id="e-mat-20mm" onclick="editSelectMat('20mm')"><span class="mat-pill-icon">🪨</span><span class="mat-pill-label">20mm</span></div>
-        <div class="mat-pill" id="e-mat-msand" onclick="editSelectMat('M-Sand')"><span class="mat-pill-icon">🏖️</span><span class="mat-pill-label">M-Sand</span></div>
-        <div class="mat-pill" id="e-mat-wsand" onclick="editSelectMat('Washed Sand')"><span class="mat-pill-icon">💧</span><span class="mat-pill-label">Washed Sand</span></div>
-      </div>
-    </div>
-    <div class="section" style="margin-bottom:12px">
-      <div class="section-label">Quantity</div>
-      <div class="qty-group">
-        <div class="qty-main">
-          <button class="qty-btn" onclick="editChangeQty(-1)">−</button>
-          <input class="qty-val" type="number" id="e-qty" value="1" min="0.5" step="0.5">
-          <button class="qty-btn" onclick="editChangeQty(1)">+</button>
-        </div>
-        <div class="unit-row">
-          <div class="unit-opt active" id="e-unit-brass" onclick="editSelectUnit('Brass')">Brass</div>
-          <div class="unit-opt" id="e-unit-tons" onclick="editSelectUnit('Tons')">Tons</div>
-        </div>
-      </div>
-    </div>
-    <div class="section" style="margin-bottom:12px">
-      <div class="section-label">Payment</div>
-      <div class="group">
-        <div class="amount-row">
-          <span class="amount-label">Amount</span>
-          <span class="rupee">₹</span>
-          <input class="amount-input" type="number" id="e-amount" placeholder="0.00" min="0" step="0.01">
-        </div>
-        <div style="border-top:0.5px solid var(--sep-light)" class="amount-row">
-          <span class="amount-label">P-Amount</span>
-          <span class="rupee">₹</span>
-          <input class="amount-input" type="number" id="e-pamount" placeholder="Pass amount" min="0" step="0.01">
-        </div>
-      </div>
-    </div>
-    <div class="modal-actions">
-      <button class="modal-cancel" onclick="closeEdit()">Cancel</button>
-      <button class="modal-save" onclick="saveEdit()">Save</button>
+    <div id="tab-vendors" style="display:none">
+      <div id="vendorList2"></div>
+      <div id="vendorDetail" style="display:none"></div>
     </div>
   </div>
 </div>
-
-<div class="toast" id="toast">
-  <span id="toastIcon">✓</span>&nbsp;<span id="toastMsg">Saved</span>
+<div class="modal-ov" id="payModal" onclick="handlePayClick(event)">
+  <div class="modal">
+    <div class="mhandle"></div><div class="mtitle" id="payTitle">Update Payment</div><div class="msub" id="paySub"></div>
+    <div class="payopts">
+      <div class="popt active" id="po-unpaid" onclick="selPayOpt('unpaid')"><div class="popt-icon">&#128683;</div><div class="popt-lbl">Unpaid</div></div>
+      <div class="popt" id="po-partial" onclick="selPayOpt('partial')"><div class="popt-icon">&#9899;</div><div class="popt-lbl">Partial</div></div>
+      <div class="popt" id="po-paid" onclick="selPayOpt('paid')"><div class="popt-icon">&#9989;</div><div class="popt-lbl">Paid</div></div>
+    </div>
+    <div id="partWrap" style="display:none;margin-bottom:10px">
+      <div class="slabel" style="margin-bottom:5px">Amount Paid</div>
+      <div class="grp"><div class="amtr" style="border:none"><span class="rs">&#8377;</span><input class="ainp" type="number" id="partialAmt" placeholder="Enter amount paid" min="0"></div></div>
+    </div>
+    <div class="macts"><button class="mcancel" onclick="closePayModal()">Cancel</button><button class="msave" onclick="savePayment()">Save</button></div>
+  </div>
 </div>
-
+<div class="modal-ov" id="editModal" onclick="handleEditClick(event)">
+  <div class="modal">
+    <div class="mhandle"></div><div class="mtitle">Edit Entry</div>
+    <div class="sec" style="margin-bottom:10px"><div class="grp">
+      <div class="grow"><span class="rlbl">Vendor</span><input class="rinp" type="text" id="e-vendor"></div>
+      <div class="grow"><span class="rlbl">Driver</span><input class="rinp" type="text" id="e-driver"></div>
+      <div class="grow"><span class="rlbl">Vehicle No.</span><input class="rinp" type="text" id="e-vehicle" style="text-transform:uppercase"></div>
+      <div class="grow" style="border-bottom:none"><span class="rlbl">Notes</span><input class="rinp" type="text" id="e-notes"></div>
+    </div></div>
+    <div class="sec" style="margin-bottom:10px"><div class="slabel">Material</div>
+      <div class="mats" style="margin-bottom:0">
+        <div class="mat active" id="e-mat-20mm" onclick="eSelMat('20mm')"><span class="mat-icon">&#129392;</span><span class="mat-lbl">20mm</span></div>
+        <div class="mat" id="e-mat-msand" onclick="eSelMat('M-Sand')"><span class="mat-icon">&#127958;</span><span class="mat-lbl">M-Sand</span></div>
+        <div class="mat" id="e-mat-wsand" onclick="eSelMat('Washed Sand')"><span class="mat-icon">&#128166;</span><span class="mat-lbl">Washed Sand</span></div>
+      </div>
+    </div>
+    <div class="sec" style="margin-bottom:10px"><div class="slabel">Quantity</div>
+      <div class="qtyg" style="margin-bottom:0">
+        <div class="qtyr"><button class="qbtn" onclick="eChgQty(-1)">&#8722;</button><input class="qval" type="number" id="e-qty" value="1" min="0.5" step="0.5"><button class="qbtn" onclick="eChgQty(1)">+</button></div>
+        <div class="unitr"><div class="uopt active" id="e-unit-brass" onclick="eSelUnit('Brass')">Brass</div><div class="uopt" id="e-unit-tons" onclick="eSelUnit('Tons')">Tons</div></div>
+      </div>
+    </div>
+    <div class="sec" style="margin-bottom:10px"><div class="slabel">Payment</div>
+      <div class="grp">
+        <div class="amtr"><span class="albl">Amount</span><span class="rs">&#8377;</span><input class="ainp" type="number" id="e-amount" placeholder="0"></div>
+        <div class="amtr"><span class="albl">P-Amount</span><span class="rs">&#8377;</span><input class="ainp" type="number" id="e-pamount" placeholder="0"></div>
+        <div class="amtr" style="border-bottom:none"><span class="albl">Paid</span><span class="rs">&#8377;</span><input class="ainp" type="number" id="e-paidnow" placeholder="0"></div>
+      </div>
+    </div>
+    <div class="macts"><button class="mcancel" onclick="closeEdit()">Cancel</button><button class="msave" onclick="saveEdit()">Save</button></div>
+  </div>
+</div>
+<div class="toast" id="toast"><span id="toastIcon">&#10003;</span>&nbsp;<span id="toastMsg">Saved</span></div>
 <script>
-var SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbzZ2zCHDxUiOQJky2ZOjrmqg2KIuq7NMO94x1-V08rHRNkaCEMoz-5ICwGBzIiKdvC9/exec';
-
-var selMat = '20mm', selUnit = 'Brass';
-var editMat = '20mm', editUnit = 'Brass', editIdx = -1;
-var entries = [];
-var activeFilter = 'all';
-
-document.getElementById('dateBadge').textContent = new Date().toLocaleDateString('en-IN', {day:'numeric',month:'short',year:'numeric'});
+var SCRIPT_URL='https://script.google.com/macros/s/AKfycbzZ2zCHDxUiOQJky2ZOjrmqg2KIuq7NMO94x1-V08rHRNkaCEMoz-5ICwGBzIiKdvC9/exec';
+var curMat='20mm',curUnit='Brass',eMat='20mm',eUnit='Brass',eIdx=-1,payIdx=-1,curPayOpt='unpaid',entries=[],activeFilter='all',isSaving=false,keyAccounts={};
+function loadKA(){try{keyAccounts=JSON.parse(localStorage.getItem('amcoKA')||'{}');}catch(e){keyAccounts={};}}
+function saveKA(){localStorage.setItem('amcoKA',JSON.stringify(keyAccounts));}
+function isKA(v){return !!keyAccounts[v];}
+function toggleKA(v,val){keyAccounts[v]=val;saveKA();}
+loadKA();
+document.getElementById('dateBadge').textContent=new Date().toLocaleDateString('en-IN',{day:'numeric',month:'short',year:'numeric'});
 loadFromSheet();
-
-/* SHEET SYNC */
-function loadFromSheet() {
-  var old = document.getElementById('jsonp-load');
-  if (old) old.parentNode.removeChild(old);
-  window.amcoLoadCallback = function(data) {
-    if (data.status === 'ok' && data.entries) {
-      entries = data.entries;
-      refreshSuggestions();
-      var active = document.querySelector('.seg-btn.active');
-      if (active) {
-        var txt = active.textContent.trim().toLowerCase();
-        if (txt === 'history') renderHistory();
-        if (txt === 'customers') renderCustomers();
-      }
-    }
-  };
-  var s = document.createElement('script');
-  s.id = 'jsonp-load';
-  s.src = SCRIPT_URL + '?callback=amcoLoadCallback';
-  document.body.appendChild(s);
-}
-
-function sendToSheet(data, cb) {
-  var old = document.getElementById('jsonp-save');
-  if (old) old.parentNode.removeChild(old);
-  var params = 'vendor=' + encodeURIComponent(data.vendor)
-    + '&driver=' + encodeURIComponent(data.driver)
-    + '&vehicle=' + encodeURIComponent(data.vehicle || '')
-    + '&material=' + encodeURIComponent(data.material)
-    + '&quantity=' + encodeURIComponent(data.quantity)
-    + '&unit=' + encodeURIComponent(data.unit)
-    + '&amount=' + encodeURIComponent(data.amount || 0)
-    + '&notes=' + encodeURIComponent(data.notes || '')
-    + '&pamount=' + encodeURIComponent(data.pamount || 0)
-    + '&timestamp=' + encodeURIComponent(data.timestamp);
-  window.amcoSaveCallback = function(result) { cb(result.status === 'success'); };
-  var s = document.createElement('script');
-  s.id = 'jsonp-save';
-  s.src = SCRIPT_URL + '?' + params + '&callback=amcoSaveCallback';
-  document.body.appendChild(s);
-}
-
-/* SUGGESTIONS */
-function toTitleCase(str) {
-  return str.replace(/\b\w/g, function(c){ return c.toUpperCase(); });
-}
-
-function refreshSuggestions() {
-  var vendors = [], drivers = [], vehicles = [];
-  for (var i=0; i<entries.length; i++) {
-    if (entries[i].vendor && vendors.indexOf(entries[i].vendor) === -1) vendors.push(entries[i].vendor);
-    if (entries[i].driver && drivers.indexOf(entries[i].driver) === -1) drivers.push(entries[i].driver);
-    if (entries[i].vehicle && vehicles.indexOf(entries[i].vehicle) === -1) vehicles.push(entries[i].vehicle);
-  }
-  var vl = document.getElementById('vendorList');
-  var dl = document.getElementById('driverList');
-  var vcl = document.getElementById('vehicleList');
-  if (vl) vl.innerHTML = vendors.map(function(v){return '<option value="'+v+'">';}).join('');
-  if (dl) dl.innerHTML = drivers.map(function(d){return '<option value="'+d+'">';}).join('');
-  if (vcl) vcl.innerHTML = vehicles.map(function(v){return '<option value="'+v+'">';}).join('');
-}
-
-/* TABS */
-function switchTab(t) {
-  var tabs = ['log','history','customers'];
-  for (var i=0; i<tabs.length; i++) {
-    document.getElementById('tab-'+tabs[i]).style.display = tabs[i]===t?'block':'none';
-  }
-  var btns = document.querySelectorAll('.seg-btn');
-  for (var i=0; i<btns.length; i++) {
-    btns[i].className = 'seg-btn'+(tabs[i]===t?' active':'');
-  }
-  if (t==='history') { loadFromSheet(); renderHistory(); }
-  if (t==='customers') { loadFromSheet(); renderCustomers(); }
-}
-
-/* MAT / UNIT */
-function matId(m) { return m==='20mm'?'20mm':m==='M-Sand'?'msand':'wsand'; }
-function selectMat(m) {
-  selMat = m;
-  ['20mm','msand','wsand'].forEach(function(id){ document.getElementById('mat-'+id).className='mat-pill'; });
-  document.getElementById('mat-'+matId(m)).className='mat-pill active';
-}
-function selectUnit(u) {
-  selUnit = u;
-  document.getElementById('unit-brass').className='unit-opt'+(u==='Brass'?' active':'');
-  document.getElementById('unit-tons').className='unit-opt'+(u==='Tons'?' active':'');
-}
-function changeQty(d) {
-  var el=document.getElementById('qty');
-  el.value=Math.max(0.5,Math.round(((parseFloat(el.value)||1)+d*0.5)*10)/10);
-}
-
-/* TOAST */
-function showToast(msg,ok) {
-  if (ok===undefined) ok=true;
-  var t=document.getElementById('toast');
-  document.getElementById('toastMsg').textContent=msg;
-  document.getElementById('toastIcon').textContent=ok?'✓':'!';
-  t.className='toast show '+(ok?'ok':'err');
-  setTimeout(function(){ t.className='toast '+(ok?'ok':'err'); },2600);
-}
-
-/* SUBMIT */
-var isSaving = false;
-
-function submitEntry() {
-  if (isSaving) return;
-
-  var vendor  = toTitleCase(document.getElementById('vendor').value.trim());
-  var driver  = toTitleCase(document.getElementById('driver').value.trim());
-  var vehicle = document.getElementById('vehicle').value.trim().toUpperCase();
-  var qty     = parseFloat(document.getElementById('qty').value);
-  var notes   = document.getElementById('notes').value.trim();
-  var amount  = parseFloat(document.getElementById('amount').value) || 0;
-
-  if (!vendor) return showToast('Enter vendor name', false);
-  if (!qty||qty<=0) return showToast('Enter valid quantity', false);
-
-  var pamount = parseFloat(document.getElementById('pamount').value) || 0;
-  var entry = {
-    timestamp: new Date().toLocaleString('en-IN'),
-    vendor: vendor, driver: driver, vehicle: vehicle,
-    material: selMat, quantity: qty, unit: selUnit,
-    notes: notes, amount: amount, pamount: pamount
-  };
-
-  isSaving = true;
-  var btn = document.getElementById('saveBtn');
-  btn.disabled = true; btn.textContent = 'Saving...';
-
-  sendToSheet(entry, function(ok) {
-    isSaving = false;
-    showToast(ok ? 'Saved to sheet ✓' : 'Saved locally ✓');
-    btn.disabled = false; btn.textContent = 'Save Entry';
-    loadFromSheet();
-  });
-
-  document.getElementById('vendor').value='';
-  document.getElementById('driver').value='';
-  document.getElementById('vehicle').value='';
-  document.getElementById('qty').value=1;
-  document.getElementById('notes').value='';
-  document.getElementById('amount').value='';
-  document.getElementById('pamount').value='';
-  selectMat('20mm'); selectUnit('Brass');
-}
-
-/* HELPERS */
-function tagClass(m) { return m==='20mm'?'etag-20mm':m==='M-Sand'?'etag-msand':'etag-wsand'; }
-function fmt(n) { return n>0?'₹'+Number(n).toLocaleString('en-IN'):'—'; }
-function initials(name) {
-  var p=name.trim().split(' '), r='';
-  for (var i=0;i<Math.min(p.length,2);i++) if(p[i].length>0) r+=p[i][0].toUpperCase();
-  return r||'?';
-}
-function parseTS(ts) {
-  // Handle Indian locale format: "13/3/2026, 2:15:03 AM"
-  if (!ts) return new Date(0);
-  var s = String(ts);
-  var m = s.match(/^(\d{1,2})\/(\d{1,2})\/(\d{4}),?\s*(.*)/);
-  if (m) {
-    var day=m[1], mon=m[2], yr=m[3], time=m[4]||'';
-    return new Date(yr+'/'+mon+'/'+day+' '+time);
-  }
-  return new Date(ts);
-}
-function isToday(ts) {
-  var d=parseTS(ts), n=new Date();
-  return d.getDate()===n.getDate()&&d.getMonth()===n.getMonth()&&d.getFullYear()===n.getFullYear();
-}
-function isThisWeek(ts) {
-  var d=parseTS(ts), n=new Date();
-  var start=new Date(n); start.setDate(n.getDate()-n.getDay());
-  start.setHours(0,0,0,0);
-  return d>=start;
-}
-function isThisMonth(ts) {
-  var d=parseTS(ts), n=new Date();
-  return d.getMonth()===n.getMonth()&&d.getFullYear()===n.getFullYear();
-}
-
-/* FILTER */
-function setFilter(f) {
-  activeFilter = f;
-  ['all','today','week','month'].forEach(function(x){
-    document.getElementById('filter-'+x).className='filter-chip'+(x===f?' active':'');
-  });
-  renderHistory();
-}
-function clearSearch() {
-  document.getElementById('searchInput').value='';
-  renderHistory();
-}
-
-function getFilteredEntries() {
-  var q = document.getElementById('searchInput') ? document.getElementById('searchInput').value.toLowerCase().trim() : '';
-  return entries.filter(function(e) {
-    var matchFilter = true;
-    if (activeFilter==='today') matchFilter=isToday(e.timestamp);
-    else if (activeFilter==='week') matchFilter=isThisWeek(e.timestamp);
-    else if (activeFilter==='month') matchFilter=isThisMonth(e.timestamp);
-    var matchSearch = !q || (
-      (e.vendor||'').toLowerCase().indexOf(q)>-1 ||
-      (e.driver||'').toLowerCase().indexOf(q)>-1 ||
-      (e.vehicle||'').toLowerCase().indexOf(q)>-1 ||
-      (e.material||'').toLowerCase().indexOf(q)>-1 ||
-      (e.notes||'').toLowerCase().indexOf(q)>-1
-    );
-    return matchFilter && matchSearch;
-  });
-}
-
-/* TODAY BANNER */
-function renderTodayBanner() {
-  var todayEntries = entries.filter(function(e){ return isToday(e.timestamp); });
-  var banner = document.getElementById('todayBanner');
-  if (!todayEntries.length) { banner.innerHTML=''; return; }
-  var totalQty=0, totalAmt=0;
-  todayEntries.forEach(function(e){ totalQty+=e.quantity; totalAmt+=(e.amount||0); });
-  banner.innerHTML = '<div class="today-banner">'
-    + '<div class="today-banner-title">Today\'s Activity</div>'
-    + '<div class="today-stats">'
-    + '<div class="today-stat"><div class="today-num">'+todayEntries.length+'</div><div class="today-label">Trips</div></div>'
-    + '<div class="today-stat"><div class="today-num">'+totalQty+'</div><div class="today-label">Qty</div></div>'
-    + '<div class="today-stat"><div class="today-num">'+(totalAmt>0?'₹'+Math.round(totalAmt).toLocaleString('en-IN'):'—')+'</div><div class="today-label">Amount</div></div>'
-    + '</div></div>';
-}
-
-/* HISTORY */
-function renderHistory() {
-  renderTodayBanner();
-  var filtered = getFilteredEntries();
-  var el = document.getElementById('historyList');
-  document.getElementById('entryCount').textContent = filtered.length+' entries';
-  if (!filtered.length) {
-    el.innerHTML='<div class="empty"><div class="empty-icon">📋</div><div class="empty-text">No entries found</div></div>';
-    return;
-  }
-  var html='';
-  for (var i=0; i<filtered.length; i++) {
-    var e=filtered[i];
-    var realIdx = entries.indexOf(e);
-    html+='<div class="entry-card">';
-    html+='<div class="entry-main"><div><div class="entry-vendor">'+e.vendor+'</div><div class="entry-time">'+e.timestamp+'</div></div>';
-    html+='<div class="entry-qty-pill">'+e.quantity+' '+e.unit+'</div></div>';
-    html+='<div class="entry-meta">';
-    html+='<span class="etag '+tagClass(e.material)+'">'+e.material+'</span>';
-    html+='<span class="etag etag-default">🚗 '+e.driver+'</span>';
-    if (e.vehicle) html+='<span class="etag etag-default">🚛 '+e.vehicle+'</span>';
-    if (e.notes) html+='<span class="etag etag-default">'+e.notes+'</span>';
-    html+='</div>';
-    if(e.amount>0||e.pamount>0){
-      html+='<div class="entry-amount-row">';
-      if(e.amount>0) html+='<span class="entry-amount-label">Amt: <b>'+fmt(e.amount)+'</b></span>';
-      if(e.pamount>0) html+='<span class="entry-amount-label" style="margin-left:auto">P-Amt: <b>'+fmt(e.pamount)+'</b></span>';
-      html+='</div>';
-    }
-    html+='<div class="entry-actions">';
-    html+='<button class="action-btn action-edit" onclick="openEdit('+realIdx+')">✏️ Edit</button>';
-    html+='<button class="action-btn action-delete" onclick="deleteEntry('+realIdx+')">🗑 Delete</button>';
-    html+='</div></div>';
-  }
-  el.innerHTML=html;
-}
-
-/* DELETE */
-function deleteEntry(i) {
-  if (!confirm('Delete this entry?')) return;
-  var entry=entries[i];
-  entries.splice(i,1);
-  renderHistory();
-  showToast('Deleting...');
-  var old=document.getElementById('jsonp-delete');
-  if(old) old.parentNode.removeChild(old);
-  window.amcoDeleteCallback=function(data){
-    if(data.status==='deleted'){ showToast('Deleted ✓'); }
-    else { showToast('Could not delete from sheet',false); }
-    loadFromSheet();
-  };
-  var s=document.createElement('script');
-  s.id='jsonp-delete';
-  s.src=SCRIPT_URL+'?action=delete&timestamp='+encodeURIComponent(entry.timestamp)+'&callback=amcoDeleteCallback';
-  document.body.appendChild(s);
-}
-
-/* EDIT */
-function openEdit(i) {
-  editIdx=i;
-  var e=entries[i];
-  document.getElementById('e-vendor').value=e.vendor||'';
-  document.getElementById('e-driver').value=e.driver||'';
-  document.getElementById('e-vehicle').value=e.vehicle||'';
-  document.getElementById('e-notes').value=e.notes||'';
-  document.getElementById('e-qty').value=e.quantity;
-  document.getElementById('e-amount').value=e.amount||'';
-  document.getElementById('e-pamount').value=e.pamount||'';
-  editSelectMat(e.material);
-  editSelectUnit(e.unit);
-  document.getElementById('editModal').className='modal-overlay show';
-}
-function closeEdit() { document.getElementById('editModal').className='modal-overlay'; editIdx=-1; }
-function handleModalClick(ev) { if(ev.target===document.getElementById('editModal')) closeEdit(); }
-function editSelectMat(m) {
-  editMat=m;
-  ['20mm','msand','wsand'].forEach(function(id){ document.getElementById('e-mat-'+id).className='mat-pill'; });
-  document.getElementById('e-mat-'+matId(m)).className='mat-pill active';
-}
-function editSelectUnit(u) {
-  editUnit=u;
-  document.getElementById('e-unit-brass').className='unit-opt'+(u==='Brass'?' active':'');
-  document.getElementById('e-unit-tons').className='unit-opt'+(u==='Tons'?' active':'');
-}
-function editChangeQty(d) {
-  var el=document.getElementById('e-qty');
-  el.value=Math.max(0.5,Math.round(((parseFloat(el.value)||1)+d*0.5)*10)/10);
-}
-function saveEdit() {
-  if(editIdx<0) return;
-  var e=entries[editIdx];
-  e.vendor=toTitleCase(document.getElementById('e-vendor').value.trim()||e.vendor);
-  e.driver=toTitleCase(document.getElementById('e-driver').value.trim()||e.driver);
-  e.vehicle=(document.getElementById('e-vehicle').value.trim()||e.vehicle||'').toUpperCase();
-  e.notes=document.getElementById('e-notes').value.trim();
-  e.quantity=parseFloat(document.getElementById('e-qty').value)||e.quantity;
-  e.amount=parseFloat(document.getElementById('e-amount').value)||0;
-  e.pamount=parseFloat(document.getElementById('e-pamount').value)||0;
-  e.material=editMat; e.unit=editUnit;
-  closeEdit();
-  renderHistory();
-  showToast('Entry updated ✓');
-}
-
-/* CUSTOMERS */
-function renderCustomers() {
-  document.getElementById('customerList').style.display='block';
-  document.getElementById('customerDetail').style.display='none';
-  var byVendor={};
-  for(var i=0;i<entries.length;i++){
-    var e=entries[i];
-    var vk=toTitleCase(e.vendor||'');
-    if(!byVendor[vk]) byVendor[vk]={loads:0,totalQty:0,totalAmt:0,materials:[]};
-    byVendor[vk].loads++;
-    byVendor[vk].totalQty+=e.quantity;
-    byVendor[vk].totalAmt+=(e.amount||0);
-    if(byVendor[vk].materials.indexOf(e.material)===-1) byVendor[vk].materials.push(e.material);
-  }
-  var cl=document.getElementById('customerList');
-  var names=Object.keys(byVendor);
-  if(!names.length){
-    cl.innerHTML='<div class="empty"><div class="empty-icon">👥</div><div class="empty-text">No customers yet</div></div>';
-    return;
-  }
-  names.sort(function(a,b){ return byVendor[b].totalAmt-byVendor[a].totalAmt; });
-  var html='<div class="list-hdr" style="margin-bottom:12px"><div class="list-title">All Customers</div><div class="list-badge">'+names.length+' vendors</div></div>';
-  html+='<button class="share-btn" style="margin-bottom:16px" onclick="shareAllWeeklyReports()">📤 Weekly Reports (All Vendors)</button>';
-  for(var i=0;i<names.length;i++){
-    var v=names[i], d=byVendor[v];
-    var sv=v.replace(/\\/g,'\\\\').replace(/'/g,"\\'");
-    html+='<div class="customer-card" onclick="showCustomerDetail(\''+sv+'\')"><div class="customer-avatar">'+initials(v)+'</div>';
-    html+='<div class="customer-info"><div class="customer-name">'+v+'</div><div class="customer-meta">'+d.loads+' trips · '+d.materials.join(', ')+'</div></div>';
-    html+='<div class="customer-right"><div class="customer-amt">'+(d.totalAmt>0?fmt(d.totalAmt):'—')+'</div><div class="customer-loads">'+d.totalQty+' qty</div></div>';
-    html+='<div class="chevron">›</div></div>';
-  }
-  cl.innerHTML=html;
-}
-
-function showCustomerDetail(vendor) {
-  var ve=entries.filter(function(e){ return toTitleCase(e.vendor||'')===vendor; });
-  var totalAmt=0, totalQty=0;
-  ve.forEach(function(e){ totalAmt+=(e.amount||0); totalQty+=e.quantity; });
-  document.getElementById('customerList').style.display='none';
-  var detail=document.getElementById('customerDetail');
-  detail.style.display='block';
-  var html='<div class="detail-header"><button class="back-btn" onclick="renderCustomers()">‹ Back</button><div class="detail-title">'+vendor+'</div></div>';
-  html+='<div class="detail-stats"><div class="ds-item"><div class="ds-num">'+ve.length+'</div><div class="ds-label">Trips</div></div>';
-  html+='<div class="ds-item"><div class="ds-num gold">'+totalQty+'</div><div class="ds-label">Total Qty</div></div>';
-  html+='<div class="ds-item"><div class="ds-num green">'+(totalAmt>0?'₹'+Math.round(totalAmt).toLocaleString('en-IN'):'—')+'</div><div class="ds-label">Amount</div></div></div>';
-  html+='<div class="list-hdr"><div class="list-title">All Trips</div><div class="list-badge">'+ve.length+' entries</div></div>';
-  for(var i=0;i<ve.length;i++){
-    var e=ve[i];
-    html+='<div class="entry-card"><div class="entry-main"><div><div class="entry-vendor" style="font-size:14px;font-weight:500">'+e.timestamp+'</div><div class="entry-time">🚗 '+e.driver+(e.vehicle?' · 🚛 '+e.vehicle:'')+'</div></div>';
-    html+='<div class="entry-qty-pill">'+e.quantity+' '+e.unit+'</div></div>';
-    html+='<div class="entry-meta"><span class="etag '+tagClass(e.material)+'">'+e.material+'</span>';
-    if(e.notes) html+='<span class="etag etag-default">'+e.notes+'</span>';
-    html+='</div>';
-    if(e.amount>0||e.pamount>0) {
-      html+='<div class="entry-amount-row">';
-      if(e.amount>0) html+='<span class="entry-amount-label">Amt: <b>'+fmt(e.amount)+'</b></span>';
-      if(e.pamount>0) html+='<span class="entry-amount-label" style="margin-left:auto">P-Amt: <b>'+fmt(e.pamount)+'</b></span>';
-      html+='</div>';
-    }
-    html+='</div>';
-  }
-  html+='<div class="total-bar"><div class="total-bar-label">Total Amount</div><div class="total-bar-val">'+(totalAmt>0?fmt(totalAmt):'—')+'</div></div>';
-  html+='<button class="share-btn" onclick="shareReport(\''+vendor.replace(/'/g,"\\'")+'\')">📤 Share Report</button>';
-  detail.innerHTML=html;
-}
-
-/* SHARE REPORT */
-function shareReport(vendor) {
-  var ve=entries.filter(function(e){ return toTitleCase(e.vendor||'')===vendor; });
-  var totalAmt=0, totalQty=0;
-  ve.forEach(function(e){ totalAmt+=(e.amount||0); totalQty+=e.quantity; });
-  var text='*AMCO Quarry Report*\n';
-  text+='Customer: '+vendor+'\n';
-  text+='Date: '+new Date().toLocaleDateString('en-IN')+'\n\n';
-  text+='Total Trips: '+ve.length+'\n';
-  text+='Total Qty: '+totalQty+'\n';
-  text+='Total Amount: '+(totalAmt>0?fmt(totalAmt):'—')+'\n\n';
-  text+='--- Trip Details ---\n';
-  for(var i=0;i<ve.length;i++){
-    var e=ve[i];
-    text+='\n'+e.timestamp+'\n';
-    text+='Driver: '+e.driver+(e.vehicle?' | Vehicle: '+e.vehicle:'')+'\n';
-    text+='Material: '+e.material+' | Qty: '+e.quantity+' '+e.unit+'\n';
-    if(e.amount>0) text+='Amount: '+fmt(e.amount)+'\n';
-  }
-  if (navigator.share) {
-    navigator.share({ title: 'AMCO Report - '+vendor, text: text });
-  } else {
-    // Fallback: copy to clipboard
-    var ta=document.createElement('textarea');
-    ta.value=text; document.body.appendChild(ta);
-    ta.select(); document.execCommand('copy');
-    document.body.removeChild(ta);
-    showToast('Report copied to clipboard ✓');
-  }
-}
-
-/* WEEKLY REPORT */
-function buildVendorWeeklyText(vendor, ve) {
-  var now = new Date();
-  var weekStart = new Date(now); weekStart.setDate(now.getDate()-now.getDay()); weekStart.setHours(0,0,0,0);
-  var weekEnd = new Date(weekStart); weekEnd.setDate(weekStart.getDate()+6);
-  var weekLabel = weekStart.toLocaleDateString('en-IN',{day:'numeric',month:'short'})
-    + ' - ' + weekEnd.toLocaleDateString('en-IN',{day:'numeric',month:'short',year:'numeric'});
-  var totalAmt=0, totalPamt=0, totalQty=0;
-  ve.forEach(function(e){ totalAmt+=(e.amount||0); totalPamt+=(e.pamount||0); totalQty+=parseFloat(e.quantity)||0; });
-  var text = '*AMCO Quarry - Weekly Report*' + '\n';
-  text += 'Customer: ' + vendor + '\n';
-  text += 'Week: ' + weekLabel + '\n';
-  text += '---------------------' + '\n\n';
-  text += 'Total Trips: ' + ve.length + '\n';
-  text += 'Total Qty: ' + totalQty + '\n';
-  if(totalAmt>0) text += 'Amount: ' + fmt(totalAmt) + '\n';
-  if(totalPamt>0) text += 'P-Amount: ' + fmt(totalPamt) + '\n';
-  text += '\n--- Trip Details ---\n';
-  ve.forEach(function(e){
-    text += '\n' + e.timestamp + '\n';
-    text += 'Driver: ' + e.driver + (e.vehicle?' | Vehicle: '+e.vehicle:'') + '\n';
-    text += 'Material: ' + e.material + ' | Qty: ' + e.quantity + ' ' + e.unit + '\n';
-    if(e.amount>0) text += 'Amount: ' + fmt(e.amount) + '\n';
-    if(e.pamount>0) text += 'P-Amount: ' + fmt(e.pamount) + '\n';
-  });
-  text += '\n=====================\n';
-  text += 'TOTAL SUMMARY\n';
-  text += 'Trips: ' + ve.length + ' | Qty: ' + totalQty + '\n';
-  if(totalAmt>0) text += 'Total Amount: ' + fmt(totalAmt) + '\n';
-  if(totalPamt>0) text += 'Total P-Amount: ' + fmt(totalPamt) + '\n';
-  if(totalAmt>0 && totalPamt>0) text += 'Grand Total: ' + fmt(totalAmt+totalPamt) + '\n';
-  text += '=====================\n';
-  return text;
-}
-
-function getWeeklyByVendor() {
-  var weekEntries = entries.filter(function(e){ return isThisWeek(e.timestamp); });
-  var byVendor = {};
-  weekEntries.forEach(function(e){
-    var vk = toTitleCase(e.vendor||'');
-    if (!byVendor[vk]) byVendor[vk] = [];
-    byVendor[vk].push(e);
-  });
-  return byVendor;
-}
-
-function shareWeeklyForVendor(vendor) {
-  var byVendor = getWeeklyByVendor();
-  var ve = byVendor[vendor];
-  if (!ve || !ve.length) { showToast('No entries this week for ' + vendor, false); return; }
-  var text = buildVendorWeeklyText(vendor, ve);
-  if (navigator.share) {
-    navigator.share({ title: 'AMCO Weekly - ' + vendor, text: text });
-  } else {
-    var ta=document.createElement('textarea');
-    ta.value=text; document.body.appendChild(ta);
-    ta.select(); document.execCommand('copy');
-    document.body.removeChild(ta);
-    showToast('Report for ' + vendor + ' copied!');
-  }
-}
-
-function shareAllWeeklyReports() {
-  var byVendor = getWeeklyByVendor();
-  var names = Object.keys(byVendor);
-  if (!names.length) { showToast('No entries this week', false); return; }
-  // Show a picker modal
-  var overlay = document.createElement('div');
-  overlay.style.cssText='position:fixed;inset:0;background:rgba(0,0,0,0.5);z-index:300;display:flex;align-items:flex-end;justify-content:center;';
-  var box = document.createElement('div');
-  box.style.cssText='background:var(--bg);border-radius:20px 20px 0 0;width:100%;max-width:430px;padding:20px 16px 40px;';
-  var html='<div style="width:36px;height:4px;background:var(--sep);border-radius:2px;margin:0 auto 16px"></div>';
-  html+='<div style="font-size:17px;font-weight:700;text-align:center;margin-bottom:16px">Weekly Report - Select Vendor</div>';
-  names.sort().forEach(function(v){
-    var sv = v.replace(/'/g,"\'");
-    html+='<div class="wk-vendor-row" data-vendor="'+encodeURIComponent(v)+'" '
-      +'style="background:var(--card);border-radius:12px;padding:16px;margin-bottom:8px;display:flex;justify-content:space-between;align-items:center;cursor:pointer">'
-      +'<span style="font-size:16px;font-weight:600">'+v+'</span>'
-      +'<span style="color:var(--blue);font-size:14px;font-weight:600">Share &#8250;</span>'
-      +'</div>';
-  });
-  html+='<button onclick="this.parentNode.parentNode.remove()" style="width:100%;padding:14px;margin-top:8px;background:var(--sep-light);border:none;border-radius:12px;font-size:16px;font-weight:600;font-family:var(--font);cursor:pointer">Cancel</button>';
-  box.innerHTML=html;
-  overlay.appendChild(box);
-  overlay.addEventListener('click',function(ev){
-    if(ev.target===overlay) { overlay.remove(); return; }
-    var row = ev.target.closest('.wk-vendor-row');
-    if (row) {
-      var vendor = decodeURIComponent(row.getAttribute('data-vendor'));
-      overlay.remove();
-      shareWeeklyForVendor(vendor);
-    }
-  });
-  document.body.appendChild(overlay);
-}
-
-function shareWeeklyReport() {
-  var now = new Date();
-  var weekStart = new Date(now); weekStart.setDate(now.getDate()-now.getDay()); weekStart.setHours(0,0,0,0);
-  var weekEnd = new Date(weekStart); weekEnd.setDate(weekStart.getDate()+6); weekEnd.setHours(23,59,59,999);
-
-  var weekEntries = entries.filter(function(e){ return isThisWeek(e.timestamp); });
-  if (!weekEntries.length) { showToast('No entries this week', false); return; }
-
-  // Group by vendor
-  var byVendor = {};
-  weekEntries.forEach(function(e){
-    var vk = toTitleCase(e.vendor||'');
-    if (!byVendor[vk]) byVendor[vk] = [];
-    byVendor[vk].push(e);
-  });
-
-  var weekLabel = weekStart.toLocaleDateString('en-IN',{day:'numeric',month:'short'})
-    + ' – ' + weekEnd.toLocaleDateString('en-IN',{day:'numeric',month:'short',year:'numeric'});
-
-  var text = '*AMCO Quarry - Weekly Report*\n';
-  text += 'Week: ' + weekLabel + '\n';
-  text += '━━━━━━━━━━━━━━━━━━━━━\n\n';
-
-  var grandAmt=0, grandPamt=0, grandTrips=0;
-
-  Object.keys(byVendor).sort().forEach(function(vendor){
-    var ve = byVendor[vendor];
-    var totalAmt=0, totalPamt=0, totalQty=0;
-    ve.forEach(function(e){ totalAmt+=(e.amount||0); totalPamt+=(e.pamount||0); totalQty+=e.quantity; });
-    grandAmt+=totalAmt; grandPamt+=totalPamt; grandTrips+=ve.length;
-
-    text += '*' + vendor + '*\n';
-    text += 'Trips: '+ve.length+' | Qty: '+totalQty+'\n';
-    if(totalAmt>0) text += 'Amount: '+fmt(totalAmt)+'\n';
-    if(totalPamt>0) text += 'P-Amount: '+fmt(totalPamt)+'\n';
-    text += '\n';
-    ve.forEach(function(e){
-      text += '  • '+e.timestamp+'\n';
-      text += '    '+e.material+' '+e.quantity+' '+e.unit+' | '+e.driver+(e.vehicle?' | '+e.vehicle:'')+'\n';
-      if(e.amount>0||e.pamount>0){
-        var amtLine='    ';
-        if(e.amount>0) amtLine+=fmt(e.amount);
-        if(e.pamount>0) amtLine+=(e.amount>0?' | ':'')+' P:'+fmt(e.pamount);
-        text+=amtLine+'\n';
-      }
-    });
-    text += '─────────────────────\n';
-  });
-
-  text += '\n*TOTAL*\n';
-  text += 'Trips: '+grandTrips+'\n';
-  if(grandAmt>0) text += 'Amount: '+fmt(grandAmt)+'\n';
-  if(grandPamt>0) text += 'P-Amount: '+fmt(grandPamt)+'\n';
-
-  if (navigator.share) {
-    navigator.share({ title: 'AMCO Weekly Report', text: text });
-  } else {
-    var ta=document.createElement('textarea');
-    ta.value=text; document.body.appendChild(ta);
-    ta.select(); document.execCommand('copy');
-    document.body.removeChild(ta);
-    showToast('Weekly report copied ✓');
-  }
-}
+function enc(v){return encodeURIComponent(v);}
+function loadFromSheet(){
+  var old=document.getElementById('jsonp-load');if(old)old.parentNode.removeChild(old);
+  window.amcoLoad=function(data){
+    if(data.status==='ok'&&data.entries){entries=data.entries;refreshSuggestions();
+      var at=document.querySelector('.sb.active');if(at){var t=at.textContent.trim().toLowerCase();if(t==='dashboard')renderDashboard();else if(t==='history')renderHistory();else if(t==='vendors')renderVendors();}}};
+  var s=document.createElement('script');s.id='jsonp-load';s.src=SCRIPT_URL+'?callback=amcoLoad';document.body.appendChild(s);}
+function sendToSheet(data,cb){
+  var old=document.getElementById('jsonp-save');if(old)old.parentNode.removeChild(old);
+  var p='vendor='+enc(data.vendor)+'&driver='+enc(data.driver||'')+'&vehicle='+enc(data.vehicle||'')+'&material='+enc(data.material)+'&quantity='+enc(data.quantity)+'&unit='+enc(data.unit)+'&amount='+enc(data.amount||0)+'&pamount='+enc(data.pamount||0)+'&paidnow='+enc(data.paidnow||0)+'&paystatus='+enc(data.paystatus||'unpaid')+'&notes='+enc(data.notes||'')+'&timestamp='+enc(data.timestamp);
+  window.amcoSave=function(r){cb(r.status==='success');};
+  var s=document.createElement('script');s.id='jsonp-save';s.src=SCRIPT_URL+'?'+p+'&callback=amcoSave';document.body.appendChild(s);}
+function updateInSheet(e){
+  var old=document.getElementById('jsonp-upd');if(old)old.parentNode.removeChild(old);
+  window.amcoUpd=function(){};
+  var s=document.createElement('script');s.id='jsonp-upd';s.src=SCRIPT_URL+'?action=update&timestamp='+enc(e.timestamp)+'&paidnow='+enc(e.paidnow||0)+'&paystatus='+enc(e.paystatus||'unpaid')+'&callback=amcoUpd';document.body.appendChild(s);}
+function titleCase(s){return s.replace(/\b\w/g,function(c){return c.toUpperCase();});}
+function refreshSuggestions(){
+  var v=[],d=[],vc=[];
+  entries.forEach(function(e){if(e.vendor&&v.indexOf(e.vendor)===-1)v.push(e.vendor);if(e.driver&&d.indexOf(e.driver)===-1)d.push(e.driver);if(e.vehicle&&vc.indexOf(e.vehicle)===-1)vc.push(e.vehicle);});
+  var vl=document.getElementById('vendorList'),dl=document.getElementById('driverList'),vcl=document.getElementById('vehicleList');
+  if(vl)vl.innerHTML=v.map(function(x){return '<option value="'+x+'">';}).join('');
+  if(dl)dl.innerHTML=d.map(function(x){return '<option value="'+x+'">';}).join('');
+  if(vcl)vcl.innerHTML=vc.map(function(x){return '<option value="'+x+'">';}).join('');}
+function switchTab(t){
+  ['dash','log','history','vendors'].forEach(function(id){document.getElementById('tab-'+id).style.display=id===t?'block':'none';});
+  var tabs=['dash','log','history','vendors'];document.querySelectorAll('.sb').forEach(function(b,i){b.className='sb'+(tabs[i]===t?' active':'');});
+  if(t==='dash'){loadFromSheet();renderDashboard();}if(t==='history'){loadFromSheet();renderHistory();}if(t==='vendors'){loadFromSheet();renderVendors();}}
+function matId(m){return m==='20mm'?'20mm':m==='M-Sand'?'msand':'wsand';}
+function selMat(m){curMat=m;['20mm','msand','wsand'].forEach(function(id){document.getElementById('mat-'+id).className='mat';});document.getElementById('mat-'+matId(m)).className='mat active';}
+function selUnit(u){curUnit=u;document.getElementById('unit-brass').className='uopt'+(u==='Brass'?' active':'');document.getElementById('unit-tons').className='uopt'+(u==='Tons'?' active':'');}
+function chgQty(d){var el=document.getElementById('qty');el.value=Math.max(0.5,Math.round(((parseFloat(el.value)||1)+d*0.5)*10)/10);}
+function showToast(msg,ok){if(ok===undefined)ok=true;var t=document.getElementById('toast');document.getElementById('toastMsg').textContent=msg;document.getElementById('toastIcon').textContent=ok?'\u2713':'!';t.className='toast show '+(ok?'ok':'err');setTimeout(function(){t.className='toast '+(ok?'ok':'err');},2600);}
+function tcls(m){return m==='20mm'?'t20':m==='M-Sand'?'tms':'tws';}
+function fmt(n){var x=parseFloat(n)||0;return x>0?'\u20b9'+x.toLocaleString('en-IN'):'\u2014';}
+function fmtN(n){return '\u20b9'+(parseFloat(n)||0).toLocaleString('en-IN');}
+function initials(n){var p=n.trim().split(' '),r='';for(var i=0;i<Math.min(p.length,2);i++)if(p[i].length>0)r+=p[i][0].toUpperCase();return r||'?';}
+function parseTS(ts){if(!ts)return new Date(0);var s=String(ts);var m=s.match(/^(\d{1,2})\/(\d{1,2})\/(\d{4}),?\s*(.*)/);if(m)return new Date(m[3]+'/'+m[2]+'/'+m[1]+' '+(m[4]||''));return new Date(ts);}
+function isToday(ts){var d=parseTS(ts),n=new Date();return d.getDate()===n.getDate()&&d.getMonth()===n.getMonth()&&d.getFullYear()===n.getFullYear();}
+function weekStart(){var n=new Date(),day=n.getDay(),diff=(day===0)?-6:(1-day),s=new Date(n);s.setDate(n.getDate()+diff);s.setHours(0,0,0,0);return s;}
+function isThisWeek(ts){var d=parseTS(ts),s=weekStart(),e=new Date(s);e.setDate(s.getDate()+5);e.setHours(23,59,59,999);return d>=s&&d<=e;}
+function isThisMonth(ts){var d=parseTS(ts),n=new Date();return d.getMonth()===n.getMonth()&&d.getFullYear()===n.getFullYear();}
+function payStatus(e){if(e.paystatus&&e.paystatus!=='undefined')return e.paystatus;var paid=parseFloat(e.paidnow)||0,total=(parseFloat(e.amount)||0)+(parseFloat(e.pamount)||0);if(paid<=0)return 'unpaid';if(paid>=total)return 'paid';return 'partial';}
+function pendingAmt(e){return Math.max(0,(parseFloat(e.amount)||0)+(parseFloat(e.pamount)||0)-(parseFloat(e.paidnow)||0));}
+function setFilter(f){activeFilter=f;['all','today','week','month','unpaid'].forEach(function(x){document.getElementById('fc-'+x).className='chip'+(x===f?' active':'');});renderHistory();}
+function getFiltered(){
+  var q=(document.getElementById('searchInput')?document.getElementById('searchInput').value:'').toLowerCase().trim();
+  return entries.filter(function(e){
+    var ok=true;if(activeFilter==='today')ok=isToday(e.timestamp);else if(activeFilter==='week')ok=isThisWeek(e.timestamp);else if(activeFilter==='month')ok=isThisMonth(e.timestamp);else if(activeFilter==='unpaid')ok=payStatus(e)!=='paid';
+    var sq=!q||(e.vendor||'').toLowerCase().indexOf(q)>-1||(e.driver||'').toLowerCase().indexOf(q)>-1||(e.vehicle||'').toLowerCase().indexOf(q)>-1||(e.material||'').toLowerCase().indexOf(q)>-1||(e.notes||'').toLowerCase().indexOf(q)>-1;return ok&&sq;});}
+function renderBanner(){
+  var subset,label='',bgColor='',tc='';
+  if(activeFilter==='today'){subset=entries.filter(function(e){return isToday(e.timestamp);});label='Today';bgColor='linear-gradient(135deg,#FFF8E8,#FFF3D0)';tc='#B8860B';}
+  else if(activeFilter==='week'){subset=entries.filter(function(e){return isThisWeek(e.timestamp);});label='This Week (Mon\u2013Sat)';bgColor='linear-gradient(135deg,#EBF4FF,#D6EAFF)';tc='#007AFF';}
+  else if(activeFilter==='month'){subset=entries.filter(function(e){return isThisMonth(e.timestamp);});label='This Month';bgColor='linear-gradient(135deg,#EAFAF2,#D4F5E4)';tc='#1A7A45';}
+  else if(activeFilter==='unpaid'){subset=entries.filter(function(e){return payStatus(e)!=='paid';});label='Unpaid';bgColor='linear-gradient(135deg,#FFF0F0,#FFE0E0)';tc='#CC2200';}
+  else{subset=entries;label='All Time';bgColor='linear-gradient(135deg,#F2F2F7,#E8E8F0)';tc='#3C3C43';}
+  if(!subset.length){document.getElementById('dynBanner').innerHTML='';return;}
+  var tQty=0,tAmt=0,tPend=0;subset.forEach(function(e){tQty+=parseFloat(e.quantity)||0;tAmt+=(parseFloat(e.amount)||0)+(parseFloat(e.pamount)||0);tPend+=pendingAmt(e);});
+  var html='<div class="sbanner" style="background:'+bgColor+';border:1px solid rgba(0,0,0,.07)"><div class="sbanner-title" style="color:'+tc+'">'+label+'</div><div class="sbanner-stats">';
+  html+='<div class="sstat"><div class="sstat-num" style="color:'+tc+'">'+subset.length+'</div><div class="sstat-lbl" style="color:'+tc+'">Trips</div></div>';
+  html+='<div class="sstat"><div class="sstat-num" style="color:'+tc+'">'+tQty+'</div><div class="sstat-lbl" style="color:'+tc+'">Qty</div></div>';
+  html+='<div class="sstat"><div class="sstat-num" style="color:'+tc+'">'+(tAmt>0?'\u20b9'+Math.round(tAmt).toLocaleString('en-IN'):'\u2014')+'</div><div class="sstat-lbl" style="color:'+tc+'">Amount</div></div>';
+  if(tPend>0)html+='<div class="sstat"><div class="sstat-num" style="color:var(--red)">\u20b9'+Math.round(tPend).toLocaleString('en-IN')+'</div><div class="sstat-lbl" style="color:var(--red)">Pending</div></div>';
+  html+='</div></div>';document.getElementById('dynBanner').innerHTML=html;}
+function renderDashboard(){
+  var todayE=entries.filter(function(e){return isToday(e.timestamp);});
+  var weekE=entries.filter(function(e){return isThisWeek(e.timestamp);});
+  var monthE=entries.filter(function(e){return isThisMonth(e.timestamp);});
+  var mname=new Date().toLocaleDateString('en-IN',{month:'long',year:'numeric'});
+  function sumAmt(arr){var t=0;arr.forEach(function(e){t+=(parseFloat(e.amount)||0)+(parseFloat(e.pamount)||0);});return t;}
+  function sumPaid(arr){var t=0;arr.forEach(function(e){t+=parseFloat(e.paidnow)||0;});return t;}
+  function sumPend(arr){var t=0;arr.forEach(function(e){t+=pendingAmt(e);});return t;}
+  var todayAmt=sumAmt(todayE),weekAmt=sumAmt(weekE),mAmt=sumAmt(monthE),mPaid=sumPaid(monthE),mPend=sumPend(monthE);
+  var matT={'20mm':{qty:0,amt:0},'M-Sand':{qty:0,amt:0},'Washed Sand':{qty:0,amt:0}};
+  monthE.forEach(function(e){if(matT[e.material]){matT[e.material].qty+=parseFloat(e.quantity)||0;matT[e.material].amt+=(parseFloat(e.amount)||0)+(parseFloat(e.pamount)||0);}});
+  var byV={};
+  monthE.forEach(function(e){var vk=titleCase(e.vendor||'Unknown');if(!byV[vk])byV[vk]={trips:0,qty:0,amt:0,paid:0,pend:0,mats:{}};byV[vk].trips++;byV[vk].qty+=parseFloat(e.quantity)||0;byV[vk].amt+=(parseFloat(e.amount)||0)+(parseFloat(e.pamount)||0);byV[vk].paid+=parseFloat(e.paidnow)||0;byV[vk].pend+=pendingAmt(e);var m=e.material;if(!byV[vk].mats[m])byV[vk].mats[m]=0;byV[vk].mats[m]+=parseFloat(e.quantity)||0;});
+  var vnames=Object.keys(byV);vnames.sort(function(a,b){return byV[b].amt-byV[a].amt;});
+  if(!monthE.length){document.getElementById('dashContent').innerHTML='<div class="empty"><div class="empty-icon">&#128202;</div><div class="empty-txt">No entries this month yet.<br>Start logging trips!</div></div>';return;}
+  var html='<div class="dashg"><div class="dc"><div class="dlbl">Today</div><div class="dnum gold">'+todayE.length+' trips</div><div class="dsub">'+(todayAmt>0?fmtN(todayAmt):'\u2014')+'</div></div>';
+  html+='<div class="dc"><div class="dlbl">This Week</div><div class="dnum gold">'+weekE.length+' trips</div><div class="dsub">'+(weekAmt>0?fmtN(weekAmt):'\u2014')+'</div></div>';
+  html+='<div class="dc"><div class="dlbl">Month Collected</div><div class="dnum green">'+(mPaid>0?fmtN(mPaid):'\u2014')+'</div><div class="dsub">of '+(mAmt>0?fmtN(mAmt):'\u2014')+'</div></div>';
+  html+='<div class="dc"><div class="dlbl">Month Pending</div><div class="dnum red">'+(mPend>0?fmtN(mPend):'\u2014')+'</div><div class="dsub">'+monthE.length+' trips total</div></div></div>';
+  var matDefs=[{k:'20mm',ic:'&#129392;',col:'#A07828',bg:'#FFF8E8'},{k:'M-Sand',ic:'&#127958;',col:'#0055BB',bg:'#EBF4FF'},{k:'Washed Sand',ic:'&#128166;',col:'#1A7A45',bg:'#EAFAF2'}];
+  var hasMatData=matDefs.some(function(m){return matT[m.k].qty>0;});
+  if(hasMatData){
+    html+='<div class="dc"><div class="dlbl" style="margin-bottom:10px">Material Breakdown \u2014 '+mname+'</div>';
+    matDefs.forEach(function(md){var d=matT[md.k];if(d.qty===0)return;html+='<div style="display:flex;align-items:center;justify-content:space-between;padding:8px 0;border-bottom:.5px solid var(--sepl)"><div style="display:flex;align-items:center;gap:8px"><div style="width:30px;height:30px;border-radius:8px;background:'+md.bg+';display:flex;align-items:center;justify-content:center;font-size:14px">'+md.ic+'</div><div><div style="font-size:13px;font-weight:600;color:'+md.col+'">'+md.k+'</div><div style="font-size:11px;color:var(--t3)">'+d.qty+' qty</div></div></div><div style="font-size:13px;font-weight:700">'+(d.amt>0?fmtN(d.amt):'\u2014')+'</div></div>';});
+    html+='</div>';}
+  if(vnames.length>0){
+    html+='<div class="dc"><div class="dlbl" style="margin-bottom:10px">Vendor Activity \u2014 '+mname+'</div>';
+    vnames.forEach(function(v){var d=byV[v];var matStr=Object.keys(d.mats).map(function(m){return m+' ('+d.mats[m]+')';}).join(', ');
+      html+='<div style="padding:10px 0;border-bottom:.5px solid var(--sepl)"><div style="display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:4px"><div style="font-size:13px;font-weight:600">'+v+(isKA(v)?'<span class="ka-badge">KA</span>':'')+'</div><div style="font-size:13px;font-weight:700">'+(d.amt>0?fmtN(d.amt):'\u2014')+'</div></div>';
+      html+='<div style="font-size:11px;color:var(--t3);margin-bottom:6px">'+d.trips+' trips &middot; '+matStr+'</div>';
+      html+='<div style="display:flex;gap:7px"><div style="flex:1;background:#EAFAF2;border-radius:7px;padding:5px 8px;text-align:center"><div style="font-size:9px;color:#1A7A45;font-weight:600;text-transform:uppercase;letter-spacing:.3px">Paid</div><div style="font-size:12px;font-weight:700;color:#1A7A45">'+(d.paid>0?fmtN(d.paid):'\u2014')+'</div></div>';
+      html+='<div style="flex:1;background:'+(d.pend>0?'#FFF0F0':'#EAFAF2')+';border-radius:7px;padding:5px 8px;text-align:center"><div style="font-size:9px;color:'+(d.pend>0?'#CC2200':'#1A7A45')+';font-weight:600;text-transform:uppercase;letter-spacing:.3px">Pending</div><div style="font-size:12px;font-weight:700;color:'+(d.pend>0?'#CC2200':'#1A7A45')+'">'+(d.pend>0?fmtN(d.pend):'\u2713 Clear')+'</div></div></div></div>';});
+    html+='</div>';}
+  document.getElementById('dashContent').innerHTML=html;}
+function renderHistory(){renderBanner();var filtered=getFiltered();document.getElementById('entryCount').textContent=filtered.length+' entries';var el=document.getElementById('historyList');if(!filtered.length){el.innerHTML='<div class="empty"><div class="empty-icon">&#128203;</div><div class="empty-txt">No entries found</div></div>';return;}
+  var html='';for(var i=0;i<filtered.length;i++){var e=filtered[i],ri=entries.indexOf(e),ps=payStatus(e),total=(parseFloat(e.amount)||0)+(parseFloat(e.pamount)||0),paid=parseFloat(e.paidnow)||0,pend=pendingAmt(e);
+    html+='<div class="ecard"><div class="emain"><div><div class="evendor">'+(e.vendor||'\u2014')+(isKA(titleCase(e.vendor||''))?'<span class="ka-badge">KA</span>':'')+'</div><div class="etime">'+e.timestamp+'</div></div><div class="eqpill">'+e.quantity+' '+e.unit+'</div></div>';
+    html+='<div class="emeta"><span class="etag '+tcls(e.material)+'">'+e.material+'</span>';if(e.driver)html+='<span class="etag tdef">&#128663; '+e.driver+'</span>';if(e.vehicle)html+='<span class="etag tdef">&#128666; '+e.vehicle+'</span>';if(e.notes)html+='<span class="etag tdef">'+e.notes+'</span>';html+='</div>';
+    if(total>0){html+='<div class="eamts">';if(e.amount>0)html+='<div class="aitm"><div class="al">Amount</div><div class="av">'+fmt(e.amount)+'</div></div>';if(e.pamount>0)html+='<div class="aitm"><div class="al">P-Amount</div><div class="av">'+fmt(e.pamount)+'</div></div>';if(paid>0)html+='<div class="aitm"><div class="al">Paid</div><div class="av" style="color:var(--green)">'+fmt(paid)+'</div></div>';if(pend>0)html+='<div class="aitm"><div class="al">Pending</div><div class="av" style="color:var(--red)">'+fmt(pend)+'</div></div>';html+='</div>';}
+    html+='<div class="epay">';if(ps==='paid')html+='<span class="pbadge ppaid">\u2713 Paid</span>';else if(ps==='partial')html+='<span class="pbadge ppart">\u25d1 Partial</span>';else html+='<span class="pbadge punpd">\u2715 Unpaid</span>';
+    html+='<button class="pupdbtn" onclick="openPayModal('+ri+')">Update Payment</button></div>';
+    html+='<div class="eacts"><button class="abt aedit" onclick="openEdit('+ri+')">&#9998; Edit</button><button class="abt adel" onclick="delEntry('+ri+')">&#128465; Delete</button></div></div>';}
+  el.innerHTML=html;}
+function openPayModal(i){payIdx=i;var e=entries[i],total=(parseFloat(e.amount)||0)+(parseFloat(e.pamount)||0);document.getElementById('payTitle').textContent='Payment \u2013 '+(e.vendor||'');document.getElementById('paySub').textContent='Total: '+fmtN(total);document.getElementById('partialAmt').value=e.paidnow||'';selPayOpt(payStatus(e));document.getElementById('payModal').className='modal-ov show';}
+function closePayModal(){document.getElementById('payModal').className='modal-ov';payIdx=-1;}
+function handlePayClick(ev){if(ev.target===document.getElementById('payModal'))closePayModal();}
+function selPayOpt(opt){curPayOpt=opt;['unpaid','partial','paid'].forEach(function(o){document.getElementById('po-'+o).className='popt'+(o===opt?' active':'');});document.getElementById('partWrap').style.display=(opt==='partial')?'block':'none';if(opt==='paid'&&payIdx>=0){var e=entries[payIdx],total=(parseFloat(e.amount)||0)+(parseFloat(e.pamount)||0);document.getElementById('partialAmt').value=total;}if(opt==='unpaid')document.getElementById('partialAmt').value=0;}
+function savePayment(){if(payIdx<0)return;var e=entries[payIdx],paidAmt=parseFloat(document.getElementById('partialAmt').value)||0;if(curPayOpt==='paid'){var total=(parseFloat(e.amount)||0)+(parseFloat(e.pamount)||0);paidAmt=total;}if(curPayOpt==='unpaid')paidAmt=0;e.paidnow=paidAmt;e.paystatus=curPayOpt;closePayModal();showToast('Payment updated');renderHistory();renderDashboard();updateInSheet(e);}
+function submitEntry(){
+  if(isSaving)return;var vendor=titleCase(document.getElementById('vendor').value.trim());var driver=titleCase(document.getElementById('driver').value.trim());var vehicle=document.getElementById('vehicle').value.trim().toUpperCase();var qty=parseFloat(document.getElementById('qty').value);var notes=document.getElementById('notes').value.trim();var amount=parseFloat(document.getElementById('amount').value)||0;var pamount=parseFloat(document.getElementById('pamount').value)||0;var paidnow=parseFloat(document.getElementById('paidnow').value)||0;
+  if(!vendor)return showToast('Enter vendor name',false);if(!qty||qty<=0)return showToast('Enter valid quantity',false);
+  var total=amount+pamount,ps=paidnow<=0?'unpaid':paidnow>=total?'paid':'partial';
+  var entry={timestamp:new Date().toLocaleString('en-IN'),vendor:vendor,driver:driver,vehicle:vehicle,material:curMat,quantity:qty,unit:curUnit,notes:notes,amount:amount,pamount:pamount,paidnow:paidnow,paystatus:ps};
+  isSaving=true;var btn=document.getElementById('saveBtn');btn.disabled=true;btn.textContent='Saving...';
+  sendToSheet(entry,function(ok){isSaving=false;showToast(ok?'Saved \u2713':'Save failed',ok);btn.disabled=false;btn.textContent='Save Entry';if(ok)loadFromSheet();});
+  ['vendor','driver','vehicle','notes','amount','pamount','paidnow'].forEach(function(id){document.getElementById(id).value='';});document.getElementById('qty').value=1;selMat('20mm');selUnit('Brass');}
+function delEntry(i){if(!confirm('Delete this entry?'))return;var entry=entries[i];entries.splice(i,1);renderHistory();showToast('Deleting...');var old=document.getElementById('jsonp-del');if(old)old.parentNode.removeChild(old);window.amcoDel=function(d){showToast(d.status==='deleted'?'Deleted \u2713':'Could not delete',d.status==='deleted');loadFromSheet();};var s=document.createElement('script');s.id='jsonp-del';s.src=SCRIPT_URL+'?action=delete&timestamp='+enc(entry.timestamp)+'&callback=amcoDel';document.body.appendChild(s);}
+function openEdit(i){eIdx=i;var e=entries[i];document.getElementById('e-vendor').value=e.vendor||'';document.getElementById('e-driver').value=e.driver||'';document.getElementById('e-vehicle').value=e.vehicle||'';document.getElementById('e-notes').value=e.notes||'';document.getElementById('e-qty').value=e.quantity;document.getElementById('e-amount').value=e.amount||'';document.getElementById('e-pamount').value=e.pamount||'';document.getElementById('e-paidnow').value=e.paidnow||'';eSelMat(e.material||'20mm');eSelUnit(e.unit||'Brass');document.getElementById('editModal').className='modal-ov show';}
+function closeEdit(){document.getElementById('editModal').className='modal-ov';eIdx=-1;}
+function handleEditClick(ev){if(ev.target===document.getElementById('editModal'))closeEdit();}
+function eSelMat(m){eMat=m;['20mm','msand','wsand'].forEach(function(id){document.getElementById('e-mat-'+id).className='mat';});document.getElementById('e-mat-'+matId(m)).className='mat active';}
+function eSelUnit(u){eUnit=u;document.getElementById('e-unit-brass').className='uopt'+(u==='Brass'?' active':'');document.getElementById('e-unit-tons').className='uopt'+(u==='Tons'?' active':'');}
+function eChgQty(d){var el=document.getElementById('e-qty');el.value=Math.max(0.5,Math.round(((parseFloat(el.value)||1)+d*0.5)*10)/10);}
+function saveEdit(){if(eIdx<0)return;var e=entries[eIdx];e.vendor=titleCase(document.getElementById('e-vendor').value.trim()||e.vendor);e.driver=titleCase(document.getElementById('e-driver').value.trim());e.vehicle=document.getElementById('e-vehicle').value.trim().toUpperCase();e.notes=document.getElementById('e-notes').value.trim();e.quantity=parseFloat(document.getElementById('e-qty').value)||e.quantity;e.amount=parseFloat(document.getElementById('e-amount').value)||0;e.pamount=parseFloat(document.getElementById('e-pamount').value)||0;e.paidnow=parseFloat(document.getElementById('e-paidnow').value)||0;var total=e.amount+e.pamount;e.paystatus=e.paidnow<=0?'unpaid':e.paidnow>=total?'paid':'partial';e.material=eMat;e.unit=eUnit;closeEdit();renderHistory();showToast('Entry updated \u2713');}
+function renderVendors(){
+  document.getElementById('vendorList2').style.display='block';document.getElementById('vendorDetail').style.display='none';
+  var byV={};entries.forEach(function(e){var vk=titleCase(e.vendor||'Unknown');if(!byV[vk])byV[vk]={loads:0,tAmt:0,tPaid:0,tPend:0,mats:[]};byV[vk].loads++;byV[vk].tAmt+=(parseFloat(e.amount)||0)+(parseFloat(e.pamount)||0);byV[vk].tPaid+=parseFloat(e.paidnow)||0;byV[vk].tPend+=pendingAmt(e);if(byV[vk].mats.indexOf(e.material)===-1)byV[vk].mats.push(e.material);});
+  var names=Object.keys(byV);if(!names.length){document.getElementById('vendorList2').innerHTML='<div class="empty"><div class="empty-icon">&#128101;</div><div class="empty-txt">No vendors yet</div></div>';return;}
+  names.sort(function(a,b){return byV[b].tAmt-byV[a].tAmt;});
+  var html='<div class="lhdr" style="margin-bottom:9px"><div class="ltitle">All Vendors</div><div class="lbadge">'+names.length+'</div></div>';
+  html+='<button class="sharebtn" onclick="showWeeklyPicker()">&#128228; Weekly Reports (Mon\u2013Sat)</button>';
+  names.forEach(function(v){var d=byV[v];html+='<div class="ccard" onclick="showVendorDetail(\''+enc(v)+'\')"><div class="cav">'+initials(v)+'</div><div><div class="cname">'+v+(isKA(v)?'<span class="ka-badge">Key Account</span>':'')+'</div><div class="cmeta">'+d.loads+' trips &middot; '+d.mats.join(', ')+'</div></div><div class="cright"><div class="camt">'+(d.tAmt>0?fmt(d.tAmt):'\u2014')+'</div>'+(d.tPend>0?'<div class="cpend">Pending: '+fmt(d.tPend)+'</div>':(d.tAmt>0?'<div class="cok">All Paid</div>':''))+'</div><div class="chev">&#8250;</div></div>';});
+  document.getElementById('vendorList2').innerHTML=html;}
+function showVendorDetail(ev){
+  var vendor=decodeURIComponent(ev);var ve=entries.filter(function(e){return titleCase(e.vendor||'')===vendor;});
+  var tAmt=0,tPamt=0,tPaid=0,tPend=0,tQty=0;ve.forEach(function(e){tAmt+=parseFloat(e.amount)||0;tPamt+=parseFloat(e.pamount)||0;tPaid+=parseFloat(e.paidnow)||0;tPend+=pendingAmt(e);tQty+=parseFloat(e.quantity)||0;});
+  var ka=isKA(vendor);document.getElementById('vendorList2').style.display='none';var det=document.getElementById('vendorDetail');det.style.display='block';
+  var html='<div class="dhdr"><button class="back" onclick="renderVendors()">&#8249; Back</button><div class="dtitle">'+vendor+'</div></div>';
+  html+='<div class="ka-toggle"><div><div class="ka-toggle-l">Key Account</div><div class="ka-toggle-s" id="ka-sub">'+(ka?'Gets CSV report':'Gets WhatsApp report')+'</div></div><label class="toggle"><input type="checkbox" id="ka-chk"'+(ka?' checked':'')+'onchange="toggleKA(\''+vendor+'\',this.checked);document.getElementById(\'ka-sub\').textContent=this.checked?\'Gets CSV report\':\'Gets WhatsApp report\';renderShareBtn(\''+ev+'\')"><span class="tslider"></span></label></div>';
+  html+='<div class="dstats"><div class="dsi"><div class="dn">'+ve.length+'</div><div class="dl">Trips</div></div><div class="dsi"><div class="dn" style="color:var(--accent)">'+tQty+'</div><div class="dl">Qty</div></div><div class="dsi"><div class="dn" style="color:'+(tPend>0?'var(--red)':'var(--green)')+'">'+fmt(tPend)+'</div><div class="dl">Pending</div></div></div>';
+  html+='<div class="psum"><div class="psum-t">Payment Summary</div><div class="psum-row"><span class="psum-l">Total Amount</span><span class="psum-v">'+fmt(tAmt+tPamt)+'</span></div>'+(tAmt>0?'<div class="psum-row"><span class="psum-l">Amount</span><span class="psum-v">'+fmt(tAmt)+'</span></div>':'')+(tPamt>0?'<div class="psum-row"><span class="psum-l">P-Amount</span><span class="psum-v">'+fmt(tPamt)+'</span></div>':'')+'<div class="psum-row"><span class="psum-l">Paid</span><span class="psum-v" style="color:var(--green)">'+fmt(tPaid)+'</span></div><div class="psum-row"><span class="psum-l">Pending</span><span class="psum-v" style="color:'+(tPend>0?'var(--red)':'var(--green)')+'">'+fmt(tPend)+'</span></div></div>';
+  html+='<div id="det-share-btn"></div>';
+  html+='<div class="lhdr"><div class="ltitle">Trips</div><div class="lbadge">'+ve.length+'</div></div>';
+  ve.forEach(function(e){var ps=payStatus(e),total=(parseFloat(e.amount)||0)+(parseFloat(e.pamount)||0);
+    html+='<div class="ecard"><div class="emain"><div><div class="evendor" style="font-size:13px;font-weight:500">'+e.timestamp+'</div><div class="etime">'+(e.driver?'&#128663; '+e.driver:'')+(e.vehicle?' &#128666; '+e.vehicle:'')+'</div></div><div class="eqpill">'+e.quantity+' '+e.unit+'</div></div>';
+    html+='<div class="emeta"><span class="etag '+tcls(e.material)+'">'+e.material+'</span>'+(e.notes?'<span class="etag tdef">'+e.notes+'</span>':'')+'</div>';
+    if(total>0){html+='<div class="eamts">';if(e.amount>0)html+='<div class="aitm"><div class="al">Amount</div><div class="av">'+fmt(e.amount)+'</div></div>';if(e.pamount>0)html+='<div class="aitm"><div class="al">P-Amount</div><div class="av">'+fmt(e.pamount)+'</div></div>';if(e.paidnow>0)html+='<div class="aitm"><div class="al">Paid</div><div class="av" style="color:var(--green)">'+fmt(e.paidnow)+'</div></div>';if(pendingAmt(e)>0)html+='<div class="aitm"><div class="al">Pending</div><div class="av" style="color:var(--red)">'+fmt(pendingAmt(e))+'</div></div>';html+='</div>';}
+    if(ps==='paid')html+='<div class="epay"><span class="pbadge ppaid">\u2713 Paid</span></div>';else if(ps==='partial')html+='<div class="epay"><span class="pbadge ppart">\u25d1 Partial</span></div>';else html+='<div class="epay"><span class="pbadge punpd">\u2715 Unpaid</span></div>';
+    html+='</div>';});
+  det.innerHTML=html;renderShareBtn(ev);}
+function renderShareBtn(ev){var vendor=decodeURIComponent(ev);var ka=isKA(vendor);var btn=document.getElementById('det-share-btn');if(!btn)return;btn.innerHTML=ka?'<button class="sharebtn" onclick="downloadCSV(\''+ev+'\')">&#128229; Download CSV Report</button>':'<button class="sharebtn" onclick="shareWhatsApp(\''+ev+'\')">&#128279; Share via WhatsApp</button>';}
+function weekLabel(){var s=weekStart(),e=new Date(s);e.setDate(s.getDate()+5);return s.toLocaleDateString('en-IN',{day:'numeric',month:'short'})+' \u2013 '+e.toLocaleDateString('en-IN',{day:'numeric',month:'short',year:'numeric'});}
+function getWeekEntries(vendor){return entries.filter(function(e){return titleCase(e.vendor||'')===vendor&&isThisWeek(e.timestamp);});}
+function buildWhatsAppText(vendor,ve){
+  var tAmt=0,tPamt=0,tPaid=0,tPend=0,tQty=0;ve.forEach(function(e){tAmt+=parseFloat(e.amount)||0;tPamt+=parseFloat(e.pamount)||0;tPaid+=parseFloat(e.paidnow)||0;tPend+=pendingAmt(e);tQty+=parseFloat(e.quantity)||0;});
+  var grand=tAmt+tPamt;var t='*AMCO Quarry - Weekly Report*\nCustomer: '+vendor+'\nWeek: '+weekLabel()+'\n---------------------\n\nTrips: '+ve.length+' | Qty: '+tQty+'\n';
+  if(grand>0)t+='Total: '+fmtN(grand)+'\n';if(tAmt>0)t+='  Amount: '+fmtN(tAmt)+'\n';if(tPamt>0)t+='  P-Amount: '+fmtN(tPamt)+'\n';if(tPaid>0)t+='Paid: '+fmtN(tPaid)+'\n';if(tPend>0)t+='Pending: '+fmtN(tPend)+'\n';
+  t+='\n--- Trips ---\n';ve.forEach(function(e){t+='\n'+e.timestamp+'\n';if(e.driver)t+='Driver: '+e.driver+(e.vehicle?' | '+e.vehicle:'')+'\n';t+='Material: '+e.material+' | Qty: '+e.quantity+' '+e.unit+'\n';var tot=(parseFloat(e.amount)||0)+(parseFloat(e.pamount)||0);if(tot>0){t+=fmtN(tot);if(e.paidnow>0)t+=' | Paid: '+fmtN(e.paidnow);if(pendingAmt(e)>0)t+=' | Pend: '+fmtN(pendingAmt(e));t+='\n';}});
+  t+='\n=====================\n';if(grand>0)t+='Total: '+fmtN(grand)+'\n';if(tPaid>0)t+='Paid: '+fmtN(tPaid)+'\n';if(tPend>0)t+='Pending: '+fmtN(tPend)+'\n';t+='=====================\n';return t;}
+function shareWhatsApp(ev){var vendor=decodeURIComponent(ev),ve=getWeekEntries(vendor);if(!ve.length){showToast('No entries this week for '+vendor,false);return;}var text=buildWhatsAppText(vendor,ve);if(navigator.share){navigator.share({title:'AMCO Weekly - '+vendor,text:text});}else{var ta=document.createElement('textarea');ta.value=text;document.body.appendChild(ta);ta.select();document.execCommand('copy');document.body.removeChild(ta);showToast('Report copied!');}}
+function downloadCSV(ev){
+  var vendor=decodeURIComponent(ev),ve=getWeekEntries(vendor);if(!ve.length){showToast('No entries this week for '+vendor,false);return;}
+  var tAmt=0,tPamt=0,tPaid=0,tPend=0,tQty=0;ve.forEach(function(e){tAmt+=parseFloat(e.amount)||0;tPamt+=parseFloat(e.pamount)||0;tPaid+=parseFloat(e.paidnow)||0;tPend+=pendingAmt(e);tQty+=parseFloat(e.quantity)||0;});
+  var rows=[['AMCO Quarry - Weekly Report'],['Customer',vendor],['Week',weekLabel()],['Generated',new Date().toLocaleString('en-IN')],[],['SUMMARY'],['Total Trips',ve.length,'Total Qty',tQty],['Total Amount',tAmt+tPamt,'',''],['Amount',tAmt,'P-Amount',tPamt],['Total Paid',tPaid,'Total Pending',tPend],[],['TRIP DETAILS'],['Date & Time','Driver','Vehicle','Material','Qty','Unit','Amount','P-Amount','Paid','Pending','Status']];
+  ve.forEach(function(e){rows.push([e.timestamp,e.driver||'',e.vehicle||'',e.material,e.quantity,e.unit,parseFloat(e.amount)||0,parseFloat(e.pamount)||0,parseFloat(e.paidnow)||0,pendingAmt(e),payStatus(e)]);});
+  var csv=rows.map(function(r){return r.map(function(c){var s=String(c===null||c===undefined?'':c);if(s.indexOf(',')>-1||s.indexOf('"')>-1||s.indexOf('\n')>-1)s='"'+s.replace(/"/g,'""')+'"';return s;}).join(',');}).join('\n');
+  var blob=new Blob(['\uFEFF'+csv],{type:'text/csv;charset=utf-8;'}),url=URL.createObjectURL(blob),a=document.createElement('a');a.href=url;a.download='AMCO_'+vendor.replace(/\s+/g,'_')+'_'+new Date().toISOString().slice(0,10)+'.csv';document.body.appendChild(a);a.click();document.body.removeChild(a);URL.revokeObjectURL(url);showToast('CSV downloaded!');}
+function showWeeklyPicker(){
+  var byV={};entries.filter(function(e){return isThisWeek(e.timestamp);}).forEach(function(e){var vk=titleCase(e.vendor||'');if(!byV[vk])byV[vk]=[];byV[vk].push(e);});
+  var names=Object.keys(byV);if(!names.length){showToast('No entries this week',false);return;}
+  var overlay=document.createElement('div');overlay.style.cssText='position:fixed;inset:0;background:rgba(0,0,0,.5);z-index:300;display:flex;align-items:flex-end;justify-content:center;';
+  var box=document.createElement('div');box.style.cssText='background:var(--bg);border-radius:20px 20px 0 0;width:100%;max-width:430px;padding:18px 14px 38px;max-height:80vh;overflow-y:auto;';
+  var html='<div style="width:36px;height:4px;background:var(--sep);border-radius:2px;margin:0 auto 14px"></div>';
+  html+='<div style="font-size:16px;font-weight:700;text-align:center;margin-bottom:4px">Weekly Reports</div>';
+  html+='<div style="font-size:12px;color:var(--t3);text-align:center;margin-bottom:14px">'+weekLabel()+'</div>';
+  names.sort().forEach(function(v){var pend=0;byV[v].forEach(function(e){pend+=pendingAmt(e);});var ka=isKA(v);
+    html+='<div class="wk-row" data-vendor="'+enc(v)+'" style="background:var(--card);border-radius:12px;padding:12px 14px;margin-bottom:7px;display:flex;justify-content:space-between;align-items:center;cursor:pointer;border:.5px solid var(--sepl)"><div><div style="font-size:14px;font-weight:600">'+v+(ka?'<span class="ka-badge">Key Account</span>':'')+'</div><div style="font-size:11px;color:var(--t3);margin-top:2px">'+byV[v].length+' trips'+(pend>0?' &middot; Pend: '+fmt(pend):'')+' &middot; '+(ka?'CSV':'WhatsApp')+'</div></div><span style="color:var(--blue);font-size:13px;font-weight:600">'+(ka?'&#128229;':'&#128279;')+' &#8250;</span></div>';});
+  html+='<button onclick="this.parentNode.parentNode.remove()" style="width:100%;padding:13px;margin-top:8px;background:var(--sepl);border:none;border-radius:12px;font-size:15px;font-weight:600;font-family:var(--f);cursor:pointer">Cancel</button>';
+  box.innerHTML=html;overlay.appendChild(box);
+  overlay.addEventListener('click',function(ev){if(ev.target===overlay){overlay.remove();return;}var row=ev.target.closest('.wk-row');if(row){var v=row.getAttribute('data-vendor');var vendor=decodeURIComponent(v);overlay.remove();if(isKA(vendor))downloadCSV(v);else shareWhatsApp(v);}});
+  document.body.appendChild(overlay);}
 </script>
 </body>
 </html>
