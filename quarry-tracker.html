@@ -192,7 +192,7 @@ html,body{height:100%;background:var(--bg);font-family:var(--f);color:var(--t);-
       </div>
       <div class="sec"><div class="slabel">Material</div>
         <div class="mats">
-          <div class="mat active" id="mat-20mm" onclick="selMat('20mm')"><span class="mat-icon">&#129392;</span><span class="mat-lbl">20mm</span></div>
+          <div class="mat active" id="mat-20mm" onclick="selMat('20mm')"><span class="mat-icon">&#9968;</span><span class="mat-lbl">20mm</span></div>
           <div class="mat" id="mat-msand" onclick="selMat('M-Sand')"><span class="mat-icon">&#127958;</span><span class="mat-lbl">M-Sand</span></div>
           <div class="mat" id="mat-wsand" onclick="selMat('Washed Sand')"><span class="mat-icon">&#128166;</span><span class="mat-lbl">Washed Sand</span></div>
         </div>
@@ -261,7 +261,7 @@ html,body{height:100%;background:var(--bg);font-family:var(--f);color:var(--t);-
     </div></div>
     <div class="sec" style="margin-bottom:10px"><div class="slabel">Material</div>
       <div class="mats" style="margin-bottom:0">
-        <div class="mat active" id="e-mat-20mm" onclick="eSelMat('20mm')"><span class="mat-icon">&#129392;</span><span class="mat-lbl">20mm</span></div>
+        <div class="mat active" id="e-mat-20mm" onclick="eSelMat('20mm')"><span class="mat-icon">&#9968;</span><span class="mat-lbl">20mm</span></div>
         <div class="mat" id="e-mat-msand" onclick="eSelMat('M-Sand')"><span class="mat-icon">&#127958;</span><span class="mat-lbl">M-Sand</span></div>
         <div class="mat" id="e-mat-wsand" onclick="eSelMat('Washed Sand')"><span class="mat-icon">&#128166;</span><span class="mat-lbl">Washed Sand</span></div>
       </div>
@@ -377,7 +377,7 @@ function renderDashboard(){
   html+='<div class="dc"><div class="dlbl">This Week</div><div class="dnum gold">'+weekE.length+' trips</div><div class="dsub">'+(weekAmt>0?fmtN(weekAmt):'\u2014')+'</div></div>';
   html+='<div class="dc"><div class="dlbl">Month Collected</div><div class="dnum green">'+(mPaid>0?fmtN(mPaid):'\u2014')+'</div><div class="dsub">of '+(mAmt>0?fmtN(mAmt):'\u2014')+'</div></div>';
   html+='<div class="dc"><div class="dlbl">Month Pending</div><div class="dnum red">'+(mPend>0?fmtN(mPend):'\u2014')+'</div><div class="dsub">'+monthE.length+' trips total</div></div></div>';
-  var matDefs=[{k:'20mm',ic:'&#129392;',col:'#A07828',bg:'#FFF8E8'},{k:'M-Sand',ic:'&#127958;',col:'#0055BB',bg:'#EBF4FF'},{k:'Washed Sand',ic:'&#128166;',col:'#1A7A45',bg:'#EAFAF2'}];
+  var matDefs=[{k:'20mm',ic:'&#9968;',col:'#A07828',bg:'#FFF8E8'},{k:'M-Sand',ic:'&#127958;',col:'#0055BB',bg:'#EBF4FF'},{k:'Washed Sand',ic:'&#128166;',col:'#1A7A45',bg:'#EAFAF2'}];
   var hasMatData=matDefs.some(function(m){return matT[m.k].qty>0;});
   if(hasMatData){
     html+='<div class="dc"><div class="dlbl" style="margin-bottom:10px">Material Breakdown \u2014 '+mname+'</div>';
