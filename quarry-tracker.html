@@ -407,13 +407,39 @@ function handlePayClick(ev){if(ev.target===document.getElementById('payModal'))c
 function selPayOpt(opt){curPayOpt=opt;['unpaid','partial','paid'].forEach(function(o){document.getElementById('po-'+o).className='popt'+(o===opt?' active':'');});document.getElementById('partWrap').style.display=(opt==='partial')?'block':'none';if(opt==='paid'&&payIdx>=0){var e=entries[payIdx],total=(parseFloat(e.amount)||0)+(parseFloat(e.pamount)||0);document.getElementById('partialAmt').value=total;}if(opt==='unpaid')document.getElementById('partialAmt').value=0;}
 function savePayment(){if(payIdx<0)return;var e=entries[payIdx],paidAmt=parseFloat(document.getElementById('partialAmt').value)||0;if(curPayOpt==='paid'){var total=(parseFloat(e.amount)||0)+(parseFloat(e.pamount)||0);paidAmt=total;}if(curPayOpt==='unpaid')paidAmt=0;e.paidnow=paidAmt;e.paystatus=curPayOpt;closePayModal();showToast('Payment updated');renderHistory();renderDashboard();updateInSheet(e);}
 function submitEntry(){
-  if(isSaving)return;var vendor=titleCase(document.getElementById('vendor').value.trim());var driver=titleCase(document.getElementById('driver').value.trim());var vehicle=document.getElementById('vehicle').value.trim().toUpperCase();var qty=parseFloat(document.getElementById('qty').value);var notes=document.getElementById('notes').value.trim();var amount=parseFloat(document.getElementById('amount').value)||0;var pamount=parseFloat(document.getElementById('pamount').value)||0;var paidnow=parseFloat(document.getElementById('paidnow').value)||0;
-  if(!vendor)return showToast('Enter vendor name',false);if(!qty||qty<=0)return showToast('Enter valid quantity',false);
+  if(isSaving)return;
+  var vendor=titleCase(document.getElementById('vendor').value.trim());
+  var driver=titleCase(document.getElementById('driver').value.trim());
+  var vehicle=document.getElementById('vehicle').value.trim().toUpperCase();
+  var qty=parseFloat(document.getElementById('qty').value);
+  var notes=document.getElementById('notes').value.trim();
+  var amount=parseFloat(document.getElementById('amount').value)||0;
+  var pamount=parseFloat(document.getElementById('pamount').value)||0;
+  var paidnow=parseFloat(document.getElementById('paidnow').value)||0;
+  if(!vendor)return showToast('Enter vendor name',false);
+  if(!qty||qty<=0)return showToast('Enter valid quantity',false);
   var total=amount+pamount,ps=paidnow<=0?'unpaid':paidnow>=total?'paid':'partial';
-  var entry={timestamp:new Date().toLocaleString('en-IN'),vendor:vendor,driver:driver,vehicle:vehicle,material:curMat,quantity:qty,unit:curUnit,notes:notes,amount:amount,pamount:pamount,paidnow:paidnow,paystatus:ps};
-  isSaving=true;var btn=document.getElementById('saveBtn');btn.disabled=true;btn.textContent='Saving...';
-  sendToSheet(entry,function(ok){isSaving=false;showToast(ok?'Saved \u2713':'Save failed',ok);btn.disabled=false;btn.textContent='Save Entry';if(ok)loadFromSheet();});
-  ['vendor','driver','vehicle','notes','amount','pamount','paidnow'].forEach(function(id){document.getElementById(id).value='';});document.getElementById('qty').value=1;selMat('20mm');selUnit('Brass');}
+  // Generate unique ID to prevent duplicate saves
+  var entryId='amco_'+Date.now()+'_'+Math.random().toString(36).substr(2,6);
+  var entry={timestamp:new Date().toLocaleString('en-IN'),entryId:entryId,vendor:vendor,driver:driver,vehicle:vehicle,material:curMat,quantity:qty,unit:curUnit,notes:notes,amount:amount,pamount:pamount,paidnow:paidnow,paystatus:ps};
+  // Lock immediately and clear form right away so dad can't re-tap
+  isSaving=true;
+  var btn=document.getElementById('saveBtn');
+  btn.disabled=true;btn.textContent='Saving...';
+  btn.style.background='#8E8E93';
+  // Clear form immediately so accidental second tap has no data
+  ['vendor','driver','vehicle','notes','amount','pamount','paidnow'].forEach(function(id){document.getElementById(id).value='';});
+  document.getElementById('qty').value=1;selMat('20mm');selUnit('Brass');
+  // Set a timeout in case the callback never fires (network issue)
+  var saveTimeout=setTimeout(function(){
+    if(isSaving){isSaving=false;btn.disabled=false;btn.textContent='Save Entry';btn.style.background='';showToast('Check connection and retry',false);}
+  },15000);
+  sendToSheet(entry,function(ok){
+    clearTimeout(saveTimeout);
+    isSaving=false;btn.disabled=false;btn.textContent='Save Entry';btn.style.background='';
+    showToast(ok?'Saved \u2713':'Save failed - check connection',ok);
+    if(ok)loadFromSheet();
+  });}
 function delEntry(i){if(!confirm('Delete this entry?'))return;var entry=entries[i];entries.splice(i,1);renderHistory();showToast('Deleting...');var old=document.getElementById('jsonp-del');if(old)old.parentNode.removeChild(old);window.amcoDel=function(d){showToast(d.status==='deleted'?'Deleted \u2713':'Could not delete',d.status==='deleted');loadFromSheet();};var s=document.createElement('script');s.id='jsonp-del';s.src=SCRIPT_URL+'?action=delete&timestamp='+enc(entry.timestamp)+'&callback=amcoDel';document.body.appendChild(s);}
 function openEdit(i){eIdx=i;var e=entries[i];document.getElementById('e-vendor').value=e.vendor||'';document.getElementById('e-driver').value=e.driver||'';document.getElementById('e-vehicle').value=e.vehicle||'';document.getElementById('e-notes').value=e.notes||'';document.getElementById('e-qty').value=e.quantity;document.getElementById('e-amount').value=e.amount||'';document.getElementById('e-pamount').value=e.pamount||'';document.getElementById('e-paidnow').value=e.paidnow||'';eSelMat(e.material||'20mm');eSelUnit(e.unit||'Brass');document.getElementById('editModal').className='modal-ov show';}
 function closeEdit(){document.getElementById('editModal').className='modal-ov';eIdx=-1;}
