@@ -284,7 +284,9 @@ html,body{height:100%;background:var(--bg);font-family:var(--f);color:var(--t);-
 </div>
 <div class="toast" id="toast"><span id="toastIcon">&#10003;</span>&nbsp;<span id="toastMsg">Saved</span></div>
 <script>
-var SCRIPT_URL='https://script.google.com/macros/s/AKfycbzZ2zCHDxUiOQJky2ZOjrmqg2KIuq7NMO94x1-V08rHRNkaCEMoz-5ICwGBzIiKdvC9/exec';
+var SUPABASE_URL='https://himgsjpfjwgzyrxgggtt.supabase.co';
+var SUPABASE_KEY='sb_publishable_IJOP7468C4CKw8d47MZUkw_zYDekdVP';
+var SUPABASE_TABLE='entries';
 var curMat='20mm',curUnit='Brass',eMat='20mm',eUnit='Brass',eIdx=-1,payIdx=-1,curPayOpt='unpaid',entries=[],activeFilter='all',isSaving=false,keyAccounts={};
 function loadKA(){try{keyAccounts=JSON.parse(localStorage.getItem('amcoKA')||'{}');}catch(e){keyAccounts={};}}
 function saveKA(){localStorage.setItem('amcoKA',JSON.stringify(keyAccounts));}
@@ -293,22 +295,59 @@ function toggleKA(v,val){keyAccounts[v]=val;saveKA();}
 loadKA();
 document.getElementById('dateBadge').textContent=new Date().toLocaleDateString('en-IN',{day:'numeric',month:'short',year:'numeric'});
 loadFromSheet();
-function enc(v){return encodeURIComponent(v);}
+function sbHeaders(){return{'Content-Type':'application/json','apikey':SUPABASE_KEY,'Authorization':'Bearer '+SUPABASE_KEY};}
+
 function loadFromSheet(){
-  var old=document.getElementById('jsonp-load');if(old)old.parentNode.removeChild(old);
-  window.amcoLoad=function(data){
-    if(data.status==='ok'&&data.entries){entries=data.entries;refreshSuggestions();
-      var at=document.querySelector('.sb.active');if(at){var t=at.textContent.trim().toLowerCase();if(t==='dashboard')renderDashboard();else if(t==='history')renderHistory();else if(t==='vendors')renderVendors();}}};
-  var s=document.createElement('script');s.id='jsonp-load';s.src=SCRIPT_URL+'?callback=amcoLoad';document.body.appendChild(s);}
+  fetch(SUPABASE_URL+'/rest/v1/'+SUPABASE_TABLE+'?select=*&order=created_at.desc',{headers:sbHeaders()})
+  .then(function(r){return r.json();})
+  .then(function(data){
+    if(Array.isArray(data)){
+      entries=data.map(function(r){return{
+        timestamp:r.timestamp,vendor:r.vendor,driver:r.driver||'',vehicle:r.vehicle||'',
+        material:r.material,quantity:r.quantity,unit:r.unit,
+        amount:r.amount||0,pamount:r.pamount||0,paidnow:r.paidnow||0,
+        paystatus:r.paystatus||'unpaid',notes:r.notes||'',
+        _id:r.id
+      };});
+      refreshSuggestions();
+      var at=document.querySelector('.sb.active');
+      if(at){var t=at.textContent.trim().toLowerCase();
+        if(t==='dashboard')renderDashboard();
+        else if(t==='history')renderHistory();
+        else if(t==='vendors')renderVendors();}
+    }
+  }).catch(function(err){console.error('Load error:',err);showToast('Could not load data',false);});}
+
 function sendToSheet(data,cb){
-  var old=document.getElementById('jsonp-save');if(old)old.parentNode.removeChild(old);
-  var p='vendor='+enc(data.vendor)+'&driver='+enc(data.driver||'')+'&vehicle='+enc(data.vehicle||'')+'&material='+enc(data.material)+'&quantity='+enc(data.quantity)+'&unit='+enc(data.unit)+'&amount='+enc(data.amount||0)+'&pamount='+enc(data.pamount||0)+'&paidnow='+enc(data.paidnow||0)+'&paystatus='+enc(data.paystatus||'unpaid')+'&notes='+enc(data.notes||'')+'&timestamp='+enc(data.timestamp);
-  window.amcoSave=function(r){cb(r.status==='success');};
-  var s=document.createElement('script');s.id='jsonp-save';s.src=SCRIPT_URL+'?'+p+'&callback=amcoSave';document.body.appendChild(s);}
+  fetch(SUPABASE_URL+'/rest/v1/'+SUPABASE_TABLE,{
+    method:'POST',
+    headers:Object.assign({},sbHeaders(),{'Prefer':'resolution=ignore-duplicates'}),
+    body:JSON.stringify({
+      entry_id:data.entryId,
+      timestamp:data.timestamp,
+      vendor:data.vendor,
+      driver:data.driver||'',
+      vehicle:data.vehicle||'',
+      material:data.material,
+      quantity:data.quantity,
+      unit:data.unit,
+      amount:data.amount||0,
+      pamount:data.pamount||0,
+      paidnow:data.paidnow||0,
+      paystatus:data.paystatus||'unpaid',
+      notes:data.notes||''
+    })
+  }).then(function(r){
+    cb(r.ok||r.status===201||r.status===204);
+  }).catch(function(){cb(false);});}
+
 function updateInSheet(e){
-  var old=document.getElementById('jsonp-upd');if(old)old.parentNode.removeChild(old);
-  window.amcoUpd=function(){};
-  var s=document.createElement('script');s.id='jsonp-upd';s.src=SCRIPT_URL+'?action=update&timestamp='+enc(e.timestamp)+'&paidnow='+enc(e.paidnow||0)+'&paystatus='+enc(e.paystatus||'unpaid')+'&callback=amcoUpd';document.body.appendChild(s);}
+  if(!e._id)return;
+  fetch(SUPABASE_URL+'/rest/v1/'+SUPABASE_TABLE+'?id=eq.'+e._id,{
+    method:'PATCH',
+    headers:sbHeaders(),
+    body:JSON.stringify({paidnow:e.paidnow||0,paystatus:e.paystatus||'unpaid'})
+  }).catch(function(err){console.error('Update error:',err);});}
 function titleCase(s){return s.replace(/\b\w/g,function(c){return c.toUpperCase();});}
 function refreshSuggestions(){
   var v=[],d=[],vc=[];
@@ -440,7 +479,19 @@ function submitEntry(){
     showToast(ok?'Saved \u2713':'Save failed - check connection',ok);
     if(ok)loadFromSheet();
   });}
-function delEntry(i){if(!confirm('Delete this entry?'))return;var entry=entries[i];entries.splice(i,1);renderHistory();showToast('Deleting...');var old=document.getElementById('jsonp-del');if(old)old.parentNode.removeChild(old);window.amcoDel=function(d){showToast(d.status==='deleted'?'Deleted \u2713':'Could not delete',d.status==='deleted');loadFromSheet();};var s=document.createElement('script');s.id='jsonp-del';s.src=SCRIPT_URL+'?action=delete&timestamp='+enc(entry.timestamp)+'&callback=amcoDel';document.body.appendChild(s);}
+function delEntry(i){
+  if(!confirm('Delete this entry?'))return;
+  var entry=entries[i];
+  entries.splice(i,1);
+  renderHistory();
+  showToast('Deleting...');
+  if(!entry._id){showToast('Could not delete',false);loadFromSheet();return;}
+  fetch(SUPABASE_URL+'/rest/v1/'+SUPABASE_TABLE+'?id=eq.'+entry._id,{
+    method:'DELETE',headers:sbHeaders()
+  }).then(function(r){
+    showToast(r.ok?'Deleted ✓':'Could not delete',r.ok);
+    loadFromSheet();
+  }).catch(function(){showToast('Could not delete',false);loadFromSheet();});}
 function openEdit(i){eIdx=i;var e=entries[i];document.getElementById('e-vendor').value=e.vendor||'';document.getElementById('e-driver').value=e.driver||'';document.getElementById('e-vehicle').value=e.vehicle||'';document.getElementById('e-notes').value=e.notes||'';document.getElementById('e-qty').value=e.quantity;document.getElementById('e-amount').value=e.amount||'';document.getElementById('e-pamount').value=e.pamount||'';document.getElementById('e-paidnow').value=e.paidnow||'';eSelMat(e.material||'20mm');eSelUnit(e.unit||'Brass');document.getElementById('editModal').className='modal-ov show';}
 function closeEdit(){document.getElementById('editModal').className='modal-ov';eIdx=-1;}
 function handleEditClick(ev){if(ev.target===document.getElementById('editModal'))closeEdit();}
