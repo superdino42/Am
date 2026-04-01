@@ -295,28 +295,67 @@ function toggleKA(v,val){keyAccounts[v]=val;saveKA();}
 loadKA();
 document.getElementById('dateBadge').textContent=new Date().toLocaleDateString('en-IN',{day:'numeric',month:'short',year:'numeric'});
 loadFromSheet();
-function sbHeaders(){return{'Content-Type':'application/json','apikey':SUPABASE_KEY,'Authorization':'Bearer '+SUPABASE_KEY};}
+function sbHeaders(){
+  return{
+    'Content-Type':'application/json',
+    'apikey':SUPABASE_KEY,
+    'Authorization':'Bearer '+SUPABASE_KEY,
+    'X-Client-Info':'amco-quarry'
+  };
+}
+
+function afterLoad(){
+  refreshSuggestions();
+  var at=document.querySelector('.sb.active');
+  if(at){
+    var t=at.textContent.trim().toLowerCase();
+    if(t==='dashboard')renderDashboard();
+    else if(t==='history')renderHistory();
+    else if(t==='vendors')renderVendors();
+  }
+}
 
 function loadFromSheet(){
-  fetch(SUPABASE_URL+'/rest/v1/'+SUPABASE_TABLE+'?select=*&order=created_at.desc',{headers:sbHeaders()})
-  .then(function(r){return r.json();})
+  document.getElementById('dashContent').innerHTML='<div class="empty"><div class="empty-icon">&#8987;</div><div class="empty-txt">Loading...</div></div>';
+  fetch(SUPABASE_URL+'/rest/v1/'+SUPABASE_TABLE+'?select=*&order=created_at.desc&limit=1000',{
+    method:'GET',
+    headers:sbHeaders()
+  })
+  .then(function(r){
+    if(!r.ok) throw new Error('HTTP '+r.status);
+    return r.json();
+  })
   .then(function(data){
     if(Array.isArray(data)){
-      entries=data.map(function(r){return{
-        timestamp:r.timestamp,vendor:r.vendor,driver:r.driver||'',vehicle:r.vehicle||'',
-        material:r.material,quantity:r.quantity,unit:r.unit,
-        amount:r.amount||0,pamount:r.pamount||0,paidnow:r.paidnow||0,
-        paystatus:r.paystatus||'unpaid',notes:r.notes||'',
-        _id:r.id
-      };});
-      refreshSuggestions();
-      var at=document.querySelector('.sb.active');
-      if(at){var t=at.textContent.trim().toLowerCase();
-        if(t==='dashboard')renderDashboard();
-        else if(t==='history')renderHistory();
-        else if(t==='vendors')renderVendors();}
+      entries=data.map(function(r){
+        return{
+          timestamp:r.timestamp||'',
+          vendor:r.vendor||'',
+          driver:r.driver||'',
+          vehicle:r.vehicle||'',
+          material:r.material||'',
+          quantity:r.quantity||0,
+          unit:r.unit||'Brass',
+          amount:r.amount||0,
+          pamount:r.pamount||0,
+          paidnow:r.paidnow||0,
+          paystatus:r.paystatus||'unpaid',
+          notes:r.notes||'',
+          _id:r.id
+        };
+      });
+      afterLoad();
+    } else {
+      console.error('Unexpected response:',data);
+      showToast('Error loading data',false);
     }
-  }).catch(function(err){console.error('Load error:',err);showToast('Could not load data',false);});}
+  })
+  .catch(function(err){
+    console.error('Load error:',err);
+    showToast('Could not connect. Check internet.',false);
+    afterLoad();
+  });
+}
 
 function sendToSheet(data,cb){
   fetch(SUPABASE_URL+'/rest/v1/'+SUPABASE_TABLE,{
@@ -348,6 +387,7 @@ function updateInSheet(e){
     headers:sbHeaders(),
     body:JSON.stringify({paidnow:e.paidnow||0,paystatus:e.paystatus||'unpaid'})
   }).catch(function(err){console.error('Update error:',err);});}
+function enc(v){return encodeURIComponent(v);}
 function titleCase(s){return s.replace(/\b\w/g,function(c){return c.toUpperCase();});}
 function refreshSuggestions(){
   var v=[],d=[],vc=[];
